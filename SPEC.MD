@@ -7,8 +7,6 @@ NFER Reading Builder is a web application that generates original reading compre
 
 The system will allow parents, tutors, and teachers to generate structured reading assessments and track reading development over time.
 
-The system must NOT reproduce copyrighted NFER materials. All content must be original.
-
 Initial focus is **Year 4**, but the architecture must support **Years 2–6**.
 
 ---
