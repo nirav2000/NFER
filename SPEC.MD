@@ -1,649 +1,226 @@
-**NFER Reading Builder**
+# NFER Reading Builder
+Version: 1.0  
+Status: MVP Specification
 
-Version: 1.0Status: MVP specification
+## Overview
+NFER Reading Builder is a web application that generates original reading comprehension assessments inspired by UK primary school tests.
 
-**1\. Overview**
-================
+The system will allow parents, tutors, and teachers to generate structured reading assessments and track reading development over time.
 
-NFER Reading Builder is a web application that generates **Year 4 reading comprehension assessments inspired by UK primary school tests**.
+The system must NOT reproduce copyrighted NFER materials. All content must be original.
 
-The system is designed for:
+Initial focus is **Year 4**, but the architecture must support **Years 2–6**.
 
-*   parents
-    
-*   tutors
-    
-*   teachers
-    
+---
 
-The application must:
+# Core Features
 
-1.  Generate weekly reading tests
-    
-2.  Provide teacher marking guides
-    
-3.  Provide model answers
-    
-4.  Track pupil progress
-    
-5.  Provide diagnostic feedback
-    
-6.  Support adaptive difficulty
-    
+1. Passage library
+2. Question library
+3. Test generator
+4. Teacher marking guide
+5. Model answers
+6. Diagnostic reports
+7. Progress tracking
+8. Adaptive difficulty
 
-The system should be designed so that **Years 2–6 can be added later**.
+---
 
-The application **must not reproduce copyrighted NFER content**. All passages and questions must be **original**.
+# Passage Library
 
-**2\. Target Users**
-====================
+Each passage contains metadata:
 
-### **Parents**
-
-Want structured reading practice for their child.
-
-### **Tutors**
-
-Need printable reading assessments.
-
-### **Teachers**
-
-Want diagnostics showing reading skill gaps.
-
-**3\. Core Features**
-=====================
-
-### **3.1 Passage Library**
-
-Store original reading passages tagged by:
-
-*   year group
-    
-*   genre
-    
-*   topic
-    
-*   difficulty
-    
-*   word count
-    
+- id
+- title
+- yearGroup
+- genre
+- topic
+- difficulty
+- wordCount
+- text
+- tags
 
 Genres:
 
-*   fiction
-    
-*   nonfiction
-    
+- fiction
+- nonfiction
 
 Example topics:
 
-*   exploration
-    
-*   animals
-    
-*   weather
-    
-*   inventions
-    
-*   space
-    
-*   history
-    
-*   nature
-    
-*   transport
-    
-*   mysteries
-    
+- exploration
+- animals
+- weather
+- inventions
+- space
+- history
+- rivers
+- nature
+- transport
 
-### **3.2 Question Library**
+---
 
-Questions must be linked to passages.
+# Question Library
 
-Each question must include:
+Questions must include:
 
-*   question type
-    
-*   difficulty
-    
-*   marks
-    
-*   skill tag
-    
-*   domain tag
-    
-*   model answers
-    
-*   marking notes
-    
+- question id
+- passageId
+- questionType
+- domain
+- fineSkillTag
+- difficulty
+- marks
+- stem
+- options
+- acceptedAnswers
+- markingNotes
+- modelAnswerGold
+- modelAnswerSilver
+- commonWrongAnswer
 
-Question types:
+---
 
-*   multiple choice
-    
-*   short answer
-    
-*   evidence selection
-    
-*   ordering
-    
+# Skill Domains
 
-**4\. Reading Skill Framework**
-===============================
+| Domain | Description |
+|------|-------------|
+Retrieval | locating stated information |
+Vocabulary | understanding word meaning |
+Inference | reading between the lines |
+Structure | understanding organisation |
+Author Intent | understanding writer choices |
 
-Each question must be tagged with a **domain** and a **fine skill**.
+---
 
-### **Domains**
+# Weekly Test Structure
 
-**Domain**
+Each test includes:
 
-**Description**
+- 2 passages
+  - 1 fiction
+  - 1 nonfiction
 
-Retrieval
+Word length target:
 
-Find explicit information
+Year 4: 300–450 words
 
-Vocabulary
-
-Understand word meaning
-
-Inference
-
-Read between the lines
-
-Structure
-
-Understand organisation
-
-Author Intent
-
-Understand writer purpose
-
-### **Fine Skill Tags**
-
-Examples include:
-
-Retrieval
-
-*   scanning for facts
-    
-*   locating evidence
-    
-*   identifying stated information
-    
-
-Vocabulary
-
-*   meaning in context
-    
-*   shades of meaning
-    
-*   pronoun reference
-    
-
-Inference
-
-*   character feelings
-    
-*   motives
-    
-*   cause and effect
-    
-*   implied meaning
-    
-
-Structure
-
-*   paragraph main idea
-    
-*   sequence of events
-    
-*   purpose of headings
-    
-
-Author Intent
-
-*   tone
-    
-*   effect of language
-    
-*   writer viewpoint
-    
-*   prediction using evidence
-    
-
-**5\. Weekly Test Structure**
-=============================
-
-Each generated test should contain:
-
-### **2 passages**
-
-1 fiction1 nonfiction
-
-### **Passage length**
-
-**Year**
-
-**Words**
-
-Year 4
-
-300–450
-
-### **Questions**
-
-Total: **12**
+Total questions: **12**
 
 Recommended mix:
 
-**Domain**
+- Retrieval: 3
+- Vocabulary: 2
+- Inference: 4
+- Structure: 1
+- Author intent: 2
 
-**Questions**
+Total marks: **≈20**
 
-Retrieval
+---
 
-3
-
-Vocabulary
-
-2
-
-Inference
-
-4
-
-Structure
-
-1
-
-Author intent
-
-2
-
-### **Marks**
-
-Total marks: **~20**
-
-**6\. Adaptive Difficulty**
-===========================
+# Adaptive Difficulty
 
 Difficulty scale: **1–5**
 
-### **Rules**
+Rules:
 
-If previous score ≥ 85%→ increase difficulty
+If score ≥ 85%  
+Increase difficulty
 
-If score 70–84%→ keep difficulty
+If score 70–84%  
+Maintain difficulty
 
-If score 50–69%→ keep passage difficulty but add scaffolding
+If score 50–69%  
+Add scaffolded questions
 
-If score < 50%→ reduce difficulty
+If score < 50%  
+Reduce difficulty
 
-**7\. Diagnostic System**
-=========================
+---
 
-After marking a test the system must generate:
+# Diagnostic Report
 
-### **Overall results**
+After marking a test the system generates:
 
-*   total score
-    
-*   percentage
-    
+- total score
+- percentage
+- domain breakdown
+- strengths
+- development areas
+- next recommended focus
 
-### **Domain breakdown**
+Example output:
 
-Example:
-
-**Domain**
-
-**Result**
-
-Retrieval
-
-3/3
-
-Vocabulary
-
-1/2
-
-Inference
-
-2/4
-
-Structure
-
-1/1
-
-Author intent
-
-2/2
-
-### **Diagnostic summary**
-
-Include:
-
-StrengthsAreas for improvementSuggested next focus
-
-Example:
-
-Strength: Retrieval
-
+Strength: Retrieval  
 Focus area: Inference
 
-Suggested practice:
+Recommendation:
+Practice explaining why characters act in certain ways.
 
-Ask the pupil to explain why characters behave in certain ways.
+---
 
-**8\. Teacher Marking Guide**
-=============================
+# Progress Tracker
 
-For each test generate:
+Store:
 
-### **Mark scheme**
+- date
+- test number
+- score
+- percentage
+- time taken
+- difficulty level
 
-**Question**
+Track domain scores and highlight any domain below **60%**.
 
-**Skill**
+---
 
-**Marks**
-
-**Acceptable answer**
-
-### **Model Answers**
-
-Each open question should include:
-
-Gold answer (full marks)
-
-Silver answer (partial marks)
-
-Common wrong answer
-
-**9\. Progress Tracking**
-=========================
-
-Store results per pupil.
-
-Tracked fields:
-
-*   date
-    
-*   test number
-    
-*   score
-    
-*   percentage
-    
-*   time taken
-    
-*   difficulty level
-    
-
-Also store domain scores.
-
-### **Tracker dashboard**
-
-Show:
-
-*   score trend
-    
-*   skill trend
-    
-*   flagged weaknesses
-    
-
-Flag any domain scoring **below 60%**.
-
-**10\. Content Requirements**
-=============================
-
-Seed database with original content.
+# Content Requirements
 
 Minimum for MVP:
 
-### **Passages**
+Passages:
+- 12 fiction
+- 12 nonfiction
 
-24 passages
+Questions:
+- minimum 160
 
-**Type**
+All questions must include marking guidance.
 
-**Count**
+---
 
-Fiction
+# Application Pages
 
-12
+Dashboard  
+Passage Library  
+Question Library  
+Generate Test  
+Test Preview  
+Teacher Guide  
+Mark Results  
+Diagnostic Report  
+Progress Tracker
 
-Nonfiction
+---
 
-12
+# Technology Stack
 
-### **Questions**
+Frontend: Next.js  
+Language: TypeScript  
+Styling: Tailwind CSS  
+Database: SQLite  
+ORM: Prisma  
+Validation: Zod  
+Testing: Vitest
 
-Minimum:
+---
 
-**160 questions**
+# Success Criteria
 
-All must include:
+A user must be able to:
 
-*   skill tags
-    
-*   model answers
-    
-*   marking notes
-    
-
-**11\. Application Pages**
-==========================
-
-Create the following pages:
-
-### **Dashboard**
-
-Overview of progress.
-
-### **Passage Library**
-
-Browse and filter passages.
-
-### **Question Library**
-
-Browse questions.
-
-### **Generate Test**
-
-Create a new assessment.
-
-### **Test Preview**
-
-Show printable pupil test.
-
-### **Teacher Guide**
-
-Show marking scheme.
-
-### **Mark Results**
-
-Enter answers.
-
-### **Diagnostic Report**
-
-Show analysis.
-
-### **Progress Tracker**
-
-Visual progress history.
-
-**12\. User Interface Requirements**
-====================================
-
-The UI should be:
-
-*   simple
-    
-*   teacher-friendly
-    
-*   printable
-    
-
-Design priorities:
-
-*   readability
-    
-*   easy printing
-    
-*   minimal clutter
-    
-
-**13\. Technology Stack**
-=========================
-
-Recommended stack:
-
-FrontendNext.js (App Router)
-
-LanguageTypeScript
-
-StylingTailwind CSS
-
-DatabaseSQLite
-
-ORMPrisma
-
-ValidationZod
-
-TestingVitest or Jest
-
-**14\. Repository Structure**
-=============================
-
-Recommended structure:
-
-/app
-
-/components
-
-/lib
-
-/generator
-
-/diagnostics
-
-/content
-
-/content/passages
-
-/content/questions
-
-/prisma
-
-/tests
-
-Content files should be stored in /content as structured JSON or TypeScript modules.
-
-**15\. Test Generator Logic**
-=============================
-
-Algorithm:
-
-1.  Select fiction passage matching year and difficulty
-    
-2.  Select nonfiction passage
-    
-3.  Pull questions matching required skill distribution
-    
-4.  Avoid duplicate fine skill tags where possible
-    
-5.  Build test object
-    
-
-**16\. Sample Test Output**
-===========================
-
-Generated test object:
-
-{
-
- passages: \[...\],
-
- questions: \[...\],
-
- markScheme: \[...\],
-
- teacherGuide: \[...\]
-
-}
-
-**17\. Engineering Requirements**
-=================================
-
-The repository must include:
-
-*   seed script
-    
-*   generator logic
-    
-*   diagnostic engine
-    
-*   tracker logic
-    
-*   sample generated test
-    
-*   README with setup instructions
-    
-
-Code should be:
-
-*   clean
-    
-*   modular
-    
-*   documented
-    
-
-**18\. Future Extensions**
-==========================
-
-The system should support:
-
-Years 2–6
-
-Additional question types
-
-AI passage generation
-
-Bulk test generation
-
-Export to PDF
-
-Student accounts
-
-Teacher dashboards
-
-**19\. Success Criteria**
-=========================
-
-The MVP is successful if a user can:
-
-1.  Generate a Year 4 test
-    
-2.  Print the test
-    
-3.  Mark answers
-    
-4.  See a diagnostic report
-    
-5.  Track progress over time
-    
-
-**20\. Non-Goals**
-==================
-
-The system will not:
-
-*   copy NFER content
-    
-*   require login for MVP
-    
-*   support multiple schools initially
+1. Generate a test
+2. Print it
+3. Mark answers
+4. See diagnostics
+5. Track progress
