@@ -1,11 +1,31 @@
 let libraryCache = null;
 
+async function fetchLibrary(url) {
+  const response = await fetch(url, { cache: 'no-store' });
+  if (!response.ok) throw new Error(`Failed to load ${url}`);
+  return response.json();
+}
+
 export async function loadLibrary() {
   if (libraryCache) return libraryCache;
-  const response = await fetch('./data/year4_reading_starter_pack_10_tests.json', { cache: 'no-store' });
-  if (!response.ok) throw new Error('Failed to load starter pack JSON');
-  libraryCache = await response.json();
-  return libraryCache;
+
+  // GitHub Pages can be served at root or /<repo>/; try both absolute and relative paths.
+  const candidates = [
+    '/data/year4_reading_starter_pack_10_tests.json',
+    './data/year4_reading_starter_pack_10_tests.json'
+  ];
+
+  let lastError = null;
+  for (const url of candidates) {
+    try {
+      libraryCache = await fetchLibrary(url);
+      return libraryCache;
+    } catch (err) {
+      lastError = err;
+    }
+  }
+
+  throw lastError || new Error('Failed to load starter pack JSON');
 }
 
 export async function generateTest() {

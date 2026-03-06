@@ -8,7 +8,9 @@ nav a,.button-link{color:var(--brand);text-decoration:none;font-weight:600}
 .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:1rem;margin-bottom:1rem}
 .actions{display:flex;gap:.7rem;flex-wrap:wrap}
 button,.button-link{border:0;background:var(--brand);color:#fff;padding:.6rem .9rem;border-radius:8px;cursor:pointer;display:inline-block}
+button:disabled{opacity:.6;cursor:not-allowed}
 .button-link{line-height:1.4}
+.error{color:#b91c1c;font-weight:600}
 .question{border-top:1px dashed var(--line);padding-top:.8rem;margin-top:.8rem}
 label{font-weight:600;display:block;margin-bottom:.4rem}
 textarea,select{width:100%;padding:.55rem;border:1px solid #ccd6e2;border-radius:8px}

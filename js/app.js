@@ -15,12 +15,29 @@ function currentPage() {
 }
 
 async function initDashboard() {
-  const library = await loadLibrary();
-  renderDashboardMeta(document.getElementById('libraryMeta'), library);
-  document.getElementById('generateBtn').addEventListener('click', async () => {
-    const test = await generateTest();
-    saveCurrentTest(test);
-    window.location.href = './test.html';
+  const metaEl = document.getElementById('libraryMeta');
+  const errorEl = document.getElementById('dashboardError');
+  const generateBtn = document.getElementById('generateBtn');
+
+  try {
+    const library = await loadLibrary();
+    renderDashboardMeta(metaEl, library);
+    errorEl.textContent = '';
+  } catch (error) {
+    metaEl.textContent = 'Unable to load the reading test library.';
+    errorEl.textContent = `Error: ${error.message}`;
+    generateBtn.disabled = true;
+    return;
+  }
+
+  generateBtn.addEventListener('click', async () => {
+    try {
+      const test = await generateTest();
+      saveCurrentTest(test);
+      window.location.href = './test.html';
+    } catch (error) {
+      errorEl.textContent = `Could not generate a test: ${error.message}`;
+    }
   });
 }
 
