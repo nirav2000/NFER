@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NFER Assessment Interface</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="container">
+      <h1>NFER Assessment Interface</h1>
+      <p>
+        GitHub Pages-ready static app (no build step). Generate a reading test from the bundled
+        JSON content and view a quick skill summary.
+      </p>
+
+      <div class="controls">
+        <button id="generateBtn">Generate Test</button>
+      </div>
+
+      <section>
+        <h2>Selected Passage</h2>
+        <div id="passageCard" class="card">Click <strong>Generate Test</strong> to begin.</div>
+      </section>
+
+      <section>
+        <h2>Questions</h2>
+        <ol id="questionList" class="card list"></ol>
+      </section>
+
+      <section>
+        <h2>Analysis</h2>
+        <pre id="analysis" class="card"></pre>
+      </section>
+    </main>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
