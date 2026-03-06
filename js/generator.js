@@ -7,14 +7,67 @@ async function loadJson(path) {
   return res.json();
 }
 
-function sample(arr, count) {
-  const copy = [...arr];
-  const out = [];
-  while (copy.length && out.length < count) {
-    const idx = Math.floor(Math.random() * copy.length);
-    out.push(copy.splice(idx, 1)[0]);
-  }
-  return out;
+function sampleOne(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+function createSyntheticQuestion(passage, domain, idx, difficulty) {
+  const templates = {
+    retrieval: {
+      questionType: 'short',
+      marks: 1,
+      stem: `Find one detail from '${passage.title}' that supports the main idea.`,
+      acceptedAnswers: ['detail', 'evidence', passage.topic.toLowerCase()],
+      fineSkillTag: 'locating-evidence'
+    },
+    vocabulary: {
+      questionType: 'mcq',
+      marks: 1,
+      stem: `Which word is closest in meaning to "careful" in the passage?`,
+      options: ['thoughtful', 'reckless', 'silent', 'distant'],
+      acceptedAnswers: ['thoughtful'],
+      fineSkillTag: 'meaning-in-context'
+    },
+    inference: {
+      questionType: 'short',
+      marks: 2,
+      stem: `What can you infer about the situation in '${passage.title}'? Use evidence from the text.`,
+      acceptedAnswers: ['because', 'evidence', 'suggests'],
+      fineSkillTag: 'multi-cue-inference'
+    },
+    structure: {
+      questionType: 'short',
+      marks: 1,
+      stem: 'How does the order of ideas help the reader understand the text?',
+      acceptedAnswers: ['order', 'sequence', 'paragraph'],
+      fineSkillTag: 'text-organisation'
+    },
+    authorIntent: {
+      questionType: 'short',
+      marks: 2,
+      stem: 'Why did the writer include this topic for Year 4 readers?',
+      acceptedAnswers: ['inform', 'engage', 'encourage'],
+      fineSkillTag: 'author-purpose'
+    }
+  };
+
+  const t = templates[domain];
+  return {
+    id: `syn-${passage.id}-${domain}-${idx}`,
+    passageId: passage.id,
+    domain,
+    fineSkillTag: t.fineSkillTag,
+    difficulty,
+    marks: t.marks,
+    questionType: t.questionType,
+    stem: t.stem,
+    options: t.options || [],
+    acceptedAnswers: t.acceptedAnswers,
+    markingNotes: 'Accept equivalent responses grounded in the passage.',
+    modelAnswerGold: 'Accurate response with clear evidence from the text.',
+    modelAnswerSilver: 'Plausible response with partial evidence.',
+    commonWrongAnswer: 'Answer not linked to passage evidence.'
+  };
 }
 
 export async function loadLibraries() {
@@ -29,50 +82,46 @@ export async function loadLibraries() {
 
 export async function generateTest() {
   const { fiction, nonFiction, fictionQs, nonFictionQs } = await loadLibraries();
-
   const history = getHistory();
   const difficultyBand = difficultyFromHistory(history);
 
-  const selectedPassages = [sample(fiction, 1)[0], sample(nonFiction, 1)[0]];
-  const ids = new Set(selectedPassages.map((p) => p.id));
-  const relevant = [...fictionQs, ...nonFictionQs].filter((q) => ids.has(q.passageId));
+  const preferGenre = history.length % 2 === 0 ? 'fiction' : 'nonfiction';
+  const passage = preferGenre === 'fiction' ? sampleOne(fiction) : sampleOne(nonFiction);
+  const bank = preferGenre === 'fiction' ? fictionQs : nonFictionQs;
+  const passageQuestions = bank.filter((q) => q.passageId === passage.id);
 
   const distribution = { retrieval: 3, vocabulary: 2, inference: 4, structure: 1, authorIntent: 2 };
-  const questions = [];
-  const usedFine = new Set();
+  const selected = [];
+  const used = new Set();
 
   for (const [domain, needed] of Object.entries(distribution)) {
-    const pool = relevant.filter((q) => q.domain === domain).sort((a, b) => a.difficulty - b.difficulty);
-    const tuned =
+    const pool = passageQuestions.filter((q) => q.domain === domain);
+    const ordered =
       difficultyBand === 'stretch'
-        ? [...pool].reverse()
-        : difficultyBand === 'foundation'
-          ? [...pool]
-          : pool;
+        ? [...pool].sort((a, b) => b.difficulty - a.difficulty)
+        : [...pool].sort((a, b) => a.difficulty - b.difficulty);
 
-    for (const q of tuned) {
-      if (questions.filter((x) => x.domain === domain).length >= needed) continue;
-      if (usedFine.has(q.fineSkillTag) && tuned.some((x) => x.fineSkillTag !== q.fineSkillTag)) continue;
-      questions.push(q);
-      usedFine.add(q.fineSkillTag);
-      if (questions.length >= 12) break;
+    for (const q of ordered) {
+      if (selected.filter((x) => x.domain === domain).length >= needed) break;
+      selected.push(q);
+      used.add(q.id);
+    }
+
+    while (selected.filter((x) => x.domain === domain).length < needed) {
+      const idx = selected.filter((x) => x.domain === domain).length + 1;
+      selected.push(createSyntheticQuestion(passage, domain, idx, passage.difficulty));
     }
   }
 
-  while (questions.length < 12) {
-    const candidate = relevant[Math.floor(Math.random() * relevant.length)];
-    if (!questions.find((q) => q.id === candidate.id)) questions.push(candidate);
-  }
-
-  const totalMarks = questions.reduce((s, q) => s + q.marks, 0);
+  const totalMarks = selected.reduce((s, q) => s + q.marks, 0);
   return {
     id: `test-${Date.now()}`,
     createdAt: new Date().toISOString(),
     difficulty: difficultyBand,
-    passages: selectedPassages,
-    questions,
+    passages: [passage],
+    questions: selected,
     totalMarks,
-    targetTimeMinutes: 35,
-    scaffolded: difficultyBand === 'supported'
+    targetTimeMinutes: 25,
+    scaffolded: difficultyBand === 'supported' || difficultyBand === 'foundation'
   };
 }

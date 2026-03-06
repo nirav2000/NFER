@@ -16,7 +16,7 @@ This project is 100% static:
 - `index.html` – dashboard
 - `passage-library.html` – passage library
 - `question-library.html` – question library
-- `generator.html` – generate a new test
+- `generator.html` – generate a new test (single-passage mode)
 - `test.html` – pupil test preview
 - `teacher-guide.html` – teacher guide and answer key
 - `mark.html` – mark responses
@@ -49,3 +49,10 @@ Open `http://localhost:8000/`.
 5. Save.
 
 No compile step is required.
+
+
+## Generation behaviour
+
+- Each generated test uses one passage at a time.
+- All generated questions apply to that same passage.
+- If a passage has fewer than 12 stored questions, the app adds synthetic spec-aligned questions client-side to complete the target mix.

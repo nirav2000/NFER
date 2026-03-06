@@ -8,6 +8,28 @@ function byId(id) {
   return document.getElementById(id);
 }
 
+function bindMarking(form, test, startTime) {
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const data = new FormData(form);
+    const answers = {};
+    for (const [k, v] of data.entries()) answers[k] = String(v);
+
+    const base = markTest(test, answers);
+    const diagnostic = createDiagnostic(base);
+    const result = {
+      ...diagnostic,
+      id: test.id,
+      date: new Date().toISOString(),
+      difficulty: test.difficulty,
+      timeTakenMinutes: Math.max(1, Math.round((Date.now() - startTime) / 60000))
+    };
+
+    saveResult(result);
+    window.location.href = './diagnostic.html';
+  });
+}
+
 async function initDashboard() {
   const latest = getLastResult();
   const history = getHistory();
@@ -32,60 +54,53 @@ async function initGenerator() {
 function initTestPage() {
   const container = byId('testContainer');
   if (!container) return;
+
   const test = getCurrentTest();
   if (!test) {
     container.innerHTML = '<div class="card">No test generated yet. Go to Generate Test first.</div>';
     return;
   }
+
   renderTest(container, test, { includeAnswers: false });
+
+  const answerArea = byId('quickAnswerContainer');
+  if (answerArea) {
+    const form = renderMarkForm(answerArea, test, 'quickMarkForm');
+    bindMarking(form, test, Date.now());
+  }
 }
 
 function initTeacherGuidePage() {
   const container = byId('teacherGuideContainer');
   if (!container) return;
+
   const test = getCurrentTest();
   if (!test) {
     container.innerHTML = '<div class="card">No test generated yet.</div>';
     return;
   }
+
   renderTest(container, test, { includeAnswers: true });
 }
 
 function initMarkPage() {
   const wrap = byId('markContainer');
   if (!wrap) return;
+
   const test = getCurrentTest();
   if (!test) {
     wrap.innerHTML = '<div class="card">No test generated yet.</div>';
     return;
   }
 
-  const form = renderMarkForm(wrap, test);
-  const start = Date.now();
-
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const data = new FormData(form);
-    const answers = {};
-    for (const [k, v] of data.entries()) answers[k] = String(v);
-
-    const base = markTest(test, answers);
-    const diagnostic = createDiagnostic(base);
-    const result = {
-      ...diagnostic,
-      id: test.id,
-      date: new Date().toISOString(),
-      difficulty: test.difficulty,
-      timeTakenMinutes: Math.max(1, Math.round((Date.now() - start) / 60000))
-    };
-    saveResult(result);
-    window.location.href = './diagnostic.html';
-  });
+  const form = renderMarkForm(wrap, test, 'markForm');
+  bindMarking(form, test, Date.now());
 }
 
 function initDiagnosticPage() {
   const out = byId('diagnosticOutput');
   if (!out) return;
+
   const result = getLastResult();
   if (!result) {
     out.innerHTML = '<div class="card">No marked test found.</div>';
