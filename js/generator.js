@@ -18,36 +18,51 @@ function createSyntheticQuestion(passage, domain, idx, difficulty) {
       marks: 1,
       stem: `Find one detail from '${passage.title}' that supports the main idea.`,
       acceptedAnswers: ['detail', 'evidence', passage.topic.toLowerCase()],
-      fineSkillTag: 'locating-evidence'
+      fineSkillTag: 'locating-evidence',
+      gold: `One clear detail is identified and linked directly to the passage focus on ${passage.topic}.`,
+      silver: 'A valid detail is identified but the explanation is brief.',
+      wrong: 'Vague statement with no text detail.'
     },
     vocabulary: {
       questionType: 'mcq',
       marks: 1,
-      stem: `Which word is closest in meaning to "careful" in the passage?`,
+      stem: 'Which word is closest in meaning to "careful" in the passage?',
       options: ['thoughtful', 'reckless', 'silent', 'distant'],
       acceptedAnswers: ['thoughtful'],
-      fineSkillTag: 'meaning-in-context'
+      fineSkillTag: 'meaning-in-context',
+      gold: 'Thoughtful is the best synonym because the passage suggests considered actions and decisions.',
+      silver: 'Thoughtful is correct.',
+      wrong: 'Choosing a word that does not match context clues.'
     },
     inference: {
       questionType: 'short',
       marks: 2,
       stem: `What can you infer about the situation in '${passage.title}'? Use evidence from the text.`,
       acceptedAnswers: ['because', 'evidence', 'suggests'],
-      fineSkillTag: 'multi-cue-inference'
+      fineSkillTag: 'multi-cue-inference',
+      gold: 'A likely inference is stated and supported with a clear text reference.',
+      silver: 'A plausible inference is given with limited or general evidence.',
+      wrong: 'An opinion is given with no supporting evidence from the passage.'
     },
     structure: {
       questionType: 'short',
       marks: 1,
       stem: 'How does the order of ideas help the reader understand the text?',
       acceptedAnswers: ['order', 'sequence', 'paragraph'],
-      fineSkillTag: 'text-organisation'
+      fineSkillTag: 'text-organisation',
+      gold: 'The response explains sequence (opening, development, conclusion) and how it supports understanding.',
+      silver: 'Mentions order but gives limited explanation.',
+      wrong: 'Describes content only, not structure.'
     },
     authorIntent: {
       questionType: 'short',
       marks: 2,
       stem: 'Why did the writer include this topic for Year 4 readers?',
       acceptedAnswers: ['inform', 'engage', 'encourage'],
-      fineSkillTag: 'author-purpose'
+      fineSkillTag: 'author-purpose',
+      gold: 'Purpose is identified and linked to Year 4 audience interests/learning needs.',
+      silver: 'Purpose is identified but audience link is brief.',
+      wrong: 'Retells facts without discussing writer purpose.'
     }
   };
 
@@ -64,9 +79,9 @@ function createSyntheticQuestion(passage, domain, idx, difficulty) {
     options: t.options || [],
     acceptedAnswers: t.acceptedAnswers,
     markingNotes: 'Accept equivalent responses grounded in the passage.',
-    modelAnswerGold: 'Accurate response with clear evidence from the text.',
-    modelAnswerSilver: 'Plausible response with partial evidence.',
-    commonWrongAnswer: 'Answer not linked to passage evidence.'
+    modelAnswerGold: t.gold,
+    modelAnswerSilver: t.silver,
+    commonWrongAnswer: t.wrong
   };
 }
 
@@ -92,7 +107,6 @@ export async function generateTest() {
 
   const distribution = { retrieval: 3, vocabulary: 2, inference: 4, structure: 1, authorIntent: 2 };
   const selected = [];
-  const used = new Set();
 
   for (const [domain, needed] of Object.entries(distribution)) {
     const pool = passageQuestions.filter((q) => q.domain === domain);
@@ -104,7 +118,6 @@ export async function generateTest() {
     for (const q of ordered) {
       if (selected.filter((x) => x.domain === domain).length >= needed) break;
       selected.push(q);
-      used.add(q.id);
     }
 
     while (selected.filter((x) => x.domain === domain).length < needed) {

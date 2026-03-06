@@ -1,6 +1,14 @@
 import { generateTest, loadLibraries } from './generator.js';
 import { renderTest, renderMarkForm } from './renderer.js';
-import { saveCurrentTest, getCurrentTest, saveResult, getLastResult, getHistory } from './storage.js';
+import {
+  saveCurrentTest,
+  getCurrentTest,
+  saveResult,
+  getLastResult,
+  getHistory,
+  saveCompletedTest,
+  getCompletedTests
+} from './storage.js';
 import { markTest, createDiagnostic } from './diagnostics.js';
 import { renderTracker, attachClear } from './tracker.js';
 
@@ -26,6 +34,14 @@ function bindMarking(form, test, startTime) {
     };
 
     saveResult(result);
+    saveCompletedTest({
+      testId: test.id,
+      date: result.date,
+      test,
+      answers,
+      result
+    });
+
     window.location.href = './diagnostic.html';
   });
 }
@@ -33,12 +49,15 @@ function bindMarking(form, test, startTime) {
 async function initDashboard() {
   const latest = getLastResult();
   const history = getHistory();
+  const completed = getCompletedTests();
+
   if (byId('latestSummary')) {
     byId('latestSummary').textContent = latest
       ? `Latest score: ${latest.totalScore}/${latest.totalMarks} (${latest.percentage}%)`
       : 'No completed tests yet.';
   }
   if (byId('historyCount')) byId('historyCount').textContent = String(history.length);
+  if (byId('completedCount')) byId('completedCount').textContent = String(completed.length);
 }
 
 async function initGenerator() {
@@ -63,6 +82,11 @@ function initTestPage() {
 
   renderTest(container, test, { includeAnswers: false });
 
+  const quickWrap = byId('quickAnswerContainer');
+  if (quickWrap) {
+    const form = renderMarkForm(quickWrap, test, 'quickMarkForm');
+    bindMarking(form, test, Date.now());
+  }
 }
 
 function initTeacherGuidePage() {

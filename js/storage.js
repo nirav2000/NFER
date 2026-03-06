@@ -1,7 +1,8 @@
 const KEYS = {
   currentTest: 'nfer.currentTest',
   lastResult: 'nfer.lastResult',
-  history: 'nfer.history'
+  history: 'nfer.history',
+  completedTests: 'nfer.completedTests'
 };
 
 export function saveCurrentTest(test) {
@@ -11,6 +12,17 @@ export function saveCurrentTest(test) {
 export function getCurrentTest() {
   const raw = localStorage.getItem(KEYS.currentTest);
   return raw ? JSON.parse(raw) : null;
+}
+
+export function getCompletedTests() {
+  const raw = localStorage.getItem(KEYS.completedTests);
+  return raw ? JSON.parse(raw) : [];
+}
+
+export function saveCompletedTest(record) {
+  const all = getCompletedTests();
+  all.push(record);
+  localStorage.setItem(KEYS.completedTests, JSON.stringify(all));
 }
 
 export function saveResult(result) {
@@ -33,4 +45,5 @@ export function getHistory() {
 export function clearHistory() {
   localStorage.removeItem(KEYS.history);
   localStorage.removeItem(KEYS.lastResult);
+  localStorage.removeItem(KEYS.completedTests);
 }

@@ -11,14 +11,31 @@ function domainBadge(domain) {
   return `<span class="domain-chip ${meta.className}" title="${domain}">${meta.icon}</span>`;
 }
 
+function inferHighQualityFallback(q) {
+  if (q.questionType === 'mcq') {
+    return {
+      gold: `The correct option is selected and matches the context of the question: ${q.acceptedAnswers?.[0] || 'accepted answer'}.`,
+      silver: 'A plausible option is chosen but does not match all context clues.',
+      wrong: 'An option is chosen that contradicts passage evidence.'
+    };
+  }
+
+  return {
+    gold: 'Clear answer with precise text evidence and an explicit link back to the question focus.',
+    silver: 'Partly correct answer with limited evidence or explanation.',
+    wrong: 'General or copied response without relevant evidence.'
+  };
+}
+
 function renderModelAnswerScheme(q) {
+  const fallback = inferHighQualityFallback(q);
   return `
-    <details class="scheme-block">
+    <details class="scheme-block" open>
       <summary>Mark scheme and model answers</summary>
-      <p><strong>Marking notes:</strong> ${q.markingNotes || 'Use text-based evidence and equivalent wording where appropriate.'}</p>
-      <p><strong>Gold model answer:</strong> ${q.modelAnswerGold || 'Accurate answer with clear evidence and precise explanation.'}</p>
-      <p><strong>Silver model answer:</strong> ${q.modelAnswerSilver || 'Partly correct answer with some evidence from the text.'}</p>
-      <p><strong>Common wrong answer:</strong> ${q.commonWrongAnswer || 'Response not supported by the text.'}</p>
+      <p><strong>Marking notes:</strong> ${q.markingNotes || 'Award marks for relevant points grounded in the passage, accepting clear equivalents.'}</p>
+      <p><strong>Gold model answer:</strong> ${q.modelAnswerGold || fallback.gold}</p>
+      <p><strong>Silver model answer:</strong> ${q.modelAnswerSilver || fallback.silver}</p>
+      <p><strong>Common wrong answer:</strong> ${q.commonWrongAnswer || fallback.wrong}</p>
       <p><strong>Accepted keywords:</strong> ${(q.acceptedAnswers || []).join(' | ')}</p>
     </details>
   `;
@@ -89,7 +106,6 @@ export function renderMarkForm(container, test, formId = 'markForm') {
     block.className = 'card question-item';
 
     const label = document.createElement('label');
-    label.htmlFor = `${formId}_ans_${q.id}`;
     label.className = 'question-stem';
     label.innerHTML = `${idx + 1}. ${domainBadge(q.domain)} ${q.stem}`;
     block.appendChild(label);

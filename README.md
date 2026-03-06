@@ -56,3 +56,12 @@ No compile step is required.
 - Each generated test uses one passage at a time.
 - All generated questions apply to that same passage.
 - If a passage has fewer than 12 stored questions, the app adds synthetic spec-aligned questions client-side to complete the target mix.
+
+
+## Local data saved
+
+The app stores the following in browser LocalStorage:
+- current generated test
+- latest diagnostic result
+- result history
+- completed test records (including submitted answers and scored outcomes)
