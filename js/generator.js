@@ -17,21 +17,23 @@ function sample(arr, count) {
   return out;
 }
 
-export async function generateTest() {
+export async function loadLibraries() {
   const [fiction, nonFiction, fictionQs, nonFictionQs] = await Promise.all([
     loadJson('./data/passages/year4-fiction.json'),
     loadJson('./data/passages/year4-nonfiction.json'),
     loadJson('./data/questions/year4-fiction-questions.json'),
     loadJson('./data/questions/year4-nonfiction-questions.json')
   ]);
+  return { fiction, nonFiction, fictionQs, nonFictionQs };
+}
+
+export async function generateTest() {
+  const { fiction, nonFiction, fictionQs, nonFictionQs } = await loadLibraries();
 
   const history = getHistory();
   const difficultyBand = difficultyFromHistory(history);
 
-  const selectedPassages = [
-    sample(fiction, 1)[0],
-    sample(nonFiction, 1)[0]
-  ];
+  const selectedPassages = [sample(fiction, 1)[0], sample(nonFiction, 1)[0]];
   const ids = new Set(selectedPassages.map((p) => p.id));
   const relevant = [...fictionQs, ...nonFictionQs].filter((q) => ids.has(q.passageId));
 
@@ -41,18 +43,19 @@ export async function generateTest() {
 
   for (const [domain, needed] of Object.entries(distribution)) {
     const pool = relevant.filter((q) => q.domain === domain).sort((a, b) => a.difficulty - b.difficulty);
-    const tuned = difficultyBand === 'stretch'
-      ? [...pool].reverse()
-      : difficultyBand === 'foundation'
-      ? [...pool]
-      : pool;
+    const tuned =
+      difficultyBand === 'stretch'
+        ? [...pool].reverse()
+        : difficultyBand === 'foundation'
+          ? [...pool]
+          : pool;
 
     for (const q of tuned) {
-      if (questions.length >= 12) break;
       if (questions.filter((x) => x.domain === domain).length >= needed) continue;
       if (usedFine.has(q.fineSkillTag) && tuned.some((x) => x.fineSkillTag !== q.fineSkillTag)) continue;
       questions.push(q);
       usedFine.add(q.fineSkillTag);
+      if (questions.length >= 12) break;
     }
   }
 
@@ -69,6 +72,7 @@ export async function generateTest() {
     passages: selectedPassages,
     questions,
     totalMarks,
-    targetTimeMinutes: 35
+    targetTimeMinutes: 35,
+    scaffolded: difficultyBand === 'supported'
   };
 }

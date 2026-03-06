@@ -1,10 +1,12 @@
-import { generateTest } from './generator.js';
+import { generateTest, loadLibraries } from './generator.js';
 import { renderTest, renderMarkForm } from './renderer.js';
 import { saveCurrentTest, getCurrentTest, saveResult, getLastResult, getHistory } from './storage.js';
 import { markTest, createDiagnostic } from './diagnostics.js';
 import { renderTracker, attachClear } from './tracker.js';
 
-function byId(id) { return document.getElementById(id); }
+function byId(id) {
+  return document.getElementById(id);
+}
 
 async function initDashboard() {
   const latest = getLastResult();
@@ -31,18 +33,33 @@ function initTestPage() {
   const container = byId('testContainer');
   if (!container) return;
   const test = getCurrentTest();
-  if (!test) { container.textContent = 'No test generated yet.'; return; }
+  if (!test) {
+    container.innerHTML = '<div class="card">No test generated yet. Go to Generate Test first.</div>';
+    return;
+  }
   renderTest(container, test, { includeAnswers: false });
+}
 
-  const teacher = byId('teacherGuide');
-  if (teacher) renderTest(teacher, test, { includeAnswers: true });
+function initTeacherGuidePage() {
+  const container = byId('teacherGuideContainer');
+  if (!container) return;
+  const test = getCurrentTest();
+  if (!test) {
+    container.innerHTML = '<div class="card">No test generated yet.</div>';
+    return;
+  }
+  renderTest(container, test, { includeAnswers: true });
 }
 
 function initMarkPage() {
   const wrap = byId('markContainer');
   if (!wrap) return;
   const test = getCurrentTest();
-  if (!test) { wrap.textContent = 'No test generated yet.'; return; }
+  if (!test) {
+    wrap.innerHTML = '<div class="card">No test generated yet.</div>';
+    return;
+  }
+
   const form = renderMarkForm(wrap, test);
   const start = Date.now();
 
@@ -70,15 +87,21 @@ function initDiagnosticPage() {
   const out = byId('diagnosticOutput');
   if (!out) return;
   const result = getLastResult();
-  if (!result) { out.textContent = 'No marked test found.'; return; }
+  if (!result) {
+    out.innerHTML = '<div class="card">No marked test found.</div>';
+    return;
+  }
+
   out.innerHTML = `
-    <div class="card"><h2>Diagnostic Report</h2>
+    <div class="card">
+      <h2>Diagnostic Report</h2>
       <p><strong>Total score:</strong> ${result.totalScore}/${result.totalMarks} (${result.percentage}%)</p>
       <p><strong>Strengths:</strong> ${result.strengths.join(', ') || 'None yet'}</p>
       <p><strong>Development areas:</strong> ${result.developmentAreas.join(', ') || 'None'}</p>
       <p><strong>Recommended next focus:</strong> ${result.recommendedNextFocus}</p>
     </div>
   `;
+
   const table = byId('domainTable');
   if (table) {
     table.innerHTML = '';
@@ -97,9 +120,39 @@ function initTrackerPage() {
   attachClear(byId('clearHistoryBtn'), () => renderTracker(tbody, byId('trackerWarning')));
 }
 
+async function initPassageLibraryPage() {
+  const body = byId('passageTableBody');
+  if (!body) return;
+
+  const { fiction, nonFiction } = await loadLibraries();
+  [...fiction, ...nonFiction].forEach((p) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${p.id}</td><td>${p.title}</td><td>${p.genre}</td><td>${p.topic}</td><td>${p.difficulty}</td><td>${p.wordCount}</td>`;
+    body.appendChild(tr);
+  });
+}
+
+async function initQuestionLibraryPage() {
+  const body = byId('questionTableBody');
+  if (!body) return;
+
+  const { fictionQs, nonFictionQs } = await loadLibraries();
+  const all = [...fictionQs, ...nonFictionQs];
+  byId('questionSummary').textContent = `Total questions: ${all.length}`;
+
+  all.forEach((q) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${q.id}</td><td>${q.passageId}</td><td>${q.domain}</td><td>${q.fineSkillTag}</td><td>${q.questionType}</td><td>${q.marks}</td>`;
+    body.appendChild(tr);
+  });
+}
+
 initDashboard();
 initGenerator();
 initTestPage();
+initTeacherGuidePage();
 initMarkPage();
 initDiagnosticPage();
 initTrackerPage();
+initPassageLibraryPage();
+initQuestionLibraryPage();

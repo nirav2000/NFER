@@ -9,7 +9,7 @@ export function renderTest(container, test, { includeAnswers = false } = {}) {
   test.passages.forEach((p, idx) => {
     const sec = document.createElement('section');
     sec.className = 'card';
-    sec.innerHTML = `<h3>Passage ${idx + 1}: ${p.title} (${p.genre})</h3><p>${p.text}</p>`;
+    sec.innerHTML = `<h3>Passage ${idx + 1}: ${p.title} (${p.genre})</h3><p><strong>Year:</strong> ${p.yearGroup} | <strong>Word count:</strong> ${p.wordCount}</p><p>${p.text}</p>`;
     container.appendChild(sec);
   });
 
@@ -21,6 +21,7 @@ export function renderTest(container, test, { includeAnswers = false } = {}) {
     const li = document.createElement('li');
     li.className = 'question-item';
     li.innerHTML = `<p><strong>[${q.domain}]</strong> ${q.stem} <em>(${q.marks} marks)</em></p>`;
+
     if (q.options && q.options.length) {
       const ul = document.createElement('ul');
       q.options.forEach((opt) => {
@@ -30,12 +31,14 @@ export function renderTest(container, test, { includeAnswers = false } = {}) {
       });
       li.appendChild(ul);
     }
+
     if (includeAnswers) {
       const a = document.createElement('p');
       a.className = 'answer-key';
       a.textContent = `Accepted: ${q.acceptedAnswers.join(' | ')}`;
       li.appendChild(a);
     }
+
     ol.appendChild(li);
   });
   qWrap.appendChild(ol);
@@ -53,6 +56,7 @@ export function renderMarkForm(container, test) {
     const label = document.createElement('label');
     label.htmlFor = `ans_${q.id}`;
     label.innerHTML = `${idx + 1}. <strong>[${q.domain}]</strong> ${q.stem}`;
+
     const input = document.createElement(q.questionType === 'mcq' ? 'select' : 'textarea');
     input.id = `ans_${q.id}`;
     input.name = q.id;

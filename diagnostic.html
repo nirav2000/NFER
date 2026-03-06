@@ -1,21 +1,39 @@
-<!doctype html><html lang='en'><head><meta charset='UTF-8'/><meta name='viewport' content='width=device-width,initial-scale=1.0'/><title>Diagnostic Report</title><link rel='stylesheet' href='./css/styles.css'/></head><body>
-<header>
-  <nav class="nav">
-    <a href="./index.html">Dashboard</a>
-    <a href="./generator.html">Generate Test</a>
-    <a href="./test.html">Test Page</a>
-    <a href="./mark.html">Marking</a>
-    <a href="./diagnostic.html">Diagnostic</a>
-    <a href="./tracker.html">Progress Tracker</a>
-  </nav>
-</header>
-<main>
-<section id='diagnosticOutput'></section>
-<section class='card'>
-  <h3>Domain breakdown</h3>
-  <table>
-    <thead><tr><th>Domain</th><th>Score</th><th>Percentage</th></tr></thead>
-    <tbody id='domainTable'></tbody>
-  </table>
-</section>
-</main><script type='module' src='./js/app.js'></script></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Diagnostic Report</title>
+    <link rel="stylesheet" href="./css/styles.css" />
+  </head>
+  <body>
+    <header>
+      <nav class="nav">
+        <a href="./index.html">Dashboard</a>
+        <a href="./passage-library.html">Passage Library</a>
+        <a href="./question-library.html">Question Library</a>
+        <a href="./generator.html">Generate Test</a>
+        <a href="./test.html">Test Preview</a>
+        <a href="./teacher-guide.html">Teacher Guide</a>
+        <a href="./mark.html">Mark Results</a>
+        <a href="./diagnostic.html">Diagnostic Report</a>
+        <a href="./tracker.html">Progress Tracker</a>
+      </nav>
+    </header>
+
+    <main>
+      <section id="diagnosticOutput"></section>
+      <section class="card">
+        <h2>Domain Breakdown</h2>
+        <table>
+          <thead>
+            <tr><th>Domain</th><th>Score</th><th>Percentage</th></tr>
+          </thead>
+          <tbody id="domainTable"></tbody>
+        </table>
+      </section>
+    </main>
+
+    <script type="module" src="./js/app.js"></script>
+  </body>
+</html>

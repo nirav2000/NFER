@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Test Preview</title>
+    <title>Question Library</title>
     <link rel="stylesheet" href="./css/styles.css" />
   </head>
   <body>
@@ -22,7 +22,19 @@
     </header>
 
     <main>
-      <section id="testContainer"></section>
+      <section class="card">
+        <h1>Question Library</h1>
+        <p>Question bank with domain coverage and fine-skill tags.</p>
+        <p id="questionSummary"></p>
+      </section>
+      <section class="card">
+        <table>
+          <thead>
+            <tr><th>ID</th><th>Passage</th><th>Domain</th><th>Fine skill</th><th>Type</th><th>Marks</th></tr>
+          </thead>
+          <tbody id="questionTableBody"></tbody>
+        </table>
+      </section>
     </main>
 
     <script type="module" src="./js/app.js"></script>

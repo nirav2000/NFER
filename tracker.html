@@ -1,24 +1,50 @@
-<!doctype html><html lang='en'><head><meta charset='UTF-8'/><meta name='viewport' content='width=device-width,initial-scale=1.0'/><title>Progress Tracker</title><link rel='stylesheet' href='./css/styles.css'/></head><body>
-<header>
-  <nav class="nav">
-    <a href="./index.html">Dashboard</a>
-    <a href="./generator.html">Generate Test</a>
-    <a href="./test.html">Test Page</a>
-    <a href="./mark.html">Marking</a>
-    <a href="./diagnostic.html">Diagnostic</a>
-    <a href="./tracker.html">Progress Tracker</a>
-  </nav>
-</header>
-<main>
-<section class='card'>
-  <h1>Progress Tracker</h1>
-  <p id='trackerWarning'></p>
-  <button id='clearHistoryBtn' class='no-print'>Clear history</button>
-</section>
-<section class='card'>
-  <table>
-    <thead><tr><th>Date</th><th>Score</th><th>Percentage</th><th>Difficulty</th><th>Time</th><th>Domains &lt;60%</th></tr></thead>
-    <tbody id='trackerBody'></tbody>
-  </table>
-</section>
-</main><script type='module' src='./js/app.js'></script></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Progress Tracker</title>
+    <link rel="stylesheet" href="./css/styles.css" />
+  </head>
+  <body>
+    <header>
+      <nav class="nav">
+        <a href="./index.html">Dashboard</a>
+        <a href="./passage-library.html">Passage Library</a>
+        <a href="./question-library.html">Question Library</a>
+        <a href="./generator.html">Generate Test</a>
+        <a href="./test.html">Test Preview</a>
+        <a href="./teacher-guide.html">Teacher Guide</a>
+        <a href="./mark.html">Mark Results</a>
+        <a href="./diagnostic.html">Diagnostic Report</a>
+        <a href="./tracker.html">Progress Tracker</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="card">
+        <h1>Progress Tracker</h1>
+        <p id="trackerWarning"></p>
+        <button id="clearHistoryBtn" class="no-print">Clear History</button>
+      </section>
+
+      <section class="card">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Score</th>
+              <th>Percentage</th>
+              <th>Difficulty</th>
+              <th>Time</th>
+              <th>Domains &lt; 60%</th>
+            </tr>
+          </thead>
+          <tbody id="trackerBody"></tbody>
+        </table>
+      </section>
+    </main>
+
+    <script type="module" src="./js/app.js"></script>
+  </body>
+</html>
