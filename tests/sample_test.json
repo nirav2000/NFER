@@ -1,0 +1,38 @@
+{
+  "generated_at": "2026-03-06T20:47:23.826Z",
+  "year": 4,
+  "passage": {
+    "id": "deep_sea",
+    "year": 4,
+    "genre": "nonfiction",
+    "difficulty": 3,
+    "word_count": 300,
+    "title": "Exploring Deep Seas",
+    "text": "Much of the ocean is still unexplored. Scientists use robotic submarines to travel where humans cannot. In the deep sea, sunlight does not reach the water, and many creatures produce their own light through a process called bioluminescence. These discoveries help researchers learn how life adapts to extreme environments."
+  },
+  "questions": [
+    {
+      "id": 1,
+      "skill": "vocabulary",
+      "type": "multiple_choice",
+      "question": "What does 'bioluminescence' mean in this passage?",
+      "options": [
+        "Moving very quickly underwater",
+        "Producing light naturally",
+        "Hunting in complete darkness",
+        "Changing colour to hide"
+      ],
+      "answer": 1,
+      "marks": 1
+    },
+    {
+      "id": 2,
+      "skill": "author_intent",
+      "type": "short_answer",
+      "question": "Why does the author mention robotic submarines?",
+      "answer_guidance": "To explain how scientists can explore areas humans cannot reach.",
+      "marks": 2
+    }
+  ],
+  "total_marks": 3
+}

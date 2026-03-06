@@ -1,3 +1,3 @@
 # NFER
 
-Updated: 2026-03-06
+Starter repository for creating NFER-style reading assessments with reusable passage and question banks.
