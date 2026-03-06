@@ -68,6 +68,37 @@ export function renderQuestion(test, index, answerValue, showScheme, formEl) {
   formEl.appendChild(block);
 }
 
+export function renderAllQuestions(test, answers, showScheme, formEl) {
+  formEl.innerHTML = '';
+
+  test.questions.forEach((q, index) => {
+    const block = document.createElement('section');
+    block.className = 'question';
+
+    const label = document.createElement('label');
+    label.textContent = `${index + 1}. ${q.stem} (${q.marks} marks)`;
+    block.appendChild(label);
+
+    const passageRef = document.createElement('p');
+    passageRef.className = 'muted';
+    passageRef.textContent = `Refer to Passage ${q.passageId === 'P2' ? '2' : '1'}`;
+    block.appendChild(passageRef);
+
+    block.appendChild(createQuestionInput(q, answers[q.id]));
+
+    const scheme = document.createElement('div');
+    scheme.className = 'scheme';
+    scheme.hidden = !showScheme;
+    scheme.innerHTML = `<p><strong>Accepted:</strong> ${(q.acceptedAnswers || []).join(' | ')}</p>
+      <p><strong>Model (Gold):</strong> ${q.modelAnswerGold || 'Precise answer with clear text evidence.'}</p>
+      <p><strong>Model (Silver):</strong> ${q.modelAnswerSilver || 'Mostly correct answer with some evidence.'}</p>
+      <p><strong>Notes:</strong> ${q.markingNotes || 'Award based on evidence and correctness.'}</p>`;
+    block.appendChild(scheme);
+
+    formEl.appendChild(block);
+  });
+}
+
 export function readCurrentAnswer(formEl, question) {
   const data = new FormData(formEl);
   return String(data.get(question.id) || '').trim();

@@ -8,6 +8,8 @@ nav a,.button-link{color:var(--brand);text-decoration:none;font-weight:600}
 .container{max-width:980px;margin:1rem auto;padding:0 .8rem 2rem}
 .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:1rem;margin-bottom:1rem}
 .actions{display:flex;gap:.7rem;flex-wrap:wrap}
+.toggle{display:flex;align-items:center;gap:.4rem;font-weight:600}
+.toggle input{margin:0}
 button,.button-link{border:0;background:var(--brand);color:#fff;padding:.6rem .9rem;border-radius:8px;cursor:pointer;display:inline-block}
 button:disabled{opacity:.6;cursor:not-allowed}
 .button-link{line-height:1.4}

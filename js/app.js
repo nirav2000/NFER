@@ -5,6 +5,7 @@ import {
   renderDashboardMeta,
   renderTestMeta,
   renderQuestion,
+  renderAllQuestions,
   readCurrentAnswer,
   renderReview,
   renderProgress,
@@ -65,7 +66,15 @@ function initTest() {
     questionCard: document.getElementById('questionCard'),
     reviewCard: document.getElementById('reviewCard'),
     reviewList: document.getElementById('reviewList'),
-    schemeToggle: document.getElementById('schemeToggle')
+    schemeToggle: document.getElementById('schemeToggle'),
+    showTimerProgressToggle: document.getElementById('showTimerProgressToggle'),
+    showAllQuestionsToggle: document.getElementById('showAllQuestionsToggle'),
+    timerCard: document.querySelector('.timer-card'),
+    submitNowBtn: document.getElementById('submitNowBtn'),
+    prevBtn: document.getElementById('prevBtn'),
+    skipBtn: document.getElementById('skipBtn'),
+    nextBtn: document.getElementById('nextBtn'),
+    reviewBtn: document.getElementById('reviewBtn')
   };
 
   renderTestMeta(test, refs);
@@ -75,6 +84,8 @@ function initTest() {
     answers: {},
     skipped: new Set(),
     showScheme: false,
+    showAllQuestions: false,
+    showTimerProgress: true,
     deadline: Date.now() + (TEST_DURATION_SECONDS * 1000)
   };
 
@@ -87,12 +98,39 @@ function initTest() {
 
   const answeredCount = () => test.questions.filter((q) => String(state.answers[q.id] || '').trim()).length;
 
+  const collectAllAnswersFromForm = () => {
+    const data = new FormData(refs.form);
+    const collected = {};
+    test.questions.forEach((q) => {
+      collected[q.id] = String(data.get(q.id) || '').trim();
+    });
+    return collected;
+  };
+
   const refreshQuestionView = () => {
+    refs.timerCard.hidden = !state.showTimerProgress;
+
+    if (state.showAllQuestions) {
+      renderAllQuestions(test, state.answers, state.showScheme, refs.form);
+      renderProgress(0, test.questions.length, answeredCount(), refs.progressFill, refs.progressText);
+      refs.prevBtn.hidden = true;
+      refs.skipBtn.hidden = true;
+      refs.nextBtn.hidden = true;
+      refs.reviewBtn.hidden = true;
+      refs.submitNowBtn.hidden = false;
+      return;
+    }
+
     const q = test.questions[state.currentIndex];
     renderQuestion(test, state.currentIndex, state.answers[q.id], state.showScheme, refs.form);
     renderProgress(state.currentIndex, test.questions.length, answeredCount(), refs.progressFill, refs.progressText);
-    document.getElementById('prevBtn').disabled = state.currentIndex === 0;
-    document.getElementById('nextBtn').disabled = state.currentIndex === test.questions.length - 1;
+    refs.prevBtn.hidden = false;
+    refs.skipBtn.hidden = false;
+    refs.nextBtn.hidden = false;
+    refs.reviewBtn.hidden = false;
+    refs.submitNowBtn.hidden = true;
+    refs.prevBtn.disabled = state.currentIndex === 0;
+    refs.nextBtn.disabled = state.currentIndex === test.questions.length - 1;
   };
 
   const openReview = () => {
@@ -112,7 +150,12 @@ function initTest() {
   };
 
   const submitTest = () => {
-    persistCurrentAnswer();
+    if (state.showAllQuestions) {
+      state.answers = collectAllAnswersFromForm();
+    } else {
+      persistCurrentAnswer();
+    }
+
     const marked = markTest(test, state.answers);
     const diagnostic = buildDiagnostic(marked);
     const timeTakenSeconds = Math.max(0, Math.round((TEST_DURATION_SECONDS * 1000 - Math.max(0, state.deadline - Date.now())) / 1000));
@@ -134,19 +177,19 @@ function initTest() {
     window.location.href = './diagnostic.html';
   };
 
-  document.getElementById('prevBtn').addEventListener('click', () => {
+  refs.prevBtn.addEventListener('click', () => {
     persistCurrentAnswer();
     state.currentIndex = Math.max(0, state.currentIndex - 1);
     refreshQuestionView();
   });
 
-  document.getElementById('nextBtn').addEventListener('click', () => {
+  refs.nextBtn.addEventListener('click', () => {
     persistCurrentAnswer();
     state.currentIndex = Math.min(test.questions.length - 1, state.currentIndex + 1);
     refreshQuestionView();
   });
 
-  document.getElementById('skipBtn').addEventListener('click', () => {
+  refs.skipBtn.addEventListener('click', () => {
     persistCurrentAnswer();
     const q = test.questions[state.currentIndex];
     if (!state.answers[q.id]) state.skipped.add(q.id);
@@ -159,7 +202,8 @@ function initTest() {
     }
   });
 
-  document.getElementById('reviewBtn').addEventListener('click', openReview);
+  refs.reviewBtn.addEventListener('click', openReview);
+  refs.submitNowBtn.addEventListener('click', submitTest);
   document.getElementById('backToQuestionsBtn').addEventListener('click', () => {
     refs.reviewCard.hidden = true;
     refs.questionCard.hidden = false;
@@ -168,8 +212,30 @@ function initTest() {
   document.getElementById('submitTestBtn').addEventListener('click', submitTest);
 
   refs.schemeToggle.addEventListener('change', (e) => {
+    if (state.showAllQuestions) {
+      state.answers = collectAllAnswersFromForm();
+    }
     state.showScheme = e.target.checked;
     toggleSchemes(state.showScheme, refs.form);
+    if (state.showAllQuestions) refreshQuestionView();
+  });
+
+  refs.showTimerProgressToggle.addEventListener('change', (e) => {
+    state.showTimerProgress = e.target.checked;
+    refs.timerCard.hidden = !state.showTimerProgress;
+  });
+
+  refs.showAllQuestionsToggle.addEventListener('change', (e) => {
+    if (!state.showAllQuestions) {
+      persistCurrentAnswer();
+    } else {
+      state.answers = collectAllAnswersFromForm();
+    }
+
+    state.showAllQuestions = e.target.checked;
+    refs.reviewCard.hidden = true;
+    refs.questionCard.hidden = false;
+    refreshQuestionView();
   });
 
   const timer = setInterval(() => {
@@ -178,7 +244,11 @@ function initTest() {
 
     if (remaining <= 0) {
       clearInterval(timer);
-      openReview();
+      if (state.showAllQuestions) {
+        submitTest();
+      } else {
+        openReview();
+      }
     }
   }, 1000);
 

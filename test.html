@@ -18,6 +18,14 @@
   <main class="container">
     <section class="card" id="testMeta"></section>
 
+    <section class="card">
+      <h2>Test Display Options</h2>
+      <div class="actions">
+        <label class="toggle"><input type="checkbox" id="showTimerProgressToggle" checked /> Show timer and progress bar</label>
+        <label class="toggle"><input type="checkbox" id="showAllQuestionsToggle" /> Show all questions at once</label>
+      </div>
+    </section>
+
     <section class="card timer-card">
       <div class="row-between">
         <p><strong>Time Remaining:</strong> <span id="timerText">35:00</span></p>
@@ -45,6 +53,7 @@
       </div>
       <form id="answersForm"></form>
       <div class="actions question-actions">
+        <button type="button" id="submitNowBtn" hidden>Submit & Mark</button>
         <button type="button" id="prevBtn">Previous</button>
         <button type="button" id="skipBtn">Skip for now</button>
         <button type="button" id="nextBtn">Next</button>
