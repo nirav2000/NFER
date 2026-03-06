@@ -63,11 +63,6 @@ function initTestPage() {
 
   renderTest(container, test, { includeAnswers: false });
 
-  const answerArea = byId('quickAnswerContainer');
-  if (answerArea) {
-    const form = renderMarkForm(answerArea, test, 'quickMarkForm');
-    bindMarking(form, test, Date.now());
-  }
 }
 
 function initTeacherGuidePage() {

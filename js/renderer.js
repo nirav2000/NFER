@@ -11,6 +11,19 @@ function domainBadge(domain) {
   return `<span class="domain-chip ${meta.className}" title="${domain}">${meta.icon}</span>`;
 }
 
+function renderModelAnswerScheme(q) {
+  return `
+    <details class="scheme-block">
+      <summary>Mark scheme and model answers</summary>
+      <p><strong>Marking notes:</strong> ${q.markingNotes || 'Use text-based evidence and equivalent wording where appropriate.'}</p>
+      <p><strong>Gold model answer:</strong> ${q.modelAnswerGold || 'Accurate answer with clear evidence and precise explanation.'}</p>
+      <p><strong>Silver model answer:</strong> ${q.modelAnswerSilver || 'Partly correct answer with some evidence from the text.'}</p>
+      <p><strong>Common wrong answer:</strong> ${q.commonWrongAnswer || 'Response not supported by the text.'}</p>
+      <p><strong>Accepted keywords:</strong> ${(q.acceptedAnswers || []).join(' | ')}</p>
+    </details>
+  `;
+}
+
 export function renderTest(container, test, { includeAnswers = false } = {}) {
   container.innerHTML = '';
 
@@ -56,10 +69,7 @@ export function renderTest(container, test, { includeAnswers = false } = {}) {
     }
 
     if (includeAnswers) {
-      const a = document.createElement('p');
-      a.className = 'answer-key';
-      a.textContent = `Accepted: ${q.acceptedAnswers.join(' | ')}`;
-      li.appendChild(a);
+      li.insertAdjacentHTML('beforeend', renderModelAnswerScheme(q));
     }
 
     ol.appendChild(li);
@@ -82,31 +92,38 @@ export function renderMarkForm(container, test, formId = 'markForm') {
     label.htmlFor = `${formId}_ans_${q.id}`;
     label.className = 'question-stem';
     label.innerHTML = `${idx + 1}. ${domainBadge(q.domain)} ${q.stem}`;
+    block.appendChild(label);
 
-    let input;
     if (q.questionType === 'mcq') {
-      input = document.createElement('select');
-      const ph = document.createElement('option');
-      ph.value = '';
-      ph.textContent = 'Select one answer';
-      input.appendChild(ph);
-      q.options.forEach((opt) => {
-        const o = document.createElement('option');
-        o.value = opt;
-        o.textContent = opt;
-        input.appendChild(o);
+      const radioWrap = document.createElement('div');
+      radioWrap.className = 'radio-wrap';
+      q.options.forEach((opt, i) => {
+        const row = document.createElement('label');
+        row.className = 'radio-option';
+
+        const input = document.createElement('input');
+        input.type = 'radio';
+        input.name = q.id;
+        input.value = opt;
+        input.id = `${formId}_ans_${q.id}_${i}`;
+
+        const text = document.createElement('span');
+        text.textContent = opt;
+
+        row.appendChild(input);
+        row.appendChild(text);
+        radioWrap.appendChild(row);
       });
+      block.appendChild(radioWrap);
     } else {
-      input = document.createElement('textarea');
+      const input = document.createElement('textarea');
       input.rows = 4;
       input.placeholder = 'Type your answer here...';
+      input.id = `${formId}_ans_${q.id}`;
+      input.name = q.id;
+      block.appendChild(input);
     }
 
-    input.id = `${formId}_ans_${q.id}`;
-    input.name = q.id;
-
-    block.appendChild(label);
-    block.appendChild(input);
     form.appendChild(block);
   });
 

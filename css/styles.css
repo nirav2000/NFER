@@ -228,3 +228,35 @@ td {
     box-shadow: none;
   }
 }
+
+.radio-wrap {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 0.45rem;
+}
+
+.radio-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  padding: 0.5rem 0.55rem;
+  border: 1px solid #d7e2ee;
+  border-radius: 8px;
+  background: #fafcff;
+  cursor: pointer;
+}
+
+.radio-option input {
+  margin-top: 0.15rem;
+}
+
+.scheme-block {
+  margin-top: 0.6rem;
+  border-top: 1px dashed #d6deea;
+  padding-top: 0.5rem;
+}
+
+.scheme-block summary {
+  cursor: pointer;
+  font-weight: 600;
+}
