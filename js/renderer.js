@@ -1,154 +1,108 @@
-const domainMeta = {
-  retrieval: { icon: '🔎', className: 'domain-retrieval' },
-  vocabulary: { icon: '🧠', className: 'domain-vocabulary' },
-  inference: { icon: '💡', className: 'domain-inference' },
-  structure: { icon: '🧱', className: 'domain-structure' },
-  authorIntent: { icon: '✍️', className: 'domain-author' }
-};
-
-function domainBadge(domain) {
-  const meta = domainMeta[domain] || { icon: '•', className: 'domain-generic' };
-  return `<span class="domain-chip ${meta.className}" title="${domain}">${meta.icon}</span>`;
-}
-
-function inferHighQualityFallback(q) {
+function createQuestionInput(q) {
   if (q.questionType === 'mcq') {
-    return {
-      gold: `The correct option is selected and matches the context of the question: ${q.acceptedAnswers?.[0] || 'accepted answer'}.`,
-      silver: 'A plausible option is chosen but does not match all context clues.',
-      wrong: 'An option is chosen that contradicts passage evidence.'
-    };
+    const wrap = document.createElement('div');
+    wrap.className = 'radio-group';
+    (q.options || []).forEach((opt, idx) => {
+      const row = document.createElement('label');
+      row.className = 'radio-option';
+      const radio = document.createElement('input');
+      radio.type = 'radio';
+      radio.name = q.id;
+      radio.value = opt;
+      radio.id = `${q.id}_${idx}`;
+      const text = document.createElement('span');
+      text.textContent = opt;
+      row.appendChild(radio);
+      row.appendChild(text);
+      wrap.appendChild(row);
+    });
+    return wrap;
   }
 
-  return {
-    gold: 'Clear answer with precise text evidence and an explicit link back to the question focus.',
-    silver: 'Partly correct answer with limited evidence or explanation.',
-    wrong: 'General or copied response without relevant evidence.'
-  };
+  const ta = document.createElement('textarea');
+  ta.name = q.id;
+  ta.rows = 3;
+  ta.placeholder = 'Type your answer';
+  return ta;
 }
 
-function renderModelAnswerScheme(q) {
-  const fallback = inferHighQualityFallback(q);
-  return `
-    <details class="scheme-block" open>
-      <summary>Mark scheme and model answers</summary>
-      <p><strong>Marking notes:</strong> ${q.markingNotes || 'Award marks for relevant points grounded in the passage, accepting clear equivalents.'}</p>
-      <p><strong>Gold model answer:</strong> ${q.modelAnswerGold || fallback.gold}</p>
-      <p><strong>Silver model answer:</strong> ${q.modelAnswerSilver || fallback.silver}</p>
-      <p><strong>Common wrong answer:</strong> ${q.commonWrongAnswer || fallback.wrong}</p>
-      <p><strong>Accepted keywords:</strong> ${(q.acceptedAnswers || []).join(' | ')}</p>
-    </details>
-  `;
+export function renderDashboardMeta(el, library) {
+  el.textContent = `Year ${library.yearGroup} library loaded. Tests available: ${library.tests.length}.`;
 }
 
-export function renderTest(container, test, { includeAnswers = false } = {}) {
-  container.innerHTML = '';
+export function renderTestPage(test, refs) {
+  refs.meta.innerHTML = `<h2>${test.title}</h2><p><strong>Test ID:</strong> ${test.id} · <strong>Difficulty:</strong> ${test.difficulty} · <strong>Total marks:</strong> ${test.totalMarks}</p>`;
+  refs.passage1.textContent = test.passages?.[0]?.text || 'Passage 1 missing';
+  refs.passage2.textContent = test.passages?.[1]?.text || 'Passage 2 missing';
 
-  const header = document.createElement('div');
-  header.className = 'card';
-  header.innerHTML = `
-    <h2>Generated Test</h2>
-    <p><strong>Difficulty:</strong> ${test.difficulty} · <strong>Total marks:</strong> ${test.totalMarks}</p>
-    <p class="muted">This generated test uses one passage. All questions below refer to this passage.</p>
-  `;
-  container.appendChild(header);
-
-  const p = test.passages[0];
-  const sec = document.createElement('section');
-  sec.className = 'card passage-card';
-  sec.innerHTML = `
-    <h3>${p.title} (${p.genre})</h3>
-    <p class="muted"><strong>Year:</strong> ${p.yearGroup} · <strong>Word count:</strong> ${p.wordCount}</p>
-    <p class="passage-text">${p.text}</p>
-  `;
-  container.appendChild(sec);
-
-  const qWrap = document.createElement('section');
-  qWrap.className = 'card';
-  qWrap.innerHTML = '<h3>Questions</h3>';
-  const ol = document.createElement('ol');
-  ol.className = 'questions-list';
-
-  test.questions.forEach((q) => {
-    const li = document.createElement('li');
-    li.className = 'question-item';
-    li.innerHTML = `<p class="question-stem">${domainBadge(q.domain)} ${q.stem} <em>(${q.marks} marks)</em></p>`;
-
-    if (q.options && q.options.length) {
-      const ul = document.createElement('ul');
-      ul.className = 'option-list';
-      q.options.forEach((opt) => {
-        const oi = document.createElement('li');
-        oi.textContent = opt;
-        ul.appendChild(oi);
-      });
-      li.appendChild(ul);
-    }
-
-    if (includeAnswers) {
-      li.insertAdjacentHTML('beforeend', renderModelAnswerScheme(q));
-    }
-
-    ol.appendChild(li);
-  });
-
-  qWrap.appendChild(ol);
-  container.appendChild(qWrap);
-}
-
-export function renderMarkForm(container, test, formId = 'markForm') {
-  container.innerHTML = '';
-  const form = document.createElement('form');
-  form.id = formId;
-
-  test.questions.forEach((q, idx) => {
-    const block = document.createElement('div');
-    block.className = 'card question-item';
-
+  refs.form.innerHTML = '';
+  test.questions.forEach((q, i) => {
+    const block = document.createElement('section');
+    block.className = 'question';
     const label = document.createElement('label');
-    label.className = 'question-stem';
-    label.innerHTML = `${idx + 1}. ${domainBadge(q.domain)} ${q.stem}`;
+    label.textContent = `${i + 1}. ${q.stem} (${q.marks} marks)`;
     block.appendChild(label);
+    block.appendChild(createQuestionInput(q));
 
-    if (q.questionType === 'mcq') {
-      const radioWrap = document.createElement('div');
-      radioWrap.className = 'radio-wrap';
-      q.options.forEach((opt, i) => {
-        const row = document.createElement('label');
-        row.className = 'radio-option';
+    const scheme = document.createElement('div');
+    scheme.className = 'scheme';
+    scheme.hidden = true;
+    scheme.innerHTML = `<p><strong>Accepted:</strong> ${(q.acceptedAnswers || []).join(' | ')}</p>
+      <p><strong>Model (Gold):</strong> ${q.modelAnswerGold || 'Precise answer with clear text evidence.'}</p>
+      <p><strong>Model (Silver):</strong> ${q.modelAnswerSilver || 'Mostly correct answer with some evidence.'}</p>
+      <p><strong>Notes:</strong> ${q.markingNotes || 'Award based on evidence and correctness.'}</p>`;
+    block.appendChild(scheme);
 
-        const input = document.createElement('input');
-        input.type = 'radio';
-        input.name = q.id;
-        input.value = opt;
-        input.id = `${formId}_ans_${q.id}_${i}`;
+    refs.form.appendChild(block);
+  });
+}
 
-        const text = document.createElement('span');
-        text.textContent = opt;
+export function collectAnswers(form, test) {
+  const data = new FormData(form);
+  const answers = {};
+  for (const q of test.questions) {
+    answers[q.id] = String(data.get(q.id) || '');
+  }
+  return answers;
+}
 
-        row.appendChild(input);
-        row.appendChild(text);
-        radioWrap.appendChild(row);
-      });
-      block.appendChild(radioWrap);
-    } else {
-      const input = document.createElement('textarea');
-      input.rows = 4;
-      input.placeholder = 'Type your answer here...';
-      input.id = `${formId}_ans_${q.id}`;
-      input.name = q.id;
-      block.appendChild(input);
-    }
+export function toggleSchemes(show, formEl) {
+  formEl.querySelectorAll('.scheme').forEach((el) => {
+    el.hidden = !show;
+  });
+}
 
-    form.appendChild(block);
+export function renderDiagnostic(root, diagnostic, record) {
+  root.innerHTML = `
+    <section class="card">
+      <h2>Result</h2>
+      <p><strong>Test:</strong> ${record.testId}</p>
+      <p><strong>Score:</strong> ${diagnostic.score}/${diagnostic.max}</p>
+      <p><strong>Percentage:</strong> ${diagnostic.percentage}%</p>
+      <p><strong>Strengths:</strong> ${diagnostic.strengths.join(', ') || 'None yet'}</p>
+      <p><strong>Focus area:</strong> ${diagnostic.focusArea}</p>
+    </section>
+    <section class="card">
+      <h3>Domain Breakdown</h3>
+      <ul>
+        ${diagnostic.domainBreakdown.map((d) => `<li>${d.domain}: ${d.score}/${d.max} (${d.percentage}%)</li>`).join('')}
+      </ul>
+    </section>
+  `;
+}
+
+export function renderTracker(bodyEl, trendEl, diffEl, history) {
+  bodyEl.innerHTML = '';
+  history.forEach((h) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${new Date(h.date).toLocaleDateString('en-GB')}</td><td>${h.testId}</td><td>${h.score}/${h.max}</td><td>${h.percentage}%</td><td>${h.difficulty}</td>`;
+    bodyEl.appendChild(tr);
   });
 
-  const btn = document.createElement('button');
-  btn.type = 'submit';
-  btn.textContent = 'Submit and Mark';
-  btn.className = 'no-print';
-  form.appendChild(btn);
-
-  container.appendChild(form);
-  return form;
+  trendEl.textContent = history.length
+    ? `Score trend: ${history.map((h) => h.percentage + '%').join(' → ')}`
+    : 'No attempts yet.';
+  diffEl.textContent = history.length
+    ? `Difficulty progression: ${history.map((h) => h.difficulty).join(' → ')}`
+    : '';
 }

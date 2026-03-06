@@ -1,8 +1,7 @@
 const KEYS = {
-  currentTest: 'nfer.currentTest',
-  lastResult: 'nfer.lastResult',
-  history: 'nfer.history',
-  completedTests: 'nfer.completedTests'
+  currentTest: 'y4.currentTest',
+  lastDiagnostic: 'y4.lastDiagnostic',
+  history: 'y4.history'
 };
 
 export function saveCurrentTest(test) {
@@ -14,36 +13,19 @@ export function getCurrentTest() {
   return raw ? JSON.parse(raw) : null;
 }
 
-export function getCompletedTests() {
-  const raw = localStorage.getItem(KEYS.completedTests);
-  return raw ? JSON.parse(raw) : [];
-}
-
-export function saveCompletedTest(record) {
-  const all = getCompletedTests();
-  all.push(record);
-  localStorage.setItem(KEYS.completedTests, JSON.stringify(all));
-}
-
-export function saveResult(result) {
-  localStorage.setItem(KEYS.lastResult, JSON.stringify(result));
+export function saveDiagnostic(diagRecord) {
+  localStorage.setItem(KEYS.lastDiagnostic, JSON.stringify(diagRecord));
   const history = getHistory();
-  history.push(result);
+  history.push(diagRecord);
   localStorage.setItem(KEYS.history, JSON.stringify(history));
 }
 
-export function getLastResult() {
-  const raw = localStorage.getItem(KEYS.lastResult);
+export function getLastDiagnostic() {
+  const raw = localStorage.getItem(KEYS.lastDiagnostic);
   return raw ? JSON.parse(raw) : null;
 }
 
 export function getHistory() {
   const raw = localStorage.getItem(KEYS.history);
   return raw ? JSON.parse(raw) : [];
-}
-
-export function clearHistory() {
-  localStorage.removeItem(KEYS.history);
-  localStorage.removeItem(KEYS.lastResult);
-  localStorage.removeItem(KEYS.completedTests);
 }

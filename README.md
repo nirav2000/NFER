@@ -1,38 +1,45 @@
-# NFER Reading Builder
+# NFER Reading Builder (Static GitHub Pages App)
 
-NFER Reading Builder is a static Year 4 reading-assessment web app designed for GitHub Pages.
-It generates original tests, marks answers, provides diagnostics and tracks progress in browser LocalStorage.
+A static Year 4 reading assessment app that loads a starter pack JSON library and runs fully client-side.
 
-## Static hosting model
+## Data source
 
-This project is 100% static:
+The app fetches:
 
-- HTML/CSS/JavaScript only
-- JSON content files stored in the repository
-- No server-side runtime, database, API routes or build pipeline required
+- `/data/year4_reading_starter_pack_10_tests.json`
 
-## Main pages
+## Pages
 
-- `index.html` – dashboard
-- `passage-library.html` – passage library
-- `question-library.html` – question library
-- `generator.html` – generate a new test (single-passage mode)
-- `test.html` – pupil test preview
-- `teacher-guide.html` – teacher guide and answer key
-- `mark.html` – mark responses
-- `diagnostic.html` – diagnostic report
-- `tracker.html` – progress tracker
+- `index.html` – dashboard (library count, generate test, tracker link)
+- `test.html` – passages, questions, answer inputs, mark-scheme toggle
+- `diagnostic.html` – score, percentage, domain breakdown, strengths, focus area
+- `tracker.html` – history table, score trend, difficulty progression
 
-## Repository structure
+## Structure
 
-- `css/styles.css` – shared and print styles
-- `js/` – modular client-side logic (`generator`, `renderer`, `diagnostics`, `tracker`, `storage`, `app`)
-- `data/passages/` – fiction and nonfiction Year 4 passage sets
-- `data/questions/` – question banks linked by `passageId`
-- `tests/sample-generated-tests.json` – sample generated metadata
-- `.nojekyll` – ensures GitHub Pages serves files as-is
+- `css/styles.css`
+- `js/app.js`
+- `js/generator.js`
+- `js/renderer.js`
+- `js/diagnostics.js`
+- `js/storage.js`
+- `data/year4_reading_starter_pack_10_tests.json`
+- `.nojekyll`
 
-## Local run
+## How it works
+
+- Random test selection from starter pack JSON
+- Client-side marking using `acceptedAnswers`
+- Domain score breakdown and diagnostic summary
+- Progress saved to LocalStorage with:
+  - `date`
+  - `testId`
+  - `score`
+  - `percentage`
+  - `difficulty`
+  - `answers`
+
+## Run locally
 
 ```bash
 python3 -m http.server 8000
@@ -40,28 +47,6 @@ python3 -m http.server 8000
 
 Open `http://localhost:8000/`.
 
-## GitHub Pages deployment
+## GitHub Pages
 
-1. Push to `main`.
-2. In GitHub: **Settings → Pages**.
-3. Source: **Deploy from a branch**.
-4. Branch: `main`, Folder: `/ (root)`.
-5. Save.
-
-No compile step is required.
-
-
-## Generation behaviour
-
-- Each generated test uses one passage at a time.
-- All generated questions apply to that same passage.
-- If a passage has fewer than 12 stored questions, the app adds synthetic spec-aligned questions client-side to complete the target mix.
-
-
-## Local data saved
-
-The app stores the following in browser LocalStorage:
-- current generated test
-- latest diagnostic result
-- result history
-- completed test records (including submitted answers and scored outcomes)
+Deploy from `main` branch, folder `/ (root)`.

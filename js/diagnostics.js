@@ -1,65 +1,46 @@
-export function markTest(test, answersByQuestionId) {
-  let totalScore = 0;
-  let totalMarks = 0;
-  const domainScores = {};
+export function markTest(test, userAnswers) {
+  let score = 0;
+  let max = 0;
+  const domainBreakdown = {};
 
-  for (const question of test.questions) {
-    const answer = (answersByQuestionId[question.id] || '').trim().toLowerCase();
-    const accepted = (question.acceptedAnswers || []).map((a) => a.toLowerCase());
-    const domain = question.domain;
-    totalMarks += question.marks;
-    if (!domainScores[domain]) domainScores[domain] = { score: 0, marks: 0 };
-    domainScores[domain].marks += question.marks;
+  for (const q of test.questions) {
+    const domain = q.domain;
+    const marks = Number(q.marks || 0);
+    max += marks;
+
+    if (!domainBreakdown[domain]) domainBreakdown[domain] = { score: 0, max: 0 };
+    domainBreakdown[domain].max += marks;
+
+    const accepted = (q.acceptedAnswers || []).map((a) => String(a).trim().toLowerCase());
+    const ans = String(userAnswers[q.id] || '').trim().toLowerCase();
 
     let earned = 0;
-    if (question.questionType === 'mcq') {
-      if (accepted.includes(answer)) earned = question.marks;
-    } else {
-      if (accepted.some((key) => answer.includes(key))) {
-        earned = question.marks;
-      } else if (answer.length > 18) {
-        earned = Math.max(1, question.marks - 1);
-      }
+    if (accepted.includes(ans)) {
+      earned = marks;
+    } else if (q.questionType !== 'mcq' && ans.length > 20) {
+      earned = Math.min(1, marks);
     }
-    totalScore += earned;
-    domainScores[domain].score += earned;
+
+    score += earned;
+    domainBreakdown[domain].score += earned;
   }
 
-  const percentage = totalMarks ? Math.round((totalScore / totalMarks) * 100) : 0;
-  return { totalScore, totalMarks, percentage, domainScores };
+  const percentage = max ? Math.round((score / max) * 100) : 0;
+  const byDomain = Object.entries(domainBreakdown).map(([domain, d]) => ({
+    domain,
+    score: d.score,
+    max: d.max,
+    percentage: d.max ? Math.round((d.score / d.max) * 100) : 0
+  }));
+
+  return { score, max, percentage, domainBreakdown: byDomain };
 }
 
-export function difficultyFromHistory(history) {
-  const latest = history[history.length - 1];
-  if (!latest) return 'standard';
-  const p = latest.percentage;
-  if (p >= 85) return 'stretch';
-  if (p >= 70) return 'standard';
-  if (p >= 50) return 'supported';
-  return 'foundation';
-}
-
-export function createDiagnostic(result) {
-  const weak = [];
-  const strong = [];
-  const breakdown = Object.entries(result.domainScores).map(([domain, v]) => {
-    const pct = v.marks ? Math.round((v.score / v.marks) * 100) : 0;
-    if (pct < 60) weak.push(domain);
-    if (pct >= 75) strong.push(domain);
-    return { domain, ...v, percentage: pct };
-  });
-
-  const nextFocus = weak.length
-    ? `Focus next on ${weak[0]} with short daily practice.`
-    : 'Maintain challenge with mixed-domain inference practice.';
-
+export function buildDiagnostic(marked) {
+  const sorted = [...marked.domainBreakdown].sort((a, b) => b.percentage - a.percentage);
   return {
-    totalScore: result.totalScore,
-    totalMarks: result.totalMarks,
-    percentage: result.percentage,
-    domainBreakdown: breakdown,
-    strengths: strong,
-    developmentAreas: weak,
-    recommendedNextFocus: nextFocus
+    ...marked,
+    strengths: sorted.filter((d) => d.percentage >= 70).map((d) => d.domain),
+    focusArea: sorted.find((d) => d.percentage < 60)?.domain || 'Maintain balanced practice'
   };
 }

@@ -1,192 +1,99 @@
-import { generateTest, loadLibraries } from './generator.js';
-import { renderTest, renderMarkForm } from './renderer.js';
+import { loadLibrary, generateTest } from './generator.js';
+import { markTest, buildDiagnostic } from './diagnostics.js';
+import { saveCurrentTest, getCurrentTest, saveDiagnostic, getLastDiagnostic, getHistory } from './storage.js';
 import {
-  saveCurrentTest,
-  getCurrentTest,
-  saveResult,
-  getLastResult,
-  getHistory,
-  saveCompletedTest,
-  getCompletedTests
-} from './storage.js';
-import { markTest, createDiagnostic } from './diagnostics.js';
-import { renderTracker, attachClear } from './tracker.js';
+  renderDashboardMeta,
+  renderTestPage,
+  collectAnswers,
+  toggleSchemes,
+  renderDiagnostic,
+  renderTracker
+} from './renderer.js';
 
-function byId(id) {
-  return document.getElementById(id);
-}
-
-function bindMarking(form, test, startTime) {
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const data = new FormData(form);
-    const answers = {};
-    for (const [k, v] of data.entries()) answers[k] = String(v);
-
-    const base = markTest(test, answers);
-    const diagnostic = createDiagnostic(base);
-    const result = {
-      ...diagnostic,
-      id: test.id,
-      date: new Date().toISOString(),
-      difficulty: test.difficulty,
-      timeTakenMinutes: Math.max(1, Math.round((Date.now() - startTime) / 60000))
-    };
-
-    saveResult(result);
-    saveCompletedTest({
-      testId: test.id,
-      date: result.date,
-      test,
-      answers,
-      result
-    });
-
-    window.location.href = './diagnostic.html';
-  });
+function currentPage() {
+  return document.body.dataset.page;
 }
 
 async function initDashboard() {
-  const latest = getLastResult();
-  const history = getHistory();
-  const completed = getCompletedTests();
-
-  if (byId('latestSummary')) {
-    byId('latestSummary').textContent = latest
-      ? `Latest score: ${latest.totalScore}/${latest.totalMarks} (${latest.percentage}%)`
-      : 'No completed tests yet.';
-  }
-  if (byId('historyCount')) byId('historyCount').textContent = String(history.length);
-  if (byId('completedCount')) byId('completedCount').textContent = String(completed.length);
-}
-
-async function initGenerator() {
-  const btn = byId('generateBtn');
-  if (!btn) return;
-  btn.addEventListener('click', async () => {
+  const library = await loadLibrary();
+  renderDashboardMeta(document.getElementById('libraryMeta'), library);
+  document.getElementById('generateBtn').addEventListener('click', async () => {
     const test = await generateTest();
     saveCurrentTest(test);
     window.location.href = './test.html';
   });
 }
 
-function initTestPage() {
-  const container = byId('testContainer');
-  if (!container) return;
-
+function initTest() {
   const test = getCurrentTest();
   if (!test) {
-    container.innerHTML = '<div class="card">No test generated yet. Go to Generate Test first.</div>';
+    document.getElementById('testMeta').innerHTML = '<h2>No test generated</h2><p>Go back to Dashboard and click Generate Test.</p>';
     return;
   }
 
-  renderTest(container, test, { includeAnswers: false });
+  const refs = {
+    meta: document.getElementById('testMeta'),
+    passage1: document.getElementById('passage1'),
+    passage2: document.getElementById('passage2'),
+    form: document.getElementById('answersForm')
+  };
 
-  const quickWrap = byId('quickAnswerContainer');
-  if (quickWrap) {
-    const form = renderMarkForm(quickWrap, test, 'quickMarkForm');
-    bindMarking(form, test, Date.now());
-  }
-}
+  renderTestPage(test, refs);
 
-function initTeacherGuidePage() {
-  const container = byId('teacherGuideContainer');
-  if (!container) return;
+  const submit = document.createElement('button');
+  submit.type = 'submit';
+  submit.textContent = 'Submit & Mark';
+  refs.form.appendChild(submit);
 
-  const test = getCurrentTest();
-  if (!test) {
-    container.innerHTML = '<div class="card">No test generated yet.</div>';
-    return;
-  }
+  document.getElementById('schemeToggle').addEventListener('change', (e) => {
+    toggleSchemes(e.target.checked, refs.form);
+  });
 
-  renderTest(container, test, { includeAnswers: true });
-}
+  refs.form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const answers = collectAnswers(refs.form, test);
+    const marked = markTest(test, answers);
+    const diagnostic = buildDiagnostic(marked);
 
-function initMarkPage() {
-  const wrap = byId('markContainer');
-  if (!wrap) return;
-
-  const test = getCurrentTest();
-  if (!test) {
-    wrap.innerHTML = '<div class="card">No test generated yet.</div>';
-    return;
-  }
-
-  const form = renderMarkForm(wrap, test, 'markForm');
-  bindMarking(form, test, Date.now());
-}
-
-function initDiagnosticPage() {
-  const out = byId('diagnosticOutput');
-  if (!out) return;
-
-  const result = getLastResult();
-  if (!result) {
-    out.innerHTML = '<div class="card">No marked test found.</div>';
-    return;
-  }
-
-  out.innerHTML = `
-    <div class="card">
-      <h2>Diagnostic Report</h2>
-      <p><strong>Total score:</strong> ${result.totalScore}/${result.totalMarks} (${result.percentage}%)</p>
-      <p><strong>Strengths:</strong> ${result.strengths.join(', ') || 'None yet'}</p>
-      <p><strong>Development areas:</strong> ${result.developmentAreas.join(', ') || 'None'}</p>
-      <p><strong>Recommended next focus:</strong> ${result.recommendedNextFocus}</p>
-    </div>
-  `;
-
-  const table = byId('domainTable');
-  if (table) {
-    table.innerHTML = '';
-    result.domainBreakdown.forEach((d) => {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `<td>${d.domain}</td><td>${d.score}/${d.marks}</td><td>${d.percentage}%</td>`;
-      table.appendChild(tr);
+    saveDiagnostic({
+      date: new Date().toISOString(),
+      testId: test.id,
+      score: diagnostic.score,
+      max: diagnostic.max,
+      percentage: diagnostic.percentage,
+      difficulty: test.difficulty,
+      domainBreakdown: diagnostic.domainBreakdown,
+      strengths: diagnostic.strengths,
+      focusArea: diagnostic.focusArea,
+      answers
     });
+
+    window.location.href = './diagnostic.html';
+  });
+}
+
+function initDiagnostic() {
+  const last = getLastDiagnostic();
+  if (!last) {
+    document.getElementById('diagnosticRoot').innerHTML = '<section class="card"><p>No diagnostic available yet.</p></section>';
+    return;
   }
+  renderDiagnostic(document.getElementById('diagnosticRoot'), last, last);
 }
 
-function initTrackerPage() {
-  const tbody = byId('trackerBody');
-  if (!tbody) return;
-  renderTracker(tbody, byId('trackerWarning'));
-  attachClear(byId('clearHistoryBtn'), () => renderTracker(tbody, byId('trackerWarning')));
+function initTracker() {
+  renderTracker(
+    document.getElementById('historyBody'),
+    document.getElementById('trend'),
+    document.getElementById('difficultyTrend'),
+    getHistory()
+  );
 }
 
-async function initPassageLibraryPage() {
-  const body = byId('passageTableBody');
-  if (!body) return;
-
-  const { fiction, nonFiction } = await loadLibraries();
-  [...fiction, ...nonFiction].forEach((p) => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${p.id}</td><td>${p.title}</td><td>${p.genre}</td><td>${p.topic}</td><td>${p.difficulty}</td><td>${p.wordCount}</td>`;
-    body.appendChild(tr);
-  });
-}
-
-async function initQuestionLibraryPage() {
-  const body = byId('questionTableBody');
-  if (!body) return;
-
-  const { fictionQs, nonFictionQs } = await loadLibraries();
-  const all = [...fictionQs, ...nonFictionQs];
-  byId('questionSummary').textContent = `Total questions: ${all.length}`;
-
-  all.forEach((q) => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${q.id}</td><td>${q.passageId}</td><td>${q.domain}</td><td>${q.fineSkillTag}</td><td>${q.questionType}</td><td>${q.marks}</td>`;
-    body.appendChild(tr);
-  });
-}
-
-initDashboard();
-initGenerator();
-initTestPage();
-initTeacherGuidePage();
-initMarkPage();
-initDiagnosticPage();
-initTrackerPage();
-initPassageLibraryPage();
-initQuestionLibraryPage();
+(async function bootstrap() {
+  const page = currentPage();
+  if (page === 'dashboard') await initDashboard();
+  if (page === 'test') initTest();
+  if (page === 'diagnostic') initDiagnostic();
+  if (page === 'tracker') initTracker();
+})();
