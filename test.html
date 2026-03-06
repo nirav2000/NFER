@@ -18,6 +18,16 @@
   <main class="container">
     <section class="card" id="testMeta"></section>
 
+    <section class="card timer-card">
+      <div class="row-between">
+        <p><strong>Time Remaining:</strong> <span id="timerText">35:00</span></p>
+        <p id="progressText">Question 1 of 1</p>
+      </div>
+      <div class="progress-track" aria-hidden="true">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+    </section>
+
     <section class="card">
       <h2>Passage 1</h2>
       <article id="passage1"></article>
@@ -28,12 +38,28 @@
       <article id="passage2"></article>
     </section>
 
-    <section class="card">
+    <section class="card" id="questionCard">
       <div class="row-between">
-        <h2>Questions</h2>
+        <h2>Question</h2>
         <label class="toggle"><input type="checkbox" id="schemeToggle" /> Show Mark Scheme</label>
       </div>
       <form id="answersForm"></form>
+      <div class="actions question-actions">
+        <button type="button" id="prevBtn">Previous</button>
+        <button type="button" id="skipBtn">Skip for now</button>
+        <button type="button" id="nextBtn">Next</button>
+        <button type="button" id="reviewBtn">Review Answers</button>
+      </div>
+    </section>
+
+    <section class="card" id="reviewCard" hidden>
+      <h2>Review Answers</h2>
+      <p>Check the status of each question before submitting.</p>
+      <div id="reviewList"></div>
+      <div class="actions">
+        <button type="button" id="backToQuestionsBtn">Back to Questions</button>
+        <button type="button" id="submitTestBtn">Submit & Mark</button>
+      </div>
     </section>
   </main>
 

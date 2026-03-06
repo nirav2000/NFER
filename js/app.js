@@ -3,12 +3,18 @@ import { markTest, buildDiagnostic } from './diagnostics.js';
 import { saveCurrentTest, getCurrentTest, saveDiagnostic, getLastDiagnostic, getHistory } from './storage.js';
 import {
   renderDashboardMeta,
-  renderTestPage,
-  collectAnswers,
+  renderTestMeta,
+  renderQuestion,
+  readCurrentAnswer,
+  renderReview,
+  renderProgress,
+  renderTimer,
   toggleSchemes,
   renderDiagnostic,
   renderTracker
 } from './renderer.js';
+
+const TEST_DURATION_SECONDS = 35 * 60;
 
 function currentPage() {
   return document.body.dataset.page;
@@ -52,25 +58,64 @@ function initTest() {
     meta: document.getElementById('testMeta'),
     passage1: document.getElementById('passage1'),
     passage2: document.getElementById('passage2'),
-    form: document.getElementById('answersForm')
+    form: document.getElementById('answersForm'),
+    progressFill: document.getElementById('progressFill'),
+    progressText: document.getElementById('progressText'),
+    timerText: document.getElementById('timerText'),
+    questionCard: document.getElementById('questionCard'),
+    reviewCard: document.getElementById('reviewCard'),
+    reviewList: document.getElementById('reviewList'),
+    schemeToggle: document.getElementById('schemeToggle')
   };
 
-  renderTestPage(test, refs);
+  renderTestMeta(test, refs);
 
-  const submit = document.createElement('button');
-  submit.type = 'submit';
-  submit.textContent = 'Submit & Mark';
-  refs.form.appendChild(submit);
+  const state = {
+    currentIndex: 0,
+    answers: {},
+    skipped: new Set(),
+    showScheme: false,
+    deadline: Date.now() + (TEST_DURATION_SECONDS * 1000)
+  };
 
-  document.getElementById('schemeToggle').addEventListener('change', (e) => {
-    toggleSchemes(e.target.checked, refs.form);
-  });
+  const persistCurrentAnswer = () => {
+    const q = test.questions[state.currentIndex];
+    const value = readCurrentAnswer(refs.form, q);
+    state.answers[q.id] = value;
+    if (value) state.skipped.delete(q.id);
+  };
 
-  refs.form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const answers = collectAnswers(refs.form, test);
-    const marked = markTest(test, answers);
+  const answeredCount = () => test.questions.filter((q) => String(state.answers[q.id] || '').trim()).length;
+
+  const refreshQuestionView = () => {
+    const q = test.questions[state.currentIndex];
+    renderQuestion(test, state.currentIndex, state.answers[q.id], state.showScheme, refs.form);
+    renderProgress(state.currentIndex, test.questions.length, answeredCount(), refs.progressFill, refs.progressText);
+    document.getElementById('prevBtn').disabled = state.currentIndex === 0;
+    document.getElementById('nextBtn').disabled = state.currentIndex === test.questions.length - 1;
+  };
+
+  const openReview = () => {
+    persistCurrentAnswer();
+    renderReview(test, state.answers, state.skipped, refs.reviewList);
+    refs.questionCard.hidden = true;
+    refs.reviewCard.hidden = false;
+
+    refs.reviewList.querySelectorAll('[data-jump]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        state.currentIndex = Number(btn.dataset.jump);
+        refs.reviewCard.hidden = true;
+        refs.questionCard.hidden = false;
+        refreshQuestionView();
+      });
+    });
+  };
+
+  const submitTest = () => {
+    persistCurrentAnswer();
+    const marked = markTest(test, state.answers);
     const diagnostic = buildDiagnostic(marked);
+    const timeTakenSeconds = Math.max(0, Math.round((TEST_DURATION_SECONDS * 1000 - Math.max(0, state.deadline - Date.now())) / 1000));
 
     saveDiagnostic({
       date: new Date().toISOString(),
@@ -82,11 +127,63 @@ function initTest() {
       domainBreakdown: diagnostic.domainBreakdown,
       strengths: diagnostic.strengths,
       focusArea: diagnostic.focusArea,
-      answers
+      answers: state.answers,
+      timeTakenSeconds
     });
 
     window.location.href = './diagnostic.html';
+  };
+
+  document.getElementById('prevBtn').addEventListener('click', () => {
+    persistCurrentAnswer();
+    state.currentIndex = Math.max(0, state.currentIndex - 1);
+    refreshQuestionView();
   });
+
+  document.getElementById('nextBtn').addEventListener('click', () => {
+    persistCurrentAnswer();
+    state.currentIndex = Math.min(test.questions.length - 1, state.currentIndex + 1);
+    refreshQuestionView();
+  });
+
+  document.getElementById('skipBtn').addEventListener('click', () => {
+    persistCurrentAnswer();
+    const q = test.questions[state.currentIndex];
+    if (!state.answers[q.id]) state.skipped.add(q.id);
+
+    if (state.currentIndex < test.questions.length - 1) {
+      state.currentIndex += 1;
+      refreshQuestionView();
+    } else {
+      openReview();
+    }
+  });
+
+  document.getElementById('reviewBtn').addEventListener('click', openReview);
+  document.getElementById('backToQuestionsBtn').addEventListener('click', () => {
+    refs.reviewCard.hidden = true;
+    refs.questionCard.hidden = false;
+    refreshQuestionView();
+  });
+  document.getElementById('submitTestBtn').addEventListener('click', submitTest);
+
+  refs.schemeToggle.addEventListener('change', (e) => {
+    state.showScheme = e.target.checked;
+    toggleSchemes(state.showScheme, refs.form);
+  });
+
+  const timer = setInterval(() => {
+    const remaining = Math.max(0, Math.round((state.deadline - Date.now()) / 1000));
+    renderTimer(refs.timerText, remaining);
+
+    if (remaining <= 0) {
+      clearInterval(timer);
+      openReview();
+    }
+  }, 1000);
+
+  renderTimer(refs.timerText, TEST_DURATION_SECONDS);
+  refreshQuestionView();
 }
 
 function initDiagnostic() {
