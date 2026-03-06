@@ -203,13 +203,36 @@ Progress Tracker
 
 # Technology Stack
 
-Frontend: Next.js  
-Language: TypeScript  
-Styling: Tailwind CSS  
-Database: SQLite  
-ORM: Prisma  
-Validation: Zod  
-Testing: Vitest
+// Frontend: Next.js  
+// Language: TypeScript  
+// Styling: Tailwind CSS  
+// Database: SQLite  
+// ORM: Prisma  
+// Validation: Zod  
+// Testing: Vitest
+
+## GitHub Pages Hosting Constraint
+
+This project must run on GitHub Pages as a static site.
+
+Therefore:
+- no server-side code
+- no API routes
+- no runtime database
+- no Prisma or SQLite runtime
+- no dependency on Node server features in production
+
+The deployed app must consist of static files:
+- HTML
+- CSS
+- JavaScript
+- JSON assets
+
+All generation, marking, diagnostics, and progress tracking must happen client-side in the browser.
+
+Progress should be stored using browser LocalStorage for the MVP.
+
+If any build tooling is used, it must be optional and automated through GitHub Actions so the user does not need to compile manually.
 
 ---
 
