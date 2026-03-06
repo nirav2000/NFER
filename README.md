@@ -1,18 +1,70 @@
-# NFER
+# NFER Reading Builder
 
-Starter repository for creating NFER-style reading assessments with reusable passage and question banks.
+NFER Reading Builder is a static Year 4 reading-assessment tool designed for GitHub Pages.
+It generates original tests, marks answers, provides diagnostics and tracks progress in browser LocalStorage.
 
-## Quick start
+## Static hosting model
 
-- Generate a sample test: `node generator/generateTest.js`
-- Analyse a generated test: `node diagnostics/analyseResults.js`
-- Run the local web UI: `python3 -m http.server 8000` then open `http://localhost:8000/docs/`
+This project is 100% static:
 
-## GitHub Pages (no compile step)
+- HTML/CSS/JavaScript only
+- JSON content files stored in the repository
+- No server-side runtime, database, API routes or build pipeline required
 
-This repo now includes a static app in `docs/` that works directly on GitHub Pages.
+## Main pages
 
-1. In GitHub, open **Settings → Pages**.
-2. Under **Build and deployment**, set **Source** to **Deploy from a branch**.
-3. Select branch **main** and folder **/docs**.
-4. Save. Your app will be served by GitHub Pages with no build tooling required.
+- `index.html` – dashboard
+- `generator.html` – generate a new test
+- `test.html` – pupil test + teacher guide/answer key
+- `mark.html` – mark responses
+- `diagnostic.html` – diagnostic report
+- `tracker.html` – progress tracker
+
+## Repository structure
+
+- `css/styles.css` – shared and print styles
+- `js/` – modular client-side logic (`generator`, `renderer`, `diagnostics`, `tracker`, `storage`, `app`)
+- `data/passages/` – fiction and nonfiction Year 4 passage sets
+- `data/questions/` – question banks linked by `passageId`
+- `tests/sample-generated-tests.json` – sample generated metadata
+- `.nojekyll` – ensures GitHub Pages serves files as-is
+
+## Content updates
+
+### Add a new passage
+
+1. Append a new object to either:
+   - `data/passages/year4-fiction.json`, or
+   - `data/passages/year4-nonfiction.json`
+2. Include at least: `id`, `year`, `genre`, `title`, `topic`, `difficulty`, `word_count`, `text`.
+3. Keep text original and Year 4 suitable (roughly 300–450 words).
+
+### Add new questions
+
+1. Add items in the matching question file:
+   - `data/questions/year4-fiction-questions.json` or
+   - `data/questions/year4-nonfiction-questions.json`
+2. Ensure each question includes required fields:
+   `id`, `passageId`, `domain`, `fineSkillTag`, `difficulty`, `marks`, `questionType`, `stem`, `options`, `acceptedAnswers`, `markingNotes`, `modelAnswerGold`, `modelAnswerSilver`, `commonWrongAnswer`.
+3. Use the supported domains:
+   `retrieval`, `vocabulary`, `inference`, `structure`, `authorIntent`.
+
+## Local run
+
+From repository root:
+
+```bash
+python3 -m http.server 8000
+```
+
+Open `http://localhost:8000/`.
+
+## GitHub Pages deployment
+
+1. Push to `main`.
+2. In GitHub: **Settings → Pages**.
+3. Source: **Deploy from a branch**.
+4. Branch: `main`, Folder: `/ (root)`.
+5. Save.
+
+The app runs directly from static files, so no compile step is needed.

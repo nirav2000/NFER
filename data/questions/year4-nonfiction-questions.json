@@ -1,0 +1,1766 @@
+[
+  {
+    "id": "q085",
+    "passageId": "y4-non-01",
+    "domain": "retrieval",
+    "fineSkillTag": "find-explicit-detail",
+    "difficulty": 2,
+    "marks": 1,
+    "questionType": "mcq",
+    "stem": "Which detail is stated in 'Ocean Currents'?",
+    "options": [
+      "A key event is linked to ocean currents",
+      "A dragon appears in the story",
+      "The setting is another planet",
+      "Nobody records observations"
+    ],
+    "acceptedAnswers": [
+      "A key event is linked to ocean currents"
+    ],
+    "markingNotes": "Award 1 mark for selecting the explicit stated detail.",
+    "modelAnswerGold": "The text clearly links an event or explanation to ocean currents.",
+    "modelAnswerSilver": "It says something important happens around ocean currents.",
+    "commonWrongAnswer": "Choosing a dramatic option not supported by the text."
+  },
+  {
+    "id": "q086",
+    "passageId": "y4-non-01",
+    "domain": "vocabulary",
+    "fineSkillTag": "context-clue-meaning",
+    "difficulty": 2,
+    "marks": 1,
+    "questionType": "mcq",
+    "stem": "What does the word 'revealed' most nearly mean in this passage?",
+    "options": [
+      "showed clearly",
+      "hid completely",
+      "forgot quickly",
+      "jumped suddenly"
+    ],
+    "acceptedAnswers": [
+      "showed clearly"
+    ],
+    "markingNotes": "Use surrounding sentence clues to confirm meaning.",
+    "modelAnswerGold": "'Revealed' means shown or made visible.",
+    "modelAnswerSilver": "It means something became clear.",
+    "commonWrongAnswer": "Thinking it means 'hid'."
+  },
+  {
+    "id": "q087",
+    "passageId": "y4-non-01",
+    "domain": "inference",
+    "fineSkillTag": "cause-and-effect",
+    "difficulty": 3,
+    "marks": 2,
+    "questionType": "short",
+    "stem": "Explain one likely reason events changed in the middle of the text.",
+    "options": [],
+    "acceptedAnswers": [
+      "because evidence changed",
+      "because conditions changed",
+      "because new information appeared"
+    ],
+    "markingNotes": "Allow equivalent reason tied to textual clues; 2 marks for clear cause + evidence.",
+    "modelAnswerGold": "A strong answer links the change to new evidence or conditions and cites a clue.",
+    "modelAnswerSilver": "A valid answer identifies a sensible cause but gives limited evidence.",
+    "commonWrongAnswer": "Restating a sentence with no reason."
+  },
+  {
+    "id": "q088",
+    "passageId": "y4-non-01",
+    "domain": "inference",
+    "fineSkillTag": "justify-opinion",
+    "difficulty": 3,
+    "marks": 2,
+    "questionType": "short",
+    "stem": "What impression of the main subject does the writer create? Give evidence.",
+    "options": [],
+    "acceptedAnswers": [
+      "impression with evidence"
+    ],
+    "markingNotes": "2 marks for inference with textual support.",
+    "modelAnswerGold": "The writer presents the subject as thoughtful and careful, shown through precise actions/details.",
+    "modelAnswerSilver": "The subject seems careful; one supporting detail is included.",
+    "commonWrongAnswer": "Opinion with no evidence."
+  },
+  {
+    "id": "q089",
+    "passageId": "y4-non-01",
+    "domain": "structure",
+    "fineSkillTag": "text-organisation",
+    "difficulty": 2,
+    "marks": 1,
+    "questionType": "short",
+    "stem": "How is the text organised to help the reader follow ideas?",
+    "options": [],
+    "acceptedAnswers": [
+      "order of events",
+      "step-by-step",
+      "introduction then detail"
+    ],
+    "markingNotes": "Accept references to sequence and paragraph roles.",
+    "modelAnswerGold": "The text moves from setup to development to conclusion, helping the reader track ideas.",
+    "modelAnswerSilver": "It is mostly in clear order with linked details.",
+    "commonWrongAnswer": "Saying only that it has sentences."
+  },
+  {
+    "id": "q090",
+    "passageId": "y4-non-01",
+    "domain": "authorIntent",
+    "fineSkillTag": "author-purpose",
+    "difficulty": 2,
+    "marks": 2,
+    "questionType": "short",
+    "stem": "Why do you think the author included this topic for Year 4 readers?",
+    "options": [],
+    "acceptedAnswers": [
+      "to inform",
+      "to entertain",
+      "to encourage careful thinking"
+    ],
+    "markingNotes": "2 marks for purpose + audience impact.",
+    "modelAnswerGold": "Award for identifying purpose and linking to Year 4 audience needs/interests.",
+    "modelAnswerSilver": "Purpose identified but limited link to audience.",
+    "commonWrongAnswer": "Answer focuses only on plot summary."
+  },
+  {
+    "id": "q091",
+    "passageId": "y4-non-01",
+    "domain": "retrieval",
+    "fineSkillTag": "sequence-events",
+    "difficulty": 2,
+    "marks": 1,
+    "questionType": "mcq",
+    "stem": "Which event happens first?",
+    "options": [
+      "An initial clue or fact appears",
+      "The final summary is given",
+      "The conclusion is printed first",
+      "No events are ordered"
+    ],
+    "acceptedAnswers": [
+      "An initial clue or fact appears"
+    ],
+    "markingNotes": "Award 1 for first event recognition.",
+    "modelAnswerGold": "The text starts with an opening clue/fact before later explanation.",
+    "modelAnswerSilver": "The opening happens before final sections.",
+    "commonWrongAnswer": "Selecting a later-stage event."
+  },
+  {
+    "id": "q092",
+    "passageId": "y4-non-02",
+    "domain": "retrieval",
+    "fineSkillTag": "find-explicit-detail",
+    "difficulty": 3,
+    "marks": 1,
+    "questionType": "mcq",
+    "stem": "Which detail is stated in 'Rainforest Layers'?",
+    "options": [
+      "A key event is linked to rainforest layers",
+      "A dragon appears in the story",
+      "The setting is another planet",
+      "Nobody records observations"
+    ],
+    "acceptedAnswers": [
+      "A key event is linked to rainforest layers"
+    ],
+    "markingNotes": "Award 1 mark for selecting the explicit stated detail.",
+    "modelAnswerGold": "The text clearly links an event or explanation to rainforest layers.",
+    "modelAnswerSilver": "It says something important happens around rainforest layers.",
+    "commonWrongAnswer": "Choosing a dramatic option not supported by the text."
+  },
+  {
+    "id": "q093",
+    "passageId": "y4-non-02",
+    "domain": "vocabulary",
+    "fineSkillTag": "context-clue-meaning",
+    "difficulty": 3,
+    "marks": 1,
+    "questionType": "mcq",
+    "stem": "What does the word 'revealed' most nearly mean in this passage?",
+    "options": [
+      "showed clearly",
+      "hid completely",
+      "forgot quickly",
+      "jumped suddenly"
+    ],
+    "acceptedAnswers": [
+      "showed clearly"
+    ],
+    "markingNotes": "Use surrounding sentence clues to confirm meaning.",
+    "modelAnswerGold": "'Revealed' means shown or made visible.",
+    "modelAnswerSilver": "It means something became clear.",
+    "commonWrongAnswer": "Thinking it means 'hid'."
+  },
+  {
+    "id": "q094",
+    "passageId": "y4-non-02",
+    "domain": "inference",
+    "fineSkillTag": "cause-and-effect",
+    "difficulty": 4,
+    "marks": 2,
+    "questionType": "short",
+    "stem": "Explain one likely reason events changed in the middle of the text.",
+    "options": [],
+    "acceptedAnswers": [
+      "because evidence changed",
+      "because conditions changed",
+      "because new information appeared"
+    ],
+    "markingNotes": "Allow equivalent reason tied to textual clues; 2 marks for clear cause + evidence.",
+    "modelAnswerGold": "A strong answer links the change to new evidence or conditions and cites a clue.",
+    "modelAnswerSilver": "A valid answer identifies a sensible cause but gives limited evidence.",
+    "commonWrongAnswer": "Restating a sentence with no reason."
+  },
+  {
+    "id": "q095",
+    "passageId": "y4-non-02",
+    "domain": "inference",
+    "fineSkillTag": "justify-opinion",
+    "difficulty": 4,
+    "marks": 2,
+    "questionType": "short",
+    "stem": "What impression of the main subject does the writer create? Give evidence.",
+    "options": [],
+    "acceptedAnswers": [
+      "impression with evidence"
+    ],
+    "markingNotes": "2 marks for inference with textual support.",
+    "modelAnswerGold": "The writer presents the subject as thoughtful and careful, shown through precise actions/details.",
+    "modelAnswerSilver": "The subject seems careful; one supporting detail is included.",
+    "commonWrongAnswer": "Opinion with no evidence."
+  },
+  {
+    "id": "q096",
+    "passageId": "y4-non-02",
+    "domain": "structure",
+    "fineSkillTag": "text-organisation",
+    "difficulty": 3,
+    "marks": 1,
+    "questionType": "short",
+    "stem": "How is the text organised to help the reader follow ideas?",
+    "options": [],
+    "acceptedAnswers": [
+      "order of events",
+      "step-by-step",
+      "introduction then detail"
+    ],
+    "markingNotes": "Accept references to sequence and paragraph roles.",
+    "modelAnswerGold": "The text moves from setup to development to conclusion, helping the reader track ideas.",
+    "modelAnswerSilver": "It is mostly in clear order with linked details.",
+    "commonWrongAnswer": "Saying only that it has sentences."
+  },
+  {
+    "id": "q097",
+    "passageId": "y4-non-02",
+    "domain": "authorIntent",
+    "fineSkillTag": "author-purpose",
+    "difficulty": 3,
+    "marks": 2,
+    "questionType": "short",
+    "stem": "Why do you think the author included this topic for Year 4 readers?",
+    "options": [],
+    "acceptedAnswers": [
+      "to inform",
+      "to entertain",
+      "to encourage careful thinking"
+    ],
+    "markingNotes": "2 marks for purpose + audience impact.",
+    "modelAnswerGold": "Award for identifying purpose and linking to Year 4 audience needs/interests.",
+    "modelAnswerSilver": "Purpose identified but limited link to audience.",
+    "commonWrongAnswer": "Answer focuses only on plot summary."
+  },
+  {
+    "id": "q098",
+    "passageId": "y4-non-02",
+    "domain": "retrieval",
+    "fineSkillTag": "sequence-events",
+    "difficulty": 3,
+    "marks": 1,
+    "questionType": "mcq",
+    "stem": "Which event happens first?",
+    "options": [
+      "An initial clue or fact appears",
+      "The final summary is given",
+      "The conclusion is printed first",
+      "No events are ordered"
+    ],
+    "acceptedAnswers": [
+      "An initial clue or fact appears"
+    ],
+    "markingNotes": "Award 1 for first event recognition.",
+    "modelAnswerGold": "The text starts with an opening clue/fact before later explanation.",
+    "modelAnswerSilver": "The opening happens before final sections.",
+    "commonWrongAnswer": "Selecting a later-stage event."
+  },
+  {
+    "id": "q099",
+    "passageId": "y4-non-03",
+    "domain": "retrieval",
+    "fineSkillTag": "find-explicit-detail",
+    "difficulty": 4,
+    "marks": 1,
+    "questionType": "mcq",
+    "stem": "Which detail is stated in 'Roman Roads'?",
+    "options": [
+      "A key event is linked to Roman roads",
+      "A dragon appears in the story",
+      "The setting is another planet",
+      "Nobody records observations"
+    ],
+    "acceptedAnswers": [
+      "A key event is linked to Roman roads"
+    ],
+    "markingNotes": "Award 1 mark for selecting the explicit stated detail.",
+    "modelAnswerGold": "The text clearly links an event or explanation to Roman roads.",
+    "modelAnswerSilver": "It says something important happens around Roman roads.",
+    "commonWrongAnswer": "Choosing a dramatic option not supported by the text."
+  },
+  {
+    "id": "q100",
+    "passageId": "y4-non-03",
+    "domain": "vocabulary",
+    "fineSkillTag": "context-clue-meaning",
+    "difficulty": 4,
+    "marks": 1,
+    "questionType": "mcq",
+    "stem": "What does the word 'revealed' most nearly mean in this passage?",
+    "options": [
+      "showed clearly",
+      "hid completely",
+      "forgot quickly",
+      "jumped suddenly"
+    ],
+    "acceptedAnswers": [
+      "showed clearly"
+    ],
+    "markingNotes": "Use surrounding sentence clues to confirm meaning.",
+    "modelAnswerGold": "'Revealed' means shown or made visible.",
+    "modelAnswerSilver": "It means something became clear.",
+    "commonWrongAnswer": "Thinking it means 'hid'."
+  },
+  {
+    "id": "q101",
+    "passageId": "y4-non-03",
+    "domain": "inference",
+    "fineSkillTag": "cause-and-effect",
+    "difficulty": 5,
+    "marks": 2,
+    "questionType": "short",
+    "stem": "Explain one likely reason events changed in the middle of the text.",
+    "options": [],
+    "acceptedAnswers": [
+      "because evidence changed",
+      "because conditions changed",
+      "because new information appeared"
+    ],
+    "markingNotes": "Allow equivalent reason tied to textual clues; 2 marks for clear cause + evidence.",
+    "modelAnswerGold": "A strong answer links the change to new evidence or conditions and cites a clue.",
+    "modelAnswerSilver": "A valid answer identifies a sensible cause but gives limited evidence.",
+    "commonWrongAnswer": "Restating a sentence with no reason."
+  },
+  {
+    "id": "q102",
+    "passageId": "y4-non-03",
+    "domain": "inference",
+    "fineSkillTag": "justify-opinion",
+    "difficulty": 5,
+    "marks": 2,
+    "questionType": "short",
+    "stem": "What impression of the main subject does the writer create? Give evidence.",
+    "options": [],
+    "acceptedAnswers": [
+      "impression with evidence"
+    ],
+    "markingNotes": "2 marks for inference with textual support.",
+    "modelAnswerGold": "The writer presents the subject as thoughtful and careful, shown through precise actions/details.",
+    "modelAnswerSilver": "The subject seems careful; one supporting detail is included.",
+    "commonWrongAnswer": "Opinion with no evidence."
+  },
+  {
+    "id": "q103",
+    "passageId": "y4-non-03",
+    "domain": "structure",
+    "fineSkillTag": "text-organisation",
+    "difficulty": 4,
+    "marks": 1,
+    "questionType": "short",
+    "stem": "How is the text organised to help the reader follow ideas?",
+    "options": [],
+    "acceptedAnswers": [
+      "order of events",
+      "step-by-step",
+      "introduction then detail"
+    ],
+    "markingNotes": "Accept references to sequence and paragraph roles.",
+    "modelAnswerGold": "The text moves from setup to development to conclusion, helping the reader track ideas.",
+    "modelAnswerSilver": "It is mostly in clear order with linked details.",
+    "commonWrongAnswer": "Saying only that it has sentences."
+  },
+  {
+    "id": "q104",
+    "passageId": "y4-non-03",
+    "domain": "authorIntent",
+    "fineSkillTag": "author-purpose",
+    "difficulty": 4,
+    "marks": 2,
+    "questionType": "short",
+    "stem": "Why do you think the author included this topic for Year 4 readers?",
+    "options": [],
+    "acceptedAnswers": [
+      "to inform",
+      "to entertain",
+      "to encourage careful thinking"
+    ],
+    "markingNotes": "2 marks for purpose + audience impact.",
+    "modelAnswerGold": "Award for identifying purpose and linking to Year 4 audience needs/interests.",
+    "modelAnswerSilver": "Purpose identified but limited link to audience.",
+    "commonWrongAnswer": "Answer focuses only on plot summary."
+  },
+  {
+    "id": "q105",
+    "passageId": "y4-non-03",
+    "domain": "retrieval",
+    "fineSkillTag": "sequence-events",
+    "difficulty": 4,
+    "marks": 1,
+    "questionType": "mcq",
+    "stem": "Which event happens first?",
+    "options": [
+      "An initial clue or fact appears",
+      "The final summary is given",
+      "The conclusion is printed first",
+      "No events are ordered"
+    ],
+    "acceptedAnswers": [
+      "An initial clue or fact appears"
+    ],
+    "markingNotes": "Award 1 for first event recognition.",
+    "modelAnswerGold": "The text starts with an opening clue/fact before later explanation.",
+    "modelAnswerSilver": "The opening happens before final sections.",
+    "commonWrongAnswer": "Selecting a later-stage event."
+  },
+  {
+    "id": "q106",
+    "passageId": "y4-non-04",
+    "domain": "retrieval",
+    "fineSkillTag": "find-explicit-detail",
+    "difficulty": 2,
+    "marks": 1,
+    "questionType": "mcq",
+    "stem": "Which detail is stated in 'Urban Bee Keeping'?",
+    "options": [
+      "A key event is linked to urban bee keeping",
+      "A dragon appears in the story",
+      "The setting is another planet",
+      "Nobody records observations"
+    ],
+    "acceptedAnswers": [
+      "A key event is linked to urban bee keeping"
+    ],
+    "markingNotes": "Award 1 mark for selecting the explicit stated detail.",
+    "modelAnswerGold": "The text clearly links an event or explanation to urban bee keeping.",
+    "modelAnswerSilver": "It says something important happens around urban bee keeping.",
+    "commonWrongAnswer": "Choosing a dramatic option not supported by the text."
+  },
+  {
+    "id": "q107",
+    "passageId": "y4-non-04",
+    "domain": "vocabulary",
+    "fineSkillTag": "context-clue-meaning",
+    "difficulty": 2,
+    "marks": 1,
+    "questionType": "mcq",
+    "stem": "What does the word 'revealed' most nearly mean in this passage?",
+    "options": [
+      "showed clearly",
+      "hid completely",
+      "forgot quickly",
+      "jumped suddenly"
+    ],
+    "acceptedAnswers": [
+      "showed clearly"
+    ],
+    "markingNotes": "Use surrounding sentence clues to confirm meaning.",
+    "modelAnswerGold": "'Revealed' means shown or made visible.",
+    "modelAnswerSilver": "It means something became clear.",
+    "commonWrongAnswer": "Thinking it means 'hid'."
+  },
+  {
+    "id": "q108",
+    "passageId": "y4-non-04",
+    "domain": "inference",
+    "fineSkillTag": "cause-and-effect",
+    "difficulty": 3,
+    "marks": 2,
+    "questionType": "short",
+    "stem": "Explain one likely reason events changed in the middle of the text.",
+    "options": [],
+    "acceptedAnswers": [
+      "because evidence changed",
+      "because conditions changed",
+      "because new information appeared"
+    ],
+    "markingNotes": "Allow equivalent reason tied to textual clues; 2 marks for clear cause + evidence.",
+    "modelAnswerGold": "A strong answer links the change to new evidence or conditions and cites a clue.",
+    "modelAnswerSilver": "A valid answer identifies a sensible cause but gives limited evidence.",
+    "commonWrongAnswer": "Restating a sentence with no reason."
+  },
+  {
+    "id": "q109",
+    "passageId": "y4-non-04",
+    "domain": "inference",
+    "fineSkillTag": "justify-opinion",
+    "difficulty": 3,
+    "marks": 2,
+    "questionType": "short",
+    "stem": "What impression of the main subject does the writer create? Give evidence.",
+    "options": [],
+    "acceptedAnswers": [
+      "impression with evidence"
+    ],
+    "markingNotes": "2 marks for inference with textual support.",
+    "modelAnswerGold": "The writer presents the subject as thoughtful and careful, shown through precise actions/details.",
+    "modelAnswerSilver": "The subject seems careful; one supporting detail is included.",
+    "commonWrongAnswer": "Opinion with no evidence."
+  },
+  {
+    "id": "q110",
+    "passageId": "y4-non-04",
+    "domain": "structure",
+    "fineSkillTag": "text-organisation",
+    "difficulty": 2,
+    "marks": 1,
+    "questionType": "short",
+    "stem": "How is the text organised to help the reader follow ideas?",
+    "options": [],
+    "acceptedAnswers": [
+      "order of events",
+      "step-by-step",
+      "introduction then detail"
+    ],
+    "markingNotes": "Accept references to sequence and paragraph roles.",
+    "modelAnswerGold": "The text moves from setup to development to conclusion, helping the reader track ideas.",
+    "modelAnswerSilver": "It is mostly in clear order with linked details.",
+    "commonWrongAnswer": "Saying only that it has sentences."
+  },
+  {
+    "id": "q111",
+    "passageId": "y4-non-04",
+    "domain": "authorIntent",
+    "fineSkillTag": "author-purpose",
+    "difficulty": 2,
+    "marks": 2,
+    "questionType": "short",
+    "stem": "Why do you think the author included this topic for Year 4 readers?",
+    "options": [],
+    "acceptedAnswers": [
+      "to inform",
+      "to entertain",
+      "to encourage careful thinking"
+    ],
+    "markingNotes": "2 marks for purpose + audience impact.",
+    "modelAnswerGold": "Award for identifying purpose and linking to Year 4 audience needs/interests.",
+    "modelAnswerSilver": "Purpose identified but limited link to audience.",
+    "commonWrongAnswer": "Answer focuses only on plot summary."
+  },
+  {
+    "id": "q112",
+    "passageId": "y4-non-04",
+    "domain": "retrieval",
+    "fineSkillTag": "sequence-events",
+    "difficulty": 2,
+    "marks": 1,
+    "questionType": "mcq",
+    "stem": "Which event happens first?",
+    "options": [
+      "An initial clue or fact appears",
+      "The final summary is given",
+      "The conclusion is printed first",
+      "No events are ordered"
+    ],
+    "acceptedAnswers": [
+      "An initial clue or fact appears"
+    ],
+    "markingNotes": "Award 1 for first event recognition.",
+    "modelAnswerGold": "The text starts with an opening clue/fact before later explanation.",
+    "modelAnswerSilver": "The opening happens before final sections.",
+    "commonWrongAnswer": "Selecting a later-stage event."
+  },
+  {
+    "id": "q113",
+    "passageId": "y4-non-05",
+    "domain": "retrieval",
+    "fineSkillTag": "find-explicit-detail",
+    "difficulty": 3,
+    "marks": 1,
+    "questionType": "mcq",
+    "stem": "Which detail is stated in 'Volcano Monitoring'?",
+    "options": [
+      "A key event is linked to volcano monitoring",
+      "A dragon appears in the story",
+      "The setting is another planet",
+      "Nobody records observations"
+    ],
+    "acceptedAnswers": [
+      "A key event is linked to volcano monitoring"
+    ],
+    "markingNotes": "Award 1 mark for selecting the explicit stated detail.",
+    "modelAnswerGold": "The text clearly links an event or explanation to volcano monitoring.",
+    "modelAnswerSilver": "It says something important happens around volcano monitoring.",
+    "commonWrongAnswer": "Choosing a dramatic option not supported by the text."
+  },
+  {
+    "id": "q114",
+    "passageId": "y4-non-05",
+    "domain": "vocabulary",
+    "fineSkillTag": "context-clue-meaning",
+    "difficulty": 3,
+    "marks": 1,
+    "questionType": "mcq",
+    "stem": "What does the word 'revealed' most nearly mean in this passage?",
+    "options": [
+      "showed clearly",
+      "hid completely",
+      "forgot quickly",
+      "jumped suddenly"
+    ],
+    "acceptedAnswers": [
+      "showed clearly"
+    ],
+    "markingNotes": "Use surrounding sentence clues to confirm meaning.",
+    "modelAnswerGold": "'Revealed' means shown or made visible.",
+    "modelAnswerSilver": "It means something became clear.",
+    "commonWrongAnswer": "Thinking it means 'hid'."
+  },
+  {
+    "id": "q115",
+    "passageId": "y4-non-05",
+    "domain": "inference",
+    "fineSkillTag": "cause-and-effect",
+    "difficulty": 4,
+    "marks": 2,
+    "questionType": "short",
+    "stem": "Explain one likely reason events changed in the middle of the text.",
+    "options": [],
+    "acceptedAnswers": [
+      "because evidence changed",
+      "because conditions changed",
+      "because new information appeared"
+    ],
+    "markingNotes": "Allow equivalent reason tied to textual clues; 2 marks for clear cause + evidence.",
+    "modelAnswerGold": "A strong answer links the change to new evidence or conditions and cites a clue.",
+    "modelAnswerSilver": "A valid answer identifies a sensible cause but gives limited evidence.",
+    "commonWrongAnswer": "Restating a sentence with no reason."
+  },
+  {
+    "id": "q116",
+    "passageId": "y4-non-05",
+    "domain": "inference",
+    "fineSkillTag": "justify-opinion",
+    "difficulty": 4,
+    "marks": 2,
+    "questionType": "short",
+    "stem": "What impression of the main subject does the writer create? Give evidence.",
+    "options": [],
+    "acceptedAnswers": [
+      "impression with evidence"
+    ],
+    "markingNotes": "2 marks for inference with textual support.",
+    "modelAnswerGold": "The writer presents the subject as thoughtful and careful, shown through precise actions/details.",
+    "modelAnswerSilver": "The subject seems careful; one supporting detail is included.",
+    "commonWrongAnswer": "Opinion with no evidence."
+  },
+  {
+    "id": "q117",
+    "passageId": "y4-non-05",
+    "domain": "structure",
+    "fineSkillTag": "text-organisation",
+    "difficulty": 3,
+    "marks": 1,
+    "questionType": "short",
+    "stem": "How is the text organised to help the reader follow ideas?",
+    "options": [],
+    "acceptedAnswers": [
+      "order of events",
+      "step-by-step",
+      "introduction then detail"
+    ],
+    "markingNotes": "Accept references to sequence and paragraph roles.",
+    "modelAnswerGold": "The text moves from setup to development to conclusion, helping the reader track ideas.",
+    "modelAnswerSilver": "It is mostly in clear order with linked details.",
+    "commonWrongAnswer": "Saying only that it has sentences."
+  },
+  {
+    "id": "q118",
+    "passageId": "y4-non-05",
+    "domain": "authorIntent",
+    "fineSkillTag": "author-purpose",
+    "difficulty": 3,
+    "marks": 2,
+    "questionType": "short",
+    "stem": "Why do you think the author included this topic for Year 4 readers?",
+    "options": [],
+    "acceptedAnswers": [
+      "to inform",
+      "to entertain",
+      "to encourage careful thinking"
+    ],
+    "markingNotes": "2 marks for purpose + audience impact.",
+    "modelAnswerGold": "Award for identifying purpose and linking to Year 4 audience needs/interests.",
+    "modelAnswerSilver": "Purpose identified but limited link to audience.",
+    "commonWrongAnswer": "Answer focuses only on plot summary."
+  },
+  {
+    "id": "q119",
+    "passageId": "y4-non-05",
+    "domain": "retrieval",
+    "fineSkillTag": "sequence-events",
+    "difficulty": 3,
+    "marks": 1,
+    "questionType": "mcq",
+    "stem": "Which event happens first?",
+    "options": [
+      "An initial clue or fact appears",
+      "The final summary is given",
+      "The conclusion is printed first",
+      "No events are ordered"
+    ],
+    "acceptedAnswers": [
+      "An initial clue or fact appears"
+    ],
+    "markingNotes": "Award 1 for first event recognition.",
+    "modelAnswerGold": "The text starts with an opening clue/fact before later explanation.",
+    "modelAnswerSilver": "The opening happens before final sections.",
+    "commonWrongAnswer": "Selecting a later-stage event."
+  },
+  {
+    "id": "q120",
+    "passageId": "y4-non-06",
+    "domain": "retrieval",
+    "fineSkillTag": "find-explicit-detail",
+    "difficulty": 4,
+    "marks": 1,
+    "questionType": "mcq",
+    "stem": "Which detail is stated in 'Wind Power'?",
+    "options": [
+      "A key event is linked to wind power",
+      "A dragon appears in the story",
+      "The setting is another planet",
+      "Nobody records observations"
+    ],
+    "acceptedAnswers": [
+      "A key event is linked to wind power"
+    ],
+    "markingNotes": "Award 1 mark for selecting the explicit stated detail.",
+    "modelAnswerGold": "The text clearly links an event or explanation to wind power.",
+    "modelAnswerSilver": "It says something important happens around wind power.",
+    "commonWrongAnswer": "Choosing a dramatic option not supported by the text."
+  },
+  {
+    "id": "q121",
+    "passageId": "y4-non-06",
+    "domain": "vocabulary",
+    "fineSkillTag": "context-clue-meaning",
+    "difficulty": 4,
+    "marks": 1,
+    "questionType": "mcq",
+    "stem": "What does the word 'revealed' most nearly mean in this passage?",
+    "options": [
+      "showed clearly",
+      "hid completely",
+      "forgot quickly",
+      "jumped suddenly"
+    ],
+    "acceptedAnswers": [
+      "showed clearly"
+    ],
+    "markingNotes": "Use surrounding sentence clues to confirm meaning.",
+    "modelAnswerGold": "'Revealed' means shown or made visible.",
+    "modelAnswerSilver": "It means something became clear.",
+    "commonWrongAnswer": "Thinking it means 'hid'."
+  },
+  {
+    "id": "q122",
+    "passageId": "y4-non-06",
+    "domain": "inference",
+    "fineSkillTag": "cause-and-effect",
+    "difficulty": 5,
+    "marks": 2,
+    "questionType": "short",
+    "stem": "Explain one likely reason events changed in the middle of the text.",
+    "options": [],
+    "acceptedAnswers": [
+      "because evidence changed",
+      "because conditions changed",
+      "because new information appeared"
+    ],
+    "markingNotes": "Allow equivalent reason tied to textual clues; 2 marks for clear cause + evidence.",
+    "modelAnswerGold": "A strong answer links the change to new evidence or conditions and cites a clue.",
+    "modelAnswerSilver": "A valid answer identifies a sensible cause but gives limited evidence.",
+    "commonWrongAnswer": "Restating a sentence with no reason."
+  },
+  {
+    "id": "q123",
+    "passageId": "y4-non-06",
+    "domain": "inference",
+    "fineSkillTag": "justify-opinion",
+    "difficulty": 5,
+    "marks": 2,
+    "questionType": "short",
+    "stem": "What impression of the main subject does the writer create? Give evidence.",
+    "options": [],
+    "acceptedAnswers": [
+      "impression with evidence"
+    ],
+    "markingNotes": "2 marks for inference with textual support.",
+    "modelAnswerGold": "The writer presents the subject as thoughtful and careful, shown through precise actions/details.",
+    "modelAnswerSilver": "The subject seems careful; one supporting detail is included.",
+    "commonWrongAnswer": "Opinion with no evidence."
+  },
+  {
+    "id": "q124",
+    "passageId": "y4-non-06",
+    "domain": "structure",
+    "fineSkillTag": "text-organisation",
+    "difficulty": 4,
+    "marks": 1,
+    "questionType": "short",
+    "stem": "How is the text organised to help the reader follow ideas?",
+    "options": [],
+    "acceptedAnswers": [
+      "order of events",
+      "step-by-step",
+      "introduction then detail"
+    ],
+    "markingNotes": "Accept references to sequence and paragraph roles.",
+    "modelAnswerGold": "The text moves from setup to development to conclusion, helping the reader track ideas.",
+    "modelAnswerSilver": "It is mostly in clear order with linked details.",
+    "commonWrongAnswer": "Saying only that it has sentences."
+  },
+  {
+    "id": "q125",
+    "passageId": "y4-non-06",
+    "domain": "authorIntent",
+    "fineSkillTag": "author-purpose",
+    "difficulty": 4,
+    "marks": 2,
+    "questionType": "short",
+    "stem": "Why do you think the author included this topic for Year 4 readers?",
+    "options": [],
+    "acceptedAnswers": [
+      "to inform",
+      "to entertain",
+      "to encourage careful thinking"
+    ],
+    "markingNotes": "2 marks for purpose + audience impact.",
+    "modelAnswerGold": "Award for identifying purpose and linking to Year 4 audience needs/interests.",
+    "modelAnswerSilver": "Purpose identified but limited link to audience.",
+    "commonWrongAnswer": "Answer focuses only on plot summary."
+  },
+  {
+    "id": "q126",
+    "passageId": "y4-non-06",
+    "domain": "retrieval",
+    "fineSkillTag": "sequence-events",
+    "difficulty": 4,
+    "marks": 1,
+    "questionType": "mcq",
+    "stem": "Which event happens first?",
+    "options": [
+      "An initial clue or fact appears",
+      "The final summary is given",
+      "The conclusion is printed first",
+      "No events are ordered"
+    ],
+    "acceptedAnswers": [
+      "An initial clue or fact appears"
+    ],
+    "markingNotes": "Award 1 for first event recognition.",
+    "modelAnswerGold": "The text starts with an opening clue/fact before later explanation.",
+    "modelAnswerSilver": "The opening happens before final sections.",
+    "commonWrongAnswer": "Selecting a later-stage event."
+  },
+  {
+    "id": "q127",
+    "passageId": "y4-non-07",
+    "domain": "retrieval",
+    "fineSkillTag": "find-explicit-detail",
+    "difficulty": 2,
+    "marks": 1,
+    "questionType": "mcq",
+    "stem": "Which detail is stated in 'Nocturnal Animals'?",
+    "options": [
+      "A key event is linked to nocturnal animals",
+      "A dragon appears in the story",
+      "The setting is another planet",
+      "Nobody records observations"
+    ],
+    "acceptedAnswers": [
+      "A key event is linked to nocturnal animals"
+    ],
+    "markingNotes": "Award 1 mark for selecting the explicit stated detail.",
+    "modelAnswerGold": "The text clearly links an event or explanation to nocturnal animals.",
+    "modelAnswerSilver": "It says something important happens around nocturnal animals.",
+    "commonWrongAnswer": "Choosing a dramatic option not supported by the text."
+  },
+  {
+    "id": "q128",
+    "passageId": "y4-non-07",
+    "domain": "vocabulary",
+    "fineSkillTag": "context-clue-meaning",
+    "difficulty": 2,
+    "marks": 1,
+    "questionType": "mcq",
+    "stem": "What does the word 'revealed' most nearly mean in this passage?",
+    "options": [
+      "showed clearly",
+      "hid completely",
+      "forgot quickly",
+      "jumped suddenly"
+    ],
+    "acceptedAnswers": [
+      "showed clearly"
+    ],
+    "markingNotes": "Use surrounding sentence clues to confirm meaning.",
+    "modelAnswerGold": "'Revealed' means shown or made visible.",
+    "modelAnswerSilver": "It means something became clear.",
+    "commonWrongAnswer": "Thinking it means 'hid'."
+  },
+  {
+    "id": "q129",
+    "passageId": "y4-non-07",
+    "domain": "inference",
+    "fineSkillTag": "cause-and-effect",
+    "difficulty": 3,
+    "marks": 2,
+    "questionType": "short",
+    "stem": "Explain one likely reason events changed in the middle of the text.",
+    "options": [],
+    "acceptedAnswers": [
+      "because evidence changed",
+      "because conditions changed",
+      "because new information appeared"
+    ],
+    "markingNotes": "Allow equivalent reason tied to textual clues; 2 marks for clear cause + evidence.",
+    "modelAnswerGold": "A strong answer links the change to new evidence or conditions and cites a clue.",
+    "modelAnswerSilver": "A valid answer identifies a sensible cause but gives limited evidence.",
+    "commonWrongAnswer": "Restating a sentence with no reason."
+  },
+  {
+    "id": "q130",
+    "passageId": "y4-non-07",
+    "domain": "inference",
+    "fineSkillTag": "justify-opinion",
+    "difficulty": 3,
+    "marks": 2,
+    "questionType": "short",
+    "stem": "What impression of the main subject does the writer create? Give evidence.",
+    "options": [],
+    "acceptedAnswers": [
+      "impression with evidence"
+    ],
+    "markingNotes": "2 marks for inference with textual support.",
+    "modelAnswerGold": "The writer presents the subject as thoughtful and careful, shown through precise actions/details.",
+    "modelAnswerSilver": "The subject seems careful; one supporting detail is included.",
+    "commonWrongAnswer": "Opinion with no evidence."
+  },
+  {
+    "id": "q131",
+    "passageId": "y4-non-07",
+    "domain": "structure",
+    "fineSkillTag": "text-organisation",
+    "difficulty": 2,
+    "marks": 1,
+    "questionType": "short",
+    "stem": "How is the text organised to help the reader follow ideas?",
+    "options": [],
+    "acceptedAnswers": [
+      "order of events",
+      "step-by-step",
+      "introduction then detail"
+    ],
+    "markingNotes": "Accept references to sequence and paragraph roles.",
+    "modelAnswerGold": "The text moves from setup to development to conclusion, helping the reader track ideas.",
+    "modelAnswerSilver": "It is mostly in clear order with linked details.",
+    "commonWrongAnswer": "Saying only that it has sentences."
+  },
+  {
+    "id": "q132",
+    "passageId": "y4-non-07",
+    "domain": "authorIntent",
+    "fineSkillTag": "author-purpose",
+    "difficulty": 2,
+    "marks": 2,
+    "questionType": "short",
+    "stem": "Why do you think the author included this topic for Year 4 readers?",
+    "options": [],
+    "acceptedAnswers": [
+      "to inform",
+      "to entertain",
+      "to encourage careful thinking"
+    ],
+    "markingNotes": "2 marks for purpose + audience impact.",
+    "modelAnswerGold": "Award for identifying purpose and linking to Year 4 audience needs/interests.",
+    "modelAnswerSilver": "Purpose identified but limited link to audience.",
+    "commonWrongAnswer": "Answer focuses only on plot summary."
+  },
+  {
+    "id": "q133",
+    "passageId": "y4-non-07",
+    "domain": "retrieval",
+    "fineSkillTag": "sequence-events",
+    "difficulty": 2,
+    "marks": 1,
+    "questionType": "mcq",
+    "stem": "Which event happens first?",
+    "options": [
+      "An initial clue or fact appears",
+      "The final summary is given",
+      "The conclusion is printed first",
+      "No events are ordered"
+    ],
+    "acceptedAnswers": [
+      "An initial clue or fact appears"
+    ],
+    "markingNotes": "Award 1 for first event recognition.",
+    "modelAnswerGold": "The text starts with an opening clue/fact before later explanation.",
+    "modelAnswerSilver": "The opening happens before final sections.",
+    "commonWrongAnswer": "Selecting a later-stage event."
+  },
+  {
+    "id": "q134",
+    "passageId": "y4-non-08",
+    "domain": "retrieval",
+    "fineSkillTag": "find-explicit-detail",
+    "difficulty": 3,
+    "marks": 1,
+    "questionType": "mcq",
+    "stem": "Which detail is stated in 'River Restoration'?",
+    "options": [
+      "A key event is linked to river restoration",
+      "A dragon appears in the story",
+      "The setting is another planet",
+      "Nobody records observations"
+    ],
+    "acceptedAnswers": [
+      "A key event is linked to river restoration"
+    ],
+    "markingNotes": "Award 1 mark for selecting the explicit stated detail.",
+    "modelAnswerGold": "The text clearly links an event or explanation to river restoration.",
+    "modelAnswerSilver": "It says something important happens around river restoration.",
+    "commonWrongAnswer": "Choosing a dramatic option not supported by the text."
+  },
+  {
+    "id": "q135",
+    "passageId": "y4-non-08",
+    "domain": "vocabulary",
+    "fineSkillTag": "context-clue-meaning",
+    "difficulty": 3,
+    "marks": 1,
+    "questionType": "mcq",
+    "stem": "What does the word 'revealed' most nearly mean in this passage?",
+    "options": [
+      "showed clearly",
+      "hid completely",
+      "forgot quickly",
+      "jumped suddenly"
+    ],
+    "acceptedAnswers": [
+      "showed clearly"
+    ],
+    "markingNotes": "Use surrounding sentence clues to confirm meaning.",
+    "modelAnswerGold": "'Revealed' means shown or made visible.",
+    "modelAnswerSilver": "It means something became clear.",
+    "commonWrongAnswer": "Thinking it means 'hid'."
+  },
+  {
+    "id": "q136",
+    "passageId": "y4-non-08",
+    "domain": "inference",
+    "fineSkillTag": "cause-and-effect",
+    "difficulty": 4,
+    "marks": 2,
+    "questionType": "short",
+    "stem": "Explain one likely reason events changed in the middle of the text.",
+    "options": [],
+    "acceptedAnswers": [
+      "because evidence changed",
+      "because conditions changed",
+      "because new information appeared"
+    ],
+    "markingNotes": "Allow equivalent reason tied to textual clues; 2 marks for clear cause + evidence.",
+    "modelAnswerGold": "A strong answer links the change to new evidence or conditions and cites a clue.",
+    "modelAnswerSilver": "A valid answer identifies a sensible cause but gives limited evidence.",
+    "commonWrongAnswer": "Restating a sentence with no reason."
+  },
+  {
+    "id": "q137",
+    "passageId": "y4-non-08",
+    "domain": "inference",
+    "fineSkillTag": "justify-opinion",
+    "difficulty": 4,
+    "marks": 2,
+    "questionType": "short",
+    "stem": "What impression of the main subject does the writer create? Give evidence.",
+    "options": [],
+    "acceptedAnswers": [
+      "impression with evidence"
+    ],
+    "markingNotes": "2 marks for inference with textual support.",
+    "modelAnswerGold": "The writer presents the subject as thoughtful and careful, shown through precise actions/details.",
+    "modelAnswerSilver": "The subject seems careful; one supporting detail is included.",
+    "commonWrongAnswer": "Opinion with no evidence."
+  },
+  {
+    "id": "q138",
+    "passageId": "y4-non-08",
+    "domain": "structure",
+    "fineSkillTag": "text-organisation",
+    "difficulty": 3,
+    "marks": 1,
+    "questionType": "short",
+    "stem": "How is the text organised to help the reader follow ideas?",
+    "options": [],
+    "acceptedAnswers": [
+      "order of events",
+      "step-by-step",
+      "introduction then detail"
+    ],
+    "markingNotes": "Accept references to sequence and paragraph roles.",
+    "modelAnswerGold": "The text moves from setup to development to conclusion, helping the reader track ideas.",
+    "modelAnswerSilver": "It is mostly in clear order with linked details.",
+    "commonWrongAnswer": "Saying only that it has sentences."
+  },
+  {
+    "id": "q139",
+    "passageId": "y4-non-08",
+    "domain": "authorIntent",
+    "fineSkillTag": "author-purpose",
+    "difficulty": 3,
+    "marks": 2,
+    "questionType": "short",
+    "stem": "Why do you think the author included this topic for Year 4 readers?",
+    "options": [],
+    "acceptedAnswers": [
+      "to inform",
+      "to entertain",
+      "to encourage careful thinking"
+    ],
+    "markingNotes": "2 marks for purpose + audience impact.",
+    "modelAnswerGold": "Award for identifying purpose and linking to Year 4 audience needs/interests.",
+    "modelAnswerSilver": "Purpose identified but limited link to audience.",
+    "commonWrongAnswer": "Answer focuses only on plot summary."
+  },
+  {
+    "id": "q140",
+    "passageId": "y4-non-08",
+    "domain": "retrieval",
+    "fineSkillTag": "sequence-events",
+    "difficulty": 3,
+    "marks": 1,
+    "questionType": "mcq",
+    "stem": "Which event happens first?",
+    "options": [
+      "An initial clue or fact appears",
+      "The final summary is given",
+      "The conclusion is printed first",
+      "No events are ordered"
+    ],
+    "acceptedAnswers": [
+      "An initial clue or fact appears"
+    ],
+    "markingNotes": "Award 1 for first event recognition.",
+    "modelAnswerGold": "The text starts with an opening clue/fact before later explanation.",
+    "modelAnswerSilver": "The opening happens before final sections.",
+    "commonWrongAnswer": "Selecting a later-stage event."
+  },
+  {
+    "id": "q141",
+    "passageId": "y4-non-09",
+    "domain": "retrieval",
+    "fineSkillTag": "find-explicit-detail",
+    "difficulty": 4,
+    "marks": 1,
+    "questionType": "mcq",
+    "stem": "Which detail is stated in 'Growing Food In Space'?",
+    "options": [
+      "A key event is linked to growing food in space",
+      "A dragon appears in the story",
+      "The setting is another planet",
+      "Nobody records observations"
+    ],
+    "acceptedAnswers": [
+      "A key event is linked to growing food in space"
+    ],
+    "markingNotes": "Award 1 mark for selecting the explicit stated detail.",
+    "modelAnswerGold": "The text clearly links an event or explanation to growing food in space.",
+    "modelAnswerSilver": "It says something important happens around growing food in space.",
+    "commonWrongAnswer": "Choosing a dramatic option not supported by the text."
+  },
+  {
+    "id": "q142",
+    "passageId": "y4-non-09",
+    "domain": "vocabulary",
+    "fineSkillTag": "context-clue-meaning",
+    "difficulty": 4,
+    "marks": 1,
+    "questionType": "mcq",
+    "stem": "What does the word 'revealed' most nearly mean in this passage?",
+    "options": [
+      "showed clearly",
+      "hid completely",
+      "forgot quickly",
+      "jumped suddenly"
+    ],
+    "acceptedAnswers": [
+      "showed clearly"
+    ],
+    "markingNotes": "Use surrounding sentence clues to confirm meaning.",
+    "modelAnswerGold": "'Revealed' means shown or made visible.",
+    "modelAnswerSilver": "It means something became clear.",
+    "commonWrongAnswer": "Thinking it means 'hid'."
+  },
+  {
+    "id": "q143",
+    "passageId": "y4-non-09",
+    "domain": "inference",
+    "fineSkillTag": "cause-and-effect",
+    "difficulty": 5,
+    "marks": 2,
+    "questionType": "short",
+    "stem": "Explain one likely reason events changed in the middle of the text.",
+    "options": [],
+    "acceptedAnswers": [
+      "because evidence changed",
+      "because conditions changed",
+      "because new information appeared"
+    ],
+    "markingNotes": "Allow equivalent reason tied to textual clues; 2 marks for clear cause + evidence.",
+    "modelAnswerGold": "A strong answer links the change to new evidence or conditions and cites a clue.",
+    "modelAnswerSilver": "A valid answer identifies a sensible cause but gives limited evidence.",
+    "commonWrongAnswer": "Restating a sentence with no reason."
+  },
+  {
+    "id": "q144",
+    "passageId": "y4-non-09",
+    "domain": "inference",
+    "fineSkillTag": "justify-opinion",
+    "difficulty": 5,
+    "marks": 2,
+    "questionType": "short",
+    "stem": "What impression of the main subject does the writer create? Give evidence.",
+    "options": [],
+    "acceptedAnswers": [
+      "impression with evidence"
+    ],
+    "markingNotes": "2 marks for inference with textual support.",
+    "modelAnswerGold": "The writer presents the subject as thoughtful and careful, shown through precise actions/details.",
+    "modelAnswerSilver": "The subject seems careful; one supporting detail is included.",
+    "commonWrongAnswer": "Opinion with no evidence."
+  },
+  {
+    "id": "q145",
+    "passageId": "y4-non-09",
+    "domain": "structure",
+    "fineSkillTag": "text-organisation",
+    "difficulty": 4,
+    "marks": 1,
+    "questionType": "short",
+    "stem": "How is the text organised to help the reader follow ideas?",
+    "options": [],
+    "acceptedAnswers": [
+      "order of events",
+      "step-by-step",
+      "introduction then detail"
+    ],
+    "markingNotes": "Accept references to sequence and paragraph roles.",
+    "modelAnswerGold": "The text moves from setup to development to conclusion, helping the reader track ideas.",
+    "modelAnswerSilver": "It is mostly in clear order with linked details.",
+    "commonWrongAnswer": "Saying only that it has sentences."
+  },
+  {
+    "id": "q146",
+    "passageId": "y4-non-09",
+    "domain": "authorIntent",
+    "fineSkillTag": "author-purpose",
+    "difficulty": 4,
+    "marks": 2,
+    "questionType": "short",
+    "stem": "Why do you think the author included this topic for Year 4 readers?",
+    "options": [],
+    "acceptedAnswers": [
+      "to inform",
+      "to entertain",
+      "to encourage careful thinking"
+    ],
+    "markingNotes": "2 marks for purpose + audience impact.",
+    "modelAnswerGold": "Award for identifying purpose and linking to Year 4 audience needs/interests.",
+    "modelAnswerSilver": "Purpose identified but limited link to audience.",
+    "commonWrongAnswer": "Answer focuses only on plot summary."
+  },
+  {
+    "id": "q147",
+    "passageId": "y4-non-09",
+    "domain": "retrieval",
+    "fineSkillTag": "sequence-events",
+    "difficulty": 4,
+    "marks": 1,
+    "questionType": "mcq",
+    "stem": "Which event happens first?",
+    "options": [
+      "An initial clue or fact appears",
+      "The final summary is given",
+      "The conclusion is printed first",
+      "No events are ordered"
+    ],
+    "acceptedAnswers": [
+      "An initial clue or fact appears"
+    ],
+    "markingNotes": "Award 1 for first event recognition.",
+    "modelAnswerGold": "The text starts with an opening clue/fact before later explanation.",
+    "modelAnswerSilver": "The opening happens before final sections.",
+    "commonWrongAnswer": "Selecting a later-stage event."
+  },
+  {
+    "id": "q148",
+    "passageId": "y4-non-10",
+    "domain": "retrieval",
+    "fineSkillTag": "find-explicit-detail",
+    "difficulty": 2,
+    "marks": 1,
+    "questionType": "mcq",
+    "stem": "Which detail is stated in 'Weather Prediction'?",
+    "options": [
+      "A key event is linked to weather prediction",
+      "A dragon appears in the story",
+      "The setting is another planet",
+      "Nobody records observations"
+    ],
+    "acceptedAnswers": [
+      "A key event is linked to weather prediction"
+    ],
+    "markingNotes": "Award 1 mark for selecting the explicit stated detail.",
+    "modelAnswerGold": "The text clearly links an event or explanation to weather prediction.",
+    "modelAnswerSilver": "It says something important happens around weather prediction.",
+    "commonWrongAnswer": "Choosing a dramatic option not supported by the text."
+  },
+  {
+    "id": "q149",
+    "passageId": "y4-non-10",
+    "domain": "vocabulary",
+    "fineSkillTag": "context-clue-meaning",
+    "difficulty": 2,
+    "marks": 1,
+    "questionType": "mcq",
+    "stem": "What does the word 'revealed' most nearly mean in this passage?",
+    "options": [
+      "showed clearly",
+      "hid completely",
+      "forgot quickly",
+      "jumped suddenly"
+    ],
+    "acceptedAnswers": [
+      "showed clearly"
+    ],
+    "markingNotes": "Use surrounding sentence clues to confirm meaning.",
+    "modelAnswerGold": "'Revealed' means shown or made visible.",
+    "modelAnswerSilver": "It means something became clear.",
+    "commonWrongAnswer": "Thinking it means 'hid'."
+  },
+  {
+    "id": "q150",
+    "passageId": "y4-non-10",
+    "domain": "inference",
+    "fineSkillTag": "cause-and-effect",
+    "difficulty": 3,
+    "marks": 2,
+    "questionType": "short",
+    "stem": "Explain one likely reason events changed in the middle of the text.",
+    "options": [],
+    "acceptedAnswers": [
+      "because evidence changed",
+      "because conditions changed",
+      "because new information appeared"
+    ],
+    "markingNotes": "Allow equivalent reason tied to textual clues; 2 marks for clear cause + evidence.",
+    "modelAnswerGold": "A strong answer links the change to new evidence or conditions and cites a clue.",
+    "modelAnswerSilver": "A valid answer identifies a sensible cause but gives limited evidence.",
+    "commonWrongAnswer": "Restating a sentence with no reason."
+  },
+  {
+    "id": "q151",
+    "passageId": "y4-non-10",
+    "domain": "inference",
+    "fineSkillTag": "justify-opinion",
+    "difficulty": 3,
+    "marks": 2,
+    "questionType": "short",
+    "stem": "What impression of the main subject does the writer create? Give evidence.",
+    "options": [],
+    "acceptedAnswers": [
+      "impression with evidence"
+    ],
+    "markingNotes": "2 marks for inference with textual support.",
+    "modelAnswerGold": "The writer presents the subject as thoughtful and careful, shown through precise actions/details.",
+    "modelAnswerSilver": "The subject seems careful; one supporting detail is included.",
+    "commonWrongAnswer": "Opinion with no evidence."
+  },
+  {
+    "id": "q152",
+    "passageId": "y4-non-10",
+    "domain": "structure",
+    "fineSkillTag": "text-organisation",
+    "difficulty": 2,
+    "marks": 1,
+    "questionType": "short",
+    "stem": "How is the text organised to help the reader follow ideas?",
+    "options": [],
+    "acceptedAnswers": [
+      "order of events",
+      "step-by-step",
+      "introduction then detail"
+    ],
+    "markingNotes": "Accept references to sequence and paragraph roles.",
+    "modelAnswerGold": "The text moves from setup to development to conclusion, helping the reader track ideas.",
+    "modelAnswerSilver": "It is mostly in clear order with linked details.",
+    "commonWrongAnswer": "Saying only that it has sentences."
+  },
+  {
+    "id": "q153",
+    "passageId": "y4-non-10",
+    "domain": "authorIntent",
+    "fineSkillTag": "author-purpose",
+    "difficulty": 2,
+    "marks": 2,
+    "questionType": "short",
+    "stem": "Why do you think the author included this topic for Year 4 readers?",
+    "options": [],
+    "acceptedAnswers": [
+      "to inform",
+      "to entertain",
+      "to encourage careful thinking"
+    ],
+    "markingNotes": "2 marks for purpose + audience impact.",
+    "modelAnswerGold": "Award for identifying purpose and linking to Year 4 audience needs/interests.",
+    "modelAnswerSilver": "Purpose identified but limited link to audience.",
+    "commonWrongAnswer": "Answer focuses only on plot summary."
+  },
+  {
+    "id": "q154",
+    "passageId": "y4-non-10",
+    "domain": "retrieval",
+    "fineSkillTag": "sequence-events",
+    "difficulty": 2,
+    "marks": 1,
+    "questionType": "mcq",
+    "stem": "Which event happens first?",
+    "options": [
+      "An initial clue or fact appears",
+      "The final summary is given",
+      "The conclusion is printed first",
+      "No events are ordered"
+    ],
+    "acceptedAnswers": [
+      "An initial clue or fact appears"
+    ],
+    "markingNotes": "Award 1 for first event recognition.",
+    "modelAnswerGold": "The text starts with an opening clue/fact before later explanation.",
+    "modelAnswerSilver": "The opening happens before final sections.",
+    "commonWrongAnswer": "Selecting a later-stage event."
+  },
+  {
+    "id": "q155",
+    "passageId": "y4-non-11",
+    "domain": "retrieval",
+    "fineSkillTag": "find-explicit-detail",
+    "difficulty": 3,
+    "marks": 1,
+    "questionType": "mcq",
+    "stem": "Which detail is stated in 'History Of Rail Travel'?",
+    "options": [
+      "A key event is linked to history of rail travel",
+      "A dragon appears in the story",
+      "The setting is another planet",
+      "Nobody records observations"
+    ],
+    "acceptedAnswers": [
+      "A key event is linked to history of rail travel"
+    ],
+    "markingNotes": "Award 1 mark for selecting the explicit stated detail.",
+    "modelAnswerGold": "The text clearly links an event or explanation to history of rail travel.",
+    "modelAnswerSilver": "It says something important happens around history of rail travel.",
+    "commonWrongAnswer": "Choosing a dramatic option not supported by the text."
+  },
+  {
+    "id": "q156",
+    "passageId": "y4-non-11",
+    "domain": "vocabulary",
+    "fineSkillTag": "context-clue-meaning",
+    "difficulty": 3,
+    "marks": 1,
+    "questionType": "mcq",
+    "stem": "What does the word 'revealed' most nearly mean in this passage?",
+    "options": [
+      "showed clearly",
+      "hid completely",
+      "forgot quickly",
+      "jumped suddenly"
+    ],
+    "acceptedAnswers": [
+      "showed clearly"
+    ],
+    "markingNotes": "Use surrounding sentence clues to confirm meaning.",
+    "modelAnswerGold": "'Revealed' means shown or made visible.",
+    "modelAnswerSilver": "It means something became clear.",
+    "commonWrongAnswer": "Thinking it means 'hid'."
+  },
+  {
+    "id": "q157",
+    "passageId": "y4-non-11",
+    "domain": "inference",
+    "fineSkillTag": "cause-and-effect",
+    "difficulty": 4,
+    "marks": 2,
+    "questionType": "short",
+    "stem": "Explain one likely reason events changed in the middle of the text.",
+    "options": [],
+    "acceptedAnswers": [
+      "because evidence changed",
+      "because conditions changed",
+      "because new information appeared"
+    ],
+    "markingNotes": "Allow equivalent reason tied to textual clues; 2 marks for clear cause + evidence.",
+    "modelAnswerGold": "A strong answer links the change to new evidence or conditions and cites a clue.",
+    "modelAnswerSilver": "A valid answer identifies a sensible cause but gives limited evidence.",
+    "commonWrongAnswer": "Restating a sentence with no reason."
+  },
+  {
+    "id": "q158",
+    "passageId": "y4-non-11",
+    "domain": "inference",
+    "fineSkillTag": "justify-opinion",
+    "difficulty": 4,
+    "marks": 2,
+    "questionType": "short",
+    "stem": "What impression of the main subject does the writer create? Give evidence.",
+    "options": [],
+    "acceptedAnswers": [
+      "impression with evidence"
+    ],
+    "markingNotes": "2 marks for inference with textual support.",
+    "modelAnswerGold": "The writer presents the subject as thoughtful and careful, shown through precise actions/details.",
+    "modelAnswerSilver": "The subject seems careful; one supporting detail is included.",
+    "commonWrongAnswer": "Opinion with no evidence."
+  },
+  {
+    "id": "q159",
+    "passageId": "y4-non-11",
+    "domain": "structure",
+    "fineSkillTag": "text-organisation",
+    "difficulty": 3,
+    "marks": 1,
+    "questionType": "short",
+    "stem": "How is the text organised to help the reader follow ideas?",
+    "options": [],
+    "acceptedAnswers": [
+      "order of events",
+      "step-by-step",
+      "introduction then detail"
+    ],
+    "markingNotes": "Accept references to sequence and paragraph roles.",
+    "modelAnswerGold": "The text moves from setup to development to conclusion, helping the reader track ideas.",
+    "modelAnswerSilver": "It is mostly in clear order with linked details.",
+    "commonWrongAnswer": "Saying only that it has sentences."
+  },
+  {
+    "id": "q160",
+    "passageId": "y4-non-11",
+    "domain": "authorIntent",
+    "fineSkillTag": "author-purpose",
+    "difficulty": 3,
+    "marks": 2,
+    "questionType": "short",
+    "stem": "Why do you think the author included this topic for Year 4 readers?",
+    "options": [],
+    "acceptedAnswers": [
+      "to inform",
+      "to entertain",
+      "to encourage careful thinking"
+    ],
+    "markingNotes": "2 marks for purpose + audience impact.",
+    "modelAnswerGold": "Award for identifying purpose and linking to Year 4 audience needs/interests.",
+    "modelAnswerSilver": "Purpose identified but limited link to audience.",
+    "commonWrongAnswer": "Answer focuses only on plot summary."
+  },
+  {
+    "id": "q161",
+    "passageId": "y4-non-11",
+    "domain": "retrieval",
+    "fineSkillTag": "sequence-events",
+    "difficulty": 3,
+    "marks": 1,
+    "questionType": "mcq",
+    "stem": "Which event happens first?",
+    "options": [
+      "An initial clue or fact appears",
+      "The final summary is given",
+      "The conclusion is printed first",
+      "No events are ordered"
+    ],
+    "acceptedAnswers": [
+      "An initial clue or fact appears"
+    ],
+    "markingNotes": "Award 1 for first event recognition.",
+    "modelAnswerGold": "The text starts with an opening clue/fact before later explanation.",
+    "modelAnswerSilver": "The opening happens before final sections.",
+    "commonWrongAnswer": "Selecting a later-stage event."
+  },
+  {
+    "id": "q162",
+    "passageId": "y4-non-12",
+    "domain": "retrieval",
+    "fineSkillTag": "find-explicit-detail",
+    "difficulty": 4,
+    "marks": 1,
+    "questionType": "mcq",
+    "stem": "Which detail is stated in 'Plastic Recycling'?",
+    "options": [
+      "A key event is linked to plastic recycling",
+      "A dragon appears in the story",
+      "The setting is another planet",
+      "Nobody records observations"
+    ],
+    "acceptedAnswers": [
+      "A key event is linked to plastic recycling"
+    ],
+    "markingNotes": "Award 1 mark for selecting the explicit stated detail.",
+    "modelAnswerGold": "The text clearly links an event or explanation to plastic recycling.",
+    "modelAnswerSilver": "It says something important happens around plastic recycling.",
+    "commonWrongAnswer": "Choosing a dramatic option not supported by the text."
+  },
+  {
+    "id": "q163",
+    "passageId": "y4-non-12",
+    "domain": "vocabulary",
+    "fineSkillTag": "context-clue-meaning",
+    "difficulty": 4,
+    "marks": 1,
+    "questionType": "mcq",
+    "stem": "What does the word 'revealed' most nearly mean in this passage?",
+    "options": [
+      "showed clearly",
+      "hid completely",
+      "forgot quickly",
+      "jumped suddenly"
+    ],
+    "acceptedAnswers": [
+      "showed clearly"
+    ],
+    "markingNotes": "Use surrounding sentence clues to confirm meaning.",
+    "modelAnswerGold": "'Revealed' means shown or made visible.",
+    "modelAnswerSilver": "It means something became clear.",
+    "commonWrongAnswer": "Thinking it means 'hid'."
+  },
+  {
+    "id": "q164",
+    "passageId": "y4-non-12",
+    "domain": "inference",
+    "fineSkillTag": "cause-and-effect",
+    "difficulty": 5,
+    "marks": 2,
+    "questionType": "short",
+    "stem": "Explain one likely reason events changed in the middle of the text.",
+    "options": [],
+    "acceptedAnswers": [
+      "because evidence changed",
+      "because conditions changed",
+      "because new information appeared"
+    ],
+    "markingNotes": "Allow equivalent reason tied to textual clues; 2 marks for clear cause + evidence.",
+    "modelAnswerGold": "A strong answer links the change to new evidence or conditions and cites a clue.",
+    "modelAnswerSilver": "A valid answer identifies a sensible cause but gives limited evidence.",
+    "commonWrongAnswer": "Restating a sentence with no reason."
+  },
+  {
+    "id": "q165",
+    "passageId": "y4-non-12",
+    "domain": "inference",
+    "fineSkillTag": "justify-opinion",
+    "difficulty": 5,
+    "marks": 2,
+    "questionType": "short",
+    "stem": "What impression of the main subject does the writer create? Give evidence.",
+    "options": [],
+    "acceptedAnswers": [
+      "impression with evidence"
+    ],
+    "markingNotes": "2 marks for inference with textual support.",
+    "modelAnswerGold": "The writer presents the subject as thoughtful and careful, shown through precise actions/details.",
+    "modelAnswerSilver": "The subject seems careful; one supporting detail is included.",
+    "commonWrongAnswer": "Opinion with no evidence."
+  },
+  {
+    "id": "q166",
+    "passageId": "y4-non-12",
+    "domain": "structure",
+    "fineSkillTag": "text-organisation",
+    "difficulty": 4,
+    "marks": 1,
+    "questionType": "short",
+    "stem": "How is the text organised to help the reader follow ideas?",
+    "options": [],
+    "acceptedAnswers": [
+      "order of events",
+      "step-by-step",
+      "introduction then detail"
+    ],
+    "markingNotes": "Accept references to sequence and paragraph roles.",
+    "modelAnswerGold": "The text moves from setup to development to conclusion, helping the reader track ideas.",
+    "modelAnswerSilver": "It is mostly in clear order with linked details.",
+    "commonWrongAnswer": "Saying only that it has sentences."
+  },
+  {
+    "id": "q167",
+    "passageId": "y4-non-12",
+    "domain": "authorIntent",
+    "fineSkillTag": "author-purpose",
+    "difficulty": 4,
+    "marks": 2,
+    "questionType": "short",
+    "stem": "Why do you think the author included this topic for Year 4 readers?",
+    "options": [],
+    "acceptedAnswers": [
+      "to inform",
+      "to entertain",
+      "to encourage careful thinking"
+    ],
+    "markingNotes": "2 marks for purpose + audience impact.",
+    "modelAnswerGold": "Award for identifying purpose and linking to Year 4 audience needs/interests.",
+    "modelAnswerSilver": "Purpose identified but limited link to audience.",
+    "commonWrongAnswer": "Answer focuses only on plot summary."
+  },
+  {
+    "id": "q168",
+    "passageId": "y4-non-12",
+    "domain": "retrieval",
+    "fineSkillTag": "sequence-events",
+    "difficulty": 4,
+    "marks": 1,
+    "questionType": "mcq",
+    "stem": "Which event happens first?",
+    "options": [
+      "An initial clue or fact appears",
+      "The final summary is given",
+      "The conclusion is printed first",
+      "No events are ordered"
+    ],
+    "acceptedAnswers": [
+      "An initial clue or fact appears"
+    ],
+    "markingNotes": "Award 1 for first event recognition.",
+    "modelAnswerGold": "The text starts with an opening clue/fact before later explanation.",
+    "modelAnswerSilver": "The opening happens before final sections.",
+    "commonWrongAnswer": "Selecting a later-stage event."
+  }
+]
