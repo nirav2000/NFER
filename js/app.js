@@ -126,7 +126,7 @@ function initGlobalUI() {
   if (hideMarksToggle) hideMarksToggle.checked = Boolean(settings.hideMarks);
   if (gentleModeToggle) gentleModeToggle.checked = Boolean(settings.gentleMode);
 
-  const syncSettings = (closeAfter = false) => {
+  const syncSettings = () => {
     settings = {
       passageFontScale: Number(passageFontRange?.value || 1),
       inputFontScale: Number(inputFontRange?.value || 1),
@@ -136,7 +136,6 @@ function initGlobalUI() {
     saveSettings(settings);
     applySettingsToPage(settings);
     document.dispatchEvent(new CustomEvent('settings:changed', { detail: settings }));
-    if (closeAfter) openCloseSettings(true);
   };
 
   [passageFontRange, inputFontRange].forEach((el) => el && el.addEventListener('input', syncSettings));
@@ -144,7 +143,7 @@ function initGlobalUI() {
 
   const saveSettingsBtn = document.getElementById('saveSettingsBtn');
   if (saveSettingsBtn) {
-    saveSettingsBtn.addEventListener('click', () => syncSettings(true));
+    saveSettingsBtn.addEventListener('click', () => syncSettings());
   }
 }
 
