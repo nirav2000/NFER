@@ -13,13 +13,36 @@
 
   <main class="container">
     <section class="card">
-      <h2>Year 4 Reading Assessment Library</h2>
+      <h2>Assessment Dashboard</h2>
       <p id="libraryMeta">Loading library...</p>
       <p id="dashboardError" class="error"></p>
+
+      <div class="library-row">
+        <label for="libraryFile">Assessment file</label>
+        <select id="libraryFile">
+          <option value="/data/year4_combined_50_test_library_v3.json">Year 4 combined 50 tests (v3)</option>
+        </select>
+        <input id="libraryPathInput" type="text" placeholder="/data/your_other_library.json" />
+        <button id="applyLibraryBtn" type="button">Load File</button>
+      </div>
+
       <div class="actions">
-        <button id="generateBtn">Generate Test</button>
+        <button id="generateBtn">Start Recommended Test</button>
+        <button id="randomBtn" type="button">Random Test</button>
         <a class="button-link" href="./tracker.html">Progress Tracker</a>
       </div>
+    </section>
+
+    <section class="card">
+      <h3>Next Recommended Test</h3>
+      <p id="recommendedMeta">No recommendation yet.</p>
+    </section>
+
+    <section class="card">
+      <h3>Recent Scores</h3>
+      <p id="recentScores">No attempts yet.</p>
+      <h3>Weak Domains</h3>
+      <p id="weakDomains">No weak domains identified yet.</p>
     </section>
   </main>
 

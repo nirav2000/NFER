@@ -18,12 +18,14 @@
   <main class="container">
     <section class="card" id="testMeta"></section>
 
-    <section class="card">
-      <h2>Test Display Options</h2>
-      <div class="actions">
-        <label class="toggle"><input type="checkbox" id="showTimerProgressToggle" checked /> Show timer and progress bar</label>
-        <label class="toggle"><input type="checkbox" id="showAllQuestionsToggle" /> Show all questions at once</label>
-      </div>
+    <section class="card compact-options-card">
+      <details>
+        <summary>Display options</summary>
+        <div class="compact-options">
+          <label class="toggle"><input type="checkbox" id="showTimerProgressToggle" checked /> Show timer and progress bar</label>
+          <label class="toggle"><input type="checkbox" id="showAllQuestionsToggle" /> Show all questions at once</label>
+        </div>
+      </details>
     </section>
 
     <section class="card timer-card">

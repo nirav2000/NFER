@@ -13,19 +13,28 @@ export function getCurrentTest() {
   return raw ? JSON.parse(raw) : null;
 }
 
-export function saveDiagnostic(diagRecord) {
-  localStorage.setItem(KEYS.lastDiagnostic, JSON.stringify(diagRecord));
-  const history = getHistory();
-  history.push(diagRecord);
+export function loadHistory() {
+  const raw = localStorage.getItem(KEYS.history);
+  return raw ? JSON.parse(raw) : [];
+}
+
+export function getHistory() {
+  return loadHistory();
+}
+
+export function saveResult(result) {
+  const history = loadHistory();
+  history.push(result);
   localStorage.setItem(KEYS.history, JSON.stringify(history));
+  localStorage.setItem(KEYS.lastDiagnostic, JSON.stringify(result));
+}
+
+export function saveDiagnostic(diagRecord) {
+  // Backward-compatible alias.
+  saveResult(diagRecord);
 }
 
 export function getLastDiagnostic() {
   const raw = localStorage.getItem(KEYS.lastDiagnostic);
   return raw ? JSON.parse(raw) : null;
-}
-
-export function getHistory() {
-  const raw = localStorage.getItem(KEYS.history);
-  return raw ? JSON.parse(raw) : [];
 }

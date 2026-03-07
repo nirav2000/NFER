@@ -1,6 +1,6 @@
-import { loadLibrary, generateTest } from './generator.js';
+import { loadLibrary, setLibraryPath, getStoredLibraryPath, generateTestRandom, selectNextTest, getWeakDomains } from './generator.js';
 import { markTest, buildDiagnostic } from './diagnostics.js';
-import { saveCurrentTest, getCurrentTest, saveDiagnostic, getLastDiagnostic, getHistory } from './storage.js';
+import { saveCurrentTest, getCurrentTest, saveResult, getLastDiagnostic, loadHistory, getHistory } from './storage.js';
 import {
   renderDashboardMeta,
   renderTestMeta,
@@ -21,29 +21,97 @@ function currentPage() {
   return document.body.dataset.page;
 }
 
-async function initDashboard() {
-  const metaEl = document.getElementById('libraryMeta');
-  const errorEl = document.getElementById('dashboardError');
-  const generateBtn = document.getElementById('generateBtn');
+function renderDashboardInsights(library, history, recommendedTest) {
+  const recommendedEl = document.getElementById('recommendedMeta');
+  const recentEl = document.getElementById('recentScores');
+  const weakEl = document.getElementById('weakDomains');
 
+  if (recommendedTest) {
+    recommendedEl.textContent = `${recommendedTest.id} · Week ${recommendedTest.week || '—'} · Difficulty ${recommendedTest.difficulty || 3} · Topics: ${(recommendedTest.topicsCovered || []).join(', ') || 'general reading'} · Domains: ${(recommendedTest.domainsCovered || []).join(', ') || 'mixed'}`;
+  } else {
+    recommendedEl.textContent = 'No recommendation available.';
+  }
+
+  if (history.length) {
+    recentEl.textContent = history.slice(-5).map((item) => `${item.testId}: ${item.percentage}%`).join(' · ');
+  } else {
+    recentEl.textContent = 'No attempts yet.';
+  }
+
+  const weakDomains = getWeakDomains(history);
+  weakEl.textContent = weakDomains.length ? weakDomains.join(', ') : 'No weak domains identified yet.';
+
+  renderDashboardMeta(document.getElementById('libraryMeta'), library);
+}
+
+async function startTestWithSelection(selectionFn, errorEl) {
   try {
     const library = await loadLibrary();
-    renderDashboardMeta(metaEl, library);
+    const history = loadHistory();
+    const test = selectionFn(library, history);
+    if (!test) throw new Error('No test available in selected library');
+    saveCurrentTest(test);
+    window.location.href = './test.html';
+  } catch (error) {
+    errorEl.textContent = `Could not generate a test: ${error.message}`;
+  }
+}
+
+async function refreshDashboard() {
+  const library = await loadLibrary();
+  const history = loadHistory();
+  const recommended = selectNextTest(library, history);
+  renderDashboardInsights(library, history, recommended);
+}
+
+async function initDashboard() {
+  const errorEl = document.getElementById('dashboardError');
+  const generateBtn = document.getElementById('generateBtn');
+  const randomBtn = document.getElementById('randomBtn');
+  const applyLibraryBtn = document.getElementById('applyLibraryBtn');
+  const libraryFileSelect = document.getElementById('libraryFile');
+  const libraryPathInput = document.getElementById('libraryPathInput');
+
+  libraryFileSelect.value = getStoredLibraryPath();
+  libraryPathInput.value = getStoredLibraryPath();
+
+  try {
+    await refreshDashboard();
     errorEl.textContent = '';
   } catch (error) {
-    metaEl.textContent = 'Unable to load the reading test library.';
+    document.getElementById('libraryMeta').textContent = 'Unable to load the reading test library.';
     errorEl.textContent = `Error: ${error.message}`;
     generateBtn.disabled = true;
+    randomBtn.disabled = true;
     return;
   }
 
-  generateBtn.addEventListener('click', async () => {
+  applyLibraryBtn.addEventListener('click', async () => {
+    const selectedPath = libraryPathInput.value.trim() || libraryFileSelect.value;
+    setLibraryPath(selectedPath);
     try {
-      const test = await generateTest();
+      await refreshDashboard();
+      errorEl.textContent = '';
+      generateBtn.disabled = false;
+      randomBtn.disabled = false;
+    } catch (error) {
+      errorEl.textContent = `Error: ${error.message}`;
+      generateBtn.disabled = true;
+      randomBtn.disabled = true;
+    }
+  });
+
+  generateBtn.addEventListener('click', async () => {
+    await startTestWithSelection((library, history) => selectNextTest(library, history), errorEl);
+  });
+
+  randomBtn.addEventListener('click', async () => {
+    try {
+      const test = await generateTestRandom();
       saveCurrentTest(test);
       window.location.href = './test.html';
     } catch (error) {
-      errorEl.textContent = `Could not generate a test: ${error.message}`;
+      errorEl.textContent = `Could not generate a random test: ${error.message}`;
     }
   });
 }
@@ -51,7 +119,7 @@ async function initDashboard() {
 function initTest() {
   const test = getCurrentTest();
   if (!test) {
-    document.getElementById('testMeta').innerHTML = '<h2>No test generated</h2><p>Go back to Dashboard and click Generate Test.</p>';
+    document.getElementById('testMeta').innerHTML = '<h2>No test generated</h2><p>Go back to Dashboard and click Start Recommended Test.</p>';
     return;
   }
 
@@ -86,6 +154,7 @@ function initTest() {
     showScheme: false,
     showAllQuestions: false,
     showTimerProgress: true,
+    startedAt: Date.now(),
     deadline: Date.now() + (TEST_DURATION_SECONDS * 1000)
   };
 
@@ -158,22 +227,28 @@ function initTest() {
 
     const marked = markTest(test, state.answers);
     const diagnostic = buildDiagnostic(marked);
-    const timeTakenSeconds = Math.max(0, Math.round((TEST_DURATION_SECONDS * 1000 - Math.max(0, state.deadline - Date.now())) / 1000));
+    const domainBreakdown = Object.fromEntries(
+      diagnostic.domainBreakdown.map((item) => [item.domain, item.percentage])
+    );
 
-    saveDiagnostic({
-      date: new Date().toISOString(),
+    const result = {
       testId: test.id,
-      score: diagnostic.score,
-      max: diagnostic.max,
       percentage: diagnostic.percentage,
-      difficulty: test.difficulty,
-      domainBreakdown: diagnostic.domainBreakdown,
+      difficulty: test.difficulty || 3,
+      topicsCovered: test.topicsCovered || [],
+      domainBreakdown,
+      completedAt: new Date().toISOString(),
+      score: diagnostic.score,
+      totalMarks: diagnostic.max,
+      timeTakenMinutes: Math.max(1, Math.round((Date.now() - state.startedAt) / 60000)),
       strengths: diagnostic.strengths,
       focusArea: diagnostic.focusArea,
-      answers: state.answers,
-      timeTakenSeconds
-    });
+      questionCount: test.questionCount || (test.questions || []).length,
+      week: test.week,
+      sequence: test.sequence
+    };
 
+    saveResult(result);
     window.location.href = './diagnostic.html';
   };
 
@@ -212,9 +287,7 @@ function initTest() {
   document.getElementById('submitTestBtn').addEventListener('click', submitTest);
 
   refs.schemeToggle.addEventListener('change', (e) => {
-    if (state.showAllQuestions) {
-      state.answers = collectAllAnswersFromForm();
-    }
+    if (state.showAllQuestions) state.answers = collectAllAnswersFromForm();
     state.showScheme = e.target.checked;
     toggleSchemes(state.showScheme, refs.form);
     if (state.showAllQuestions) refreshQuestionView();
@@ -244,11 +317,8 @@ function initTest() {
 
     if (remaining <= 0) {
       clearInterval(timer);
-      if (state.showAllQuestions) {
-        submitTest();
-      } else {
-        openReview();
-      }
+      if (state.showAllQuestions) submitTest();
+      else openReview();
     }
   }, 1000);
 

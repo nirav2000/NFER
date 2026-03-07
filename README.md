@@ -1,43 +1,44 @@
 # NFER Reading Builder (Static GitHub Pages App)
 
-A static Year 4 reading assessment app that loads a starter pack JSON library and runs fully client-side.
+A static Year 4 reading assessment app that runs fully client-side in the browser.
 
-## Data source
+## Primary data source
 
-The app fetches:
+The app now uses:
 
-- `/data/year4_reading_starter_pack_10_tests.json`
+- `/data/year4_combined_50_test_library_v3.json`
+
+It can also load compatible JSON files from `/data/` using the dashboard file selector.
 
 ## Pages
 
-- `index.html` – dashboard (library count, generate test, tracker link)
-- `test.html` – passages, questions, answer inputs, mark-scheme toggle
+- `index.html` – dashboard (library overview, recommended test, random fallback, weak domains)
+- `test.html` – passages, questions, timer/progress, navigation, review, submission
 - `diagnostic.html` – score, percentage, domain breakdown, strengths, focus area
 - `tracker.html` – history table, score trend, difficulty progression
 
-## Structure
+## Selection logic
 
-- `css/styles.css`
-- `js/app.js`
-- `js/generator.js`
-- `js/renderer.js`
-- `js/diagnostics.js`
-- `js/storage.js`
-- `data/year4_reading_starter_pack_10_tests.json`
-- `.nojekyll`
+- **Recommended test** uses a balanced selection algorithm that considers:
+  - recent test IDs (avoid repeats)
+  - recent topics (increase variety)
+  - target difficulty (based on latest score)
+  - weak domains from recent results
+- **Random test** button is available as a fallback.
 
-## How it works
+## LocalStorage history record
 
-- Random test selection from starter pack JSON
-- Client-side marking using `acceptedAnswers`
-- Domain score breakdown and diagnostic summary
-- Progress saved to LocalStorage with:
-  - `date`
-  - `testId`
-  - `score`
-  - `percentage`
-  - `difficulty`
-  - `answers`
+Each completed test is stored in a history array with fields such as:
+
+- `testId`
+- `percentage`
+- `difficulty`
+- `topicsCovered`
+- `domainBreakdown` (domain → percentage)
+- `completedAt`
+- `score`
+- `totalMarks`
+- `timeTakenMinutes`
 
 ## Run locally
 
@@ -49,4 +50,4 @@ Open `http://localhost:8000/`.
 
 ## GitHub Pages
 
-Deploy from `main` branch, folder `/ (root)`.
+Deploy from the `main` branch, folder `/ (root)`.
