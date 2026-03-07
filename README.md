@@ -17,6 +17,15 @@ It can also load compatible JSON files from `/data/` using the dashboard file se
 - `diagnostic.html` – score, percentage, domain breakdown, strengths, focus area
 - `tracker.html` – history table, score trend, difficulty progression
 
+## UI themes and footer
+
+- Footer now shows app version and a style selector.
+- Available styles:
+  - `default` (baseline)
+  - `ocean` (dark, high-contrast)
+  - `paper` (print-inspired serif theme)
+- Theme preference is stored in LocalStorage and applied client-side.
+
 ## Selection logic
 
 - **Recommended test** uses a balanced selection algorithm that considers:

@@ -16,9 +16,42 @@ import {
 } from './renderer.js';
 
 const TEST_DURATION_SECONDS = 35 * 60;
+const APP_VERSION = 'v3.2.0';
+const THEME_KEY = 'y4.theme';
+const THEME_PATHS = {
+  default: '',
+  ocean: './css/theme-ocean.css',
+  paper: './css/theme-paper.css'
+};
 
 function currentPage() {
   return document.body.dataset.page;
+}
+
+function applyTheme(themeName) {
+  const theme = THEME_PATHS[themeName] != null ? themeName : 'default';
+  localStorage.setItem(THEME_KEY, theme);
+
+  const themeLink = document.getElementById('themeStylesheet');
+  if (themeLink) {
+    themeLink.setAttribute('href', THEME_PATHS[theme]);
+  }
+
+  const selector = document.getElementById('themeSelect');
+  if (selector && selector.value !== theme) selector.value = theme;
+}
+
+function initGlobalUI() {
+  const versionInfo = document.getElementById('versionInfo');
+  if (versionInfo) versionInfo.textContent = `NFER Reading Builder ${APP_VERSION}`;
+
+  const selectedTheme = localStorage.getItem(THEME_KEY) || 'default';
+  applyTheme(selectedTheme);
+
+  const themeSelect = document.getElementById('themeSelect');
+  if (themeSelect) {
+    themeSelect.addEventListener('change', (e) => applyTheme(e.target.value));
+  }
 }
 
 function renderDashboardInsights(library, history, recommendedTest) {
@@ -135,8 +168,8 @@ function initTest() {
     reviewCard: document.getElementById('reviewCard'),
     reviewList: document.getElementById('reviewList'),
     schemeToggle: document.getElementById('schemeToggle'),
-    showTimerProgressToggle: document.getElementById('showTimerProgressToggle'),
-    showAllQuestionsToggle: document.getElementById('showAllQuestionsToggle'),
+    toggleTimerProgressBtn: document.getElementById('toggleTimerProgressBtn'),
+    toggleAllQuestionsBtn: document.getElementById('toggleAllQuestionsBtn'),
     timerCard: document.querySelector('.timer-card'),
     submitNowBtn: document.getElementById('submitNowBtn'),
     prevBtn: document.getElementById('prevBtn'),
@@ -178,6 +211,8 @@ function initTest() {
 
   const refreshQuestionView = () => {
     refs.timerCard.hidden = !state.showTimerProgress;
+    if (refs.toggleTimerProgressBtn) refs.toggleTimerProgressBtn.setAttribute('aria-pressed', String(state.showTimerProgress));
+    if (refs.toggleAllQuestionsBtn) refs.toggleAllQuestionsBtn.setAttribute('aria-pressed', String(state.showAllQuestions));
 
     if (state.showAllQuestions) {
       renderAllQuestions(test, state.answers, state.showScheme, refs.form);
@@ -293,19 +328,21 @@ function initTest() {
     if (state.showAllQuestions) refreshQuestionView();
   });
 
-  refs.showTimerProgressToggle.addEventListener('change', (e) => {
-    state.showTimerProgress = e.target.checked;
+  refs.toggleTimerProgressBtn.addEventListener('click', () => {
+    state.showTimerProgress = !state.showTimerProgress;
     refs.timerCard.hidden = !state.showTimerProgress;
+    refs.toggleTimerProgressBtn.setAttribute('aria-pressed', String(state.showTimerProgress));
   });
 
-  refs.showAllQuestionsToggle.addEventListener('change', (e) => {
+  refs.toggleAllQuestionsBtn.addEventListener('click', () => {
     if (!state.showAllQuestions) {
       persistCurrentAnswer();
     } else {
       state.answers = collectAllAnswersFromForm();
     }
 
-    state.showAllQuestions = e.target.checked;
+    state.showAllQuestions = !state.showAllQuestions;
+    refs.toggleAllQuestionsBtn.setAttribute('aria-pressed', String(state.showAllQuestions));
     refs.reviewCard.hidden = true;
     refs.questionCard.hidden = false;
     refreshQuestionView();
@@ -345,6 +382,7 @@ function initTracker() {
 }
 
 (async function bootstrap() {
+  initGlobalUI();
   const page = currentPage();
   if (page === 'dashboard') await initDashboard();
   if (page === 'test') initTest();

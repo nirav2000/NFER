@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Diagnostic Report</title>
   <link rel="stylesheet" href="./css/styles.css" />
+  <link rel="stylesheet" href="" id="themeStylesheet" />
 </head>
 <body data-page="diagnostic">
   <header class="site-header">
@@ -16,6 +17,16 @@
   </header>
 
   <main class="container" id="diagnosticRoot"></main>
+
+  <footer class="site-footer">
+    <p id="versionInfo">Version</p>
+    <label for="themeSelect">Style</label>
+    <select id="themeSelect">
+      <option value="default">Default</option>
+      <option value="ocean">Ocean Night</option>
+      <option value="paper">Paper Garden</option>
+    </select>
+  </footer>
 
   <script type="module" src="./js/app.js"></script>
 </body>

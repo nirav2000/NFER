@@ -5,10 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Generated Test</title>
   <link rel="stylesheet" href="./css/styles.css" />
+  <link rel="stylesheet" href="" id="themeStylesheet" />
 </head>
 <body data-page="test">
   <header class="site-header">
-    <h1>Generated Test</h1>
+    <div class="header-row">
+      <h1>Generated Test</h1>
+      <div class="header-tools" aria-label="Test display options">
+        <button type="button" id="toggleTimerProgressBtn" class="icon-btn" title="Toggle timer and progress" aria-pressed="true">🕒</button>
+        <button type="button" id="toggleAllQuestionsBtn" class="icon-btn" title="Toggle show all questions" aria-pressed="false">📄</button>
+      </div>
+    </div>
     <nav>
       <a href="./index.html">← Dashboard</a>
       <a href="./tracker.html">Progress Tracker</a>
@@ -17,16 +24,6 @@
 
   <main class="container">
     <section class="card" id="testMeta"></section>
-
-    <section class="card compact-options-card">
-      <details>
-        <summary>Display options</summary>
-        <div class="compact-options">
-          <label class="toggle"><input type="checkbox" id="showTimerProgressToggle" checked /> Show timer and progress bar</label>
-          <label class="toggle"><input type="checkbox" id="showAllQuestionsToggle" /> Show all questions at once</label>
-        </div>
-      </details>
-    </section>
 
     <section class="card timer-card">
       <div class="row-between">
@@ -73,6 +70,16 @@
       </div>
     </section>
   </main>
+
+  <footer class="site-footer">
+    <p id="versionInfo">Version</p>
+    <label for="themeSelect">Style</label>
+    <select id="themeSelect">
+      <option value="default">Default</option>
+      <option value="ocean">Ocean Night</option>
+      <option value="paper">Paper Garden</option>
+    </select>
+  </footer>
 
   <script type="module" src="./js/app.js"></script>
 </body>

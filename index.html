@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NFER Reading Builder</title>
   <link rel="stylesheet" href="./css/styles.css" />
+  <link rel="stylesheet" href="" id="themeStylesheet" />
 </head>
 <body data-page="dashboard">
   <header class="site-header">
@@ -29,7 +30,7 @@
       <div class="actions">
         <button id="generateBtn">Start Recommended Test</button>
         <button id="randomBtn" type="button">Random Test</button>
-        <a class="button-link" href="./tracker.html">Progress Tracker</a>
+        <a class="button-link action-btn" href="./tracker.html">Progress Tracker</a>
       </div>
     </section>
 
@@ -45,6 +46,16 @@
       <p id="weakDomains">No weak domains identified yet.</p>
     </section>
   </main>
+
+  <footer class="site-footer">
+    <p id="versionInfo">Version</p>
+    <label for="themeSelect">Style</label>
+    <select id="themeSelect">
+      <option value="default">Default</option>
+      <option value="ocean">Ocean Night</option>
+      <option value="paper">Paper Garden</option>
+    </select>
+  </footer>
 
   <script type="module" src="./js/app.js"></script>
 </body>

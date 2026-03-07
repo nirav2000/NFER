@@ -1,0 +1,15 @@
+:root{
+  --bg:#f3eee2;
+  --card:#fffaf0;
+  --ink:#3f2d1f;
+  --line:#dbc6a4;
+  --brand:#7c3f00;
+  --danger:#8f2222;
+}
+body{background-image:linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);background-size:26px 26px;background-color:var(--bg);font-family:Georgia,'Times New Roman',serif}
+.site-header,.site-footer{background:#efe2ca;border-color:#d1b990}
+.card{border:1px solid #c9ab7f;box-shadow:0 6px 0 rgba(124,63,0,.12)}
+h1,h2,h3{letter-spacing:.02em}
+button,.button-link{background:#7c3f00;color:#fff6e9;border-radius:2px}
+.progress-fill{background:linear-gradient(90deg,#7c3f00,#c97e2b)}
+.radio-option{border-style:dashed}

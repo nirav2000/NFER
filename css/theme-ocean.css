@@ -1,0 +1,15 @@
+:root{
+  --bg:#071426;
+  --card:#0f233d;
+  --ink:#dbeafe;
+  --line:#1f3b5f;
+  --brand:#22d3ee;
+  --danger:#fda4af;
+}
+body{background:radial-gradient(circle at 10% 0%, #12315a 0%, #071426 55%, #020812 100%);}
+.site-header,.site-footer{backdrop-filter:blur(6px); background:rgba(9,28,50,.82);}
+.card{box-shadow:0 12px 24px rgba(0,0,0,.25)}
+button,.button-link{background:linear-gradient(135deg,#06b6d4,#22d3ee);color:#052034;font-weight:700}
+.progress-fill{background:linear-gradient(90deg,#38bdf8,#22d3ee,#67e8f9)}
+.radio-option,.scheme{background:rgba(255,255,255,.03)}
+a{color:#67e8f9}
