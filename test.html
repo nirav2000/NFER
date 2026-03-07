@@ -14,6 +14,7 @@
       <div class="header-tools" aria-label="Test display options">
         <button type="button" id="toggleTimerProgressBtn" class="icon-btn" title="Toggle timer and progress" aria-pressed="true">🕒</button>
         <button type="button" id="toggleAllQuestionsBtn" class="icon-btn" title="Toggle show all questions" aria-pressed="false">📄</button>
+        <button type="button" id="settingsToggleBtn" class="icon-btn" title="Settings">⚙️</button>
       </div>
     </div>
     <nav>
@@ -21,6 +22,29 @@
       <a href="./tracker.html">Progress Tracker</a>
     </nav>
   </header>
+
+  <aside class="settings-panel" id="settingsPanel" hidden>
+    <h3>Settings</h3>
+    <label>Passage text size <input id="passageFontRange" type="range" min="0.9" max="1.5" step="0.05" /></label>
+    <label>Answer text size <input id="inputFontRange" type="range" min="0.95" max="1.45" step="0.05" /></label>
+    <label class="toggle"><input id="hideMarksToggle" type="checkbox" /> Hide marks per question</label>
+    <label class="toggle"><input id="gentleModeToggle" type="checkbox" /> Use gentler wording</label>
+    <button type="button" id="saveSettingsBtn">Save settings</button>
+
+    <h4>Interaction recording and replay</h4>
+    <button type="button" id="recordingToggleBtn">Start Interaction Recording</button>
+    <div class="row-between">
+      <label for="replaySpeed">Replay speed</label>
+      <select id="replaySpeed">
+        <option value="1">1x</option>
+        <option value="2">2x</option>
+        <option value="4">4x</option>
+        <option value="8">8x</option>
+      </select>
+    </div>
+    <button type="button" id="replayBtn">Replay Last Recording</button>
+    <p id="recordingStatus" class="muted">No recording in progress.</p>
+  </aside>
 
   <main class="container">
     <section class="card" id="testMeta"></section>
@@ -50,7 +74,7 @@
         <h2>Question</h2>
         <label class="toggle"><input type="checkbox" id="schemeToggle" /> Show Mark Scheme</label>
       </div>
-      <form id="answersForm"></form>
+      <form id="answersForm" autocomplete="off"></form>
       <div class="actions question-actions">
         <button type="button" id="submitNowBtn" hidden>Submit & Mark</button>
         <button type="button" id="prevBtn">Previous</button>
@@ -78,6 +102,8 @@
       <option value="default">Default</option>
       <option value="ocean">Ocean Night</option>
       <option value="paper">Paper Garden</option>
+      <option value="split">Split Panel</option>
+      <option value="arcade">Arcade Grid</option>
     </select>
   </footer>
 

@@ -1,6 +1,18 @@
 import { loadLibrary, setLibraryPath, getStoredLibraryPath, generateTestRandom, selectNextTest, getWeakDomains } from './generator.js';
 import { markTest, buildDiagnostic } from './diagnostics.js';
-import { saveCurrentTest, getCurrentTest, saveResult, getLastDiagnostic, loadHistory, getHistory } from './storage.js';
+import {
+  saveCurrentTest,
+  getCurrentTest,
+  saveResult,
+  getLastDiagnostic,
+  loadHistory,
+  getHistory,
+  saveTestSession,
+  getTestSession,
+  clearTestSession,
+  getSettings,
+  saveSettings
+} from './storage.js';
 import {
   renderDashboardMeta,
   renderTestMeta,
@@ -12,16 +24,20 @@ import {
   renderTimer,
   toggleSchemes,
   renderDiagnostic,
-  renderTracker
+  renderTracker,
+  renderAttemptReview
 } from './renderer.js';
+import { createInteractionRecorder, getStoredReplay, replayInteractions } from './replay.js';
 
 const TEST_DURATION_SECONDS = 35 * 60;
-const APP_VERSION = 'v3.2.0';
+const APP_VERSION = 'v3.3.0';
 const THEME_KEY = 'y4.theme';
 const THEME_PATHS = {
   default: '',
   ocean: './css/theme-ocean.css',
-  paper: './css/theme-paper.css'
+  paper: './css/theme-paper.css',
+  split: './css/theme-split.css',
+  arcade: './css/theme-arcade.css'
 };
 
 function currentPage() {
@@ -41,6 +57,26 @@ function applyTheme(themeName) {
   if (selector && selector.value !== theme) selector.value = theme;
 }
 
+function getLabel(word, settings) {
+  if (!settings?.gentleMode) return word;
+  const map = {
+    Assessment: 'Practice Plan',
+    Test: 'Practice',
+    Question: 'Challenge',
+    Submit: 'Finish',
+    Diagnostic: 'Learning Summary',
+    Progress: 'Journey'
+  };
+  return map[word] || word;
+}
+
+function applySettingsToPage(settings) {
+  document.documentElement.style.setProperty('--passage-font-scale', String(settings.passageFontScale || 1));
+  document.documentElement.style.setProperty('--input-font-scale', String(settings.inputFontScale || 1));
+  document.body.classList.toggle('hide-marks', Boolean(settings.hideMarks));
+  document.body.classList.toggle('gentle-mode', Boolean(settings.gentleMode));
+}
+
 function initGlobalUI() {
   const versionInfo = document.getElementById('versionInfo');
   if (versionInfo) versionInfo.textContent = `NFER Reading Builder ${APP_VERSION}`;
@@ -51,6 +87,42 @@ function initGlobalUI() {
   const themeSelect = document.getElementById('themeSelect');
   if (themeSelect) {
     themeSelect.addEventListener('change', (e) => applyTheme(e.target.value));
+  }
+
+  const settings = getSettings();
+  applySettingsToPage(settings);
+
+  const settingsToggleBtn = document.getElementById('settingsToggleBtn');
+  const settingsPanel = document.getElementById('settingsPanel');
+  if (settingsToggleBtn && settingsPanel) {
+    settingsToggleBtn.addEventListener('click', () => {
+      settingsPanel.hidden = !settingsPanel.hidden;
+    });
+  }
+
+  const passageFontRange = document.getElementById('passageFontRange');
+  const inputFontRange = document.getElementById('inputFontRange');
+  const hideMarksToggle = document.getElementById('hideMarksToggle');
+  const gentleModeToggle = document.getElementById('gentleModeToggle');
+
+  if (passageFontRange) passageFontRange.value = String(settings.passageFontScale || 1);
+  if (inputFontRange) inputFontRange.value = String(settings.inputFontScale || 1);
+  if (hideMarksToggle) hideMarksToggle.checked = Boolean(settings.hideMarks);
+  if (gentleModeToggle) gentleModeToggle.checked = Boolean(settings.gentleMode);
+
+  const saveSettingsBtn = document.getElementById('saveSettingsBtn');
+  if (saveSettingsBtn) {
+    saveSettingsBtn.addEventListener('click', () => {
+      const next = {
+        passageFontScale: Number(passageFontRange?.value || 1),
+        inputFontScale: Number(inputFontRange?.value || 1),
+        hideMarks: Boolean(hideMarksToggle?.checked),
+        gentleMode: Boolean(gentleModeToggle?.checked)
+      };
+      saveSettings(next);
+      applySettingsToPage(next);
+      window.location.reload();
+    });
   }
 }
 
@@ -156,6 +228,9 @@ function initTest() {
     return;
   }
 
+  const settings = getSettings();
+  const recorder = createInteractionRecorder();
+
   const refs = {
     meta: document.getElementById('testMeta'),
     passage1: document.getElementById('passage1'),
@@ -175,27 +250,55 @@ function initTest() {
     prevBtn: document.getElementById('prevBtn'),
     skipBtn: document.getElementById('skipBtn'),
     nextBtn: document.getElementById('nextBtn'),
-    reviewBtn: document.getElementById('reviewBtn')
+    reviewBtn: document.getElementById('reviewBtn'),
+    recordingStatus: document.getElementById('recordingStatus')
   };
 
-  renderTestMeta(test, refs);
+  const savedSession = getTestSession(test.id);
 
   const state = {
-    currentIndex: 0,
-    answers: {},
-    skipped: new Set(),
-    showScheme: false,
-    showAllQuestions: false,
-    showTimerProgress: true,
-    startedAt: Date.now(),
-    deadline: Date.now() + (TEST_DURATION_SECONDS * 1000)
+    currentIndex: savedSession?.currentIndex || 0,
+    answers: savedSession?.answers || {},
+    skipped: new Set(savedSession?.skipped || []),
+    showScheme: savedSession?.showScheme || false,
+    showAllQuestions: savedSession?.showAllQuestions || false,
+    showTimerProgress: savedSession?.showTimerProgress ?? true,
+    startedAt: savedSession?.startedAt || Date.now(),
+    deadline: savedSession?.deadline || Date.now() + (TEST_DURATION_SECONDS * 1000)
   };
+
+  refs.schemeToggle.checked = state.showScheme;
+
+  function persistSession() {
+    saveTestSession(test.id, {
+      currentIndex: state.currentIndex,
+      answers: state.answers,
+      skipped: Array.from(state.skipped),
+      showScheme: state.showScheme,
+      showAllQuestions: state.showAllQuestions,
+      showTimerProgress: state.showTimerProgress,
+      startedAt: state.startedAt,
+      deadline: state.deadline
+    });
+  }
+
+  const options = () => ({
+    hideMarks: settings.hideMarks,
+    gentleMode: settings.gentleMode,
+    inputFontScale: settings.inputFontScale
+  });
+
+  renderTestMeta(test, refs, { gentleMode: settings.gentleMode });
+
+  refs.passage1.style.fontSize = `${settings.passageFontScale}rem`;
+  refs.passage2.style.fontSize = `${settings.passageFontScale}rem`;
 
   const persistCurrentAnswer = () => {
     const q = test.questions[state.currentIndex];
     const value = readCurrentAnswer(refs.form, q);
     state.answers[q.id] = value;
     if (value) state.skipped.delete(q.id);
+    persistSession();
   };
 
   const answeredCount = () => test.questions.filter((q) => String(state.answers[q.id] || '').trim()).length;
@@ -211,12 +314,12 @@ function initTest() {
 
   const refreshQuestionView = () => {
     refs.timerCard.hidden = !state.showTimerProgress;
-    if (refs.toggleTimerProgressBtn) refs.toggleTimerProgressBtn.setAttribute('aria-pressed', String(state.showTimerProgress));
-    if (refs.toggleAllQuestionsBtn) refs.toggleAllQuestionsBtn.setAttribute('aria-pressed', String(state.showAllQuestions));
+    refs.toggleTimerProgressBtn?.setAttribute('aria-pressed', String(state.showTimerProgress));
+    refs.toggleAllQuestionsBtn?.setAttribute('aria-pressed', String(state.showAllQuestions));
 
     if (state.showAllQuestions) {
-      renderAllQuestions(test, state.answers, state.showScheme, refs.form);
-      renderProgress(0, test.questions.length, answeredCount(), refs.progressFill, refs.progressText);
+      renderAllQuestions(test, state.answers, state.showScheme, refs.form, options());
+      renderProgress(0, test.questions.length, answeredCount(), refs.progressFill, refs.progressText, options());
       refs.prevBtn.hidden = true;
       refs.skipBtn.hidden = true;
       refs.nextBtn.hidden = true;
@@ -226,8 +329,8 @@ function initTest() {
     }
 
     const q = test.questions[state.currentIndex];
-    renderQuestion(test, state.currentIndex, state.answers[q.id], state.showScheme, refs.form);
-    renderProgress(state.currentIndex, test.questions.length, answeredCount(), refs.progressFill, refs.progressText);
+    renderQuestion(test, state.currentIndex, state.answers[q.id], state.showScheme, refs.form, options());
+    renderProgress(state.currentIndex, test.questions.length, answeredCount(), refs.progressFill, refs.progressText, options());
     refs.prevBtn.hidden = false;
     refs.skipBtn.hidden = false;
     refs.nextBtn.hidden = false;
@@ -239,7 +342,7 @@ function initTest() {
 
   const openReview = () => {
     persistCurrentAnswer();
-    renderReview(test, state.answers, state.skipped, refs.reviewList);
+    renderReview(test, state.answers, state.skipped, refs.reviewList, options());
     refs.questionCard.hidden = true;
     refs.reviewCard.hidden = false;
 
@@ -280,22 +383,29 @@ function initTest() {
       focusArea: diagnostic.focusArea,
       questionCount: test.questionCount || (test.questions || []).length,
       week: test.week,
-      sequence: test.sequence
+      sequence: test.sequence,
+      answers: state.answers,
+      testSnapshot: test
     };
 
+    clearTestSession(test.id);
     saveResult(result);
     window.location.href = './diagnostic.html';
   };
 
+  const recordAction = (type, payload = {}) => recorder.log(type, payload);
+
   refs.prevBtn.addEventListener('click', () => {
     persistCurrentAnswer();
     state.currentIndex = Math.max(0, state.currentIndex - 1);
+    recordAction('prev');
     refreshQuestionView();
   });
 
   refs.nextBtn.addEventListener('click', () => {
     persistCurrentAnswer();
     state.currentIndex = Math.min(test.questions.length - 1, state.currentIndex + 1);
+    recordAction('next');
     refreshQuestionView();
   });
 
@@ -303,6 +413,7 @@ function initTest() {
     persistCurrentAnswer();
     const q = test.questions[state.currentIndex];
     if (!state.answers[q.id]) state.skipped.add(q.id);
+    recordAction('skip');
 
     if (state.currentIndex < test.questions.length - 1) {
       state.currentIndex += 1;
@@ -310,9 +421,13 @@ function initTest() {
     } else {
       openReview();
     }
+    persistSession();
   });
 
-  refs.reviewBtn.addEventListener('click', openReview);
+  refs.reviewBtn.addEventListener('click', () => {
+    recordAction('review');
+    openReview();
+  });
   refs.submitNowBtn.addEventListener('click', submitTest);
   document.getElementById('backToQuestionsBtn').addEventListener('click', () => {
     refs.reviewCard.hidden = true;
@@ -325,13 +440,17 @@ function initTest() {
     if (state.showAllQuestions) state.answers = collectAllAnswersFromForm();
     state.showScheme = e.target.checked;
     toggleSchemes(state.showScheme, refs.form);
+    recordAction('scheme', { value: state.showScheme });
     if (state.showAllQuestions) refreshQuestionView();
+    persistSession();
   });
 
   refs.toggleTimerProgressBtn.addEventListener('click', () => {
     state.showTimerProgress = !state.showTimerProgress;
     refs.timerCard.hidden = !state.showTimerProgress;
     refs.toggleTimerProgressBtn.setAttribute('aria-pressed', String(state.showTimerProgress));
+    recordAction('timerToggle', { value: state.showTimerProgress });
+    persistSession();
   });
 
   refs.toggleAllQuestionsBtn.addEventListener('click', () => {
@@ -345,8 +464,63 @@ function initTest() {
     refs.toggleAllQuestionsBtn.setAttribute('aria-pressed', String(state.showAllQuestions));
     refs.reviewCard.hidden = true;
     refs.questionCard.hidden = false;
+    recordAction('allQuestionsToggle', { value: state.showAllQuestions });
     refreshQuestionView();
+    persistSession();
   });
+
+  refs.form.addEventListener('input', () => {
+    recordAction('input');
+    if (state.showAllQuestions) {
+      state.answers = collectAllAnswersFromForm();
+    } else {
+      const q = test.questions[state.currentIndex];
+      state.answers[q.id] = readCurrentAnswer(refs.form, q);
+    }
+    persistSession();
+  });
+
+  const recordingToggleBtn = document.getElementById('recordingToggleBtn');
+  const replayBtn = document.getElementById('replayBtn');
+  const replaySpeed = document.getElementById('replaySpeed');
+
+  if (recordingToggleBtn) {
+    recordingToggleBtn.addEventListener('click', () => {
+      if (recorder.isRecording()) {
+        recorder.stop();
+        refs.recordingStatus.textContent = 'Recording saved.';
+        recordingToggleBtn.textContent = 'Start Interaction Recording';
+      } else {
+        recorder.start();
+        refs.recordingStatus.textContent = 'Recording in progress...';
+        recordingToggleBtn.textContent = 'Stop Interaction Recording';
+      }
+    });
+  }
+
+  if (replayBtn) {
+    replayBtn.addEventListener('click', async () => {
+      const recording = getStoredReplay();
+      if (!recording) {
+        refs.recordingStatus.textContent = 'No recording found to replay.';
+        return;
+      }
+      refs.recordingStatus.textContent = 'Replay in progress...';
+      await replayInteractions(recording, {
+        prev: () => refs.prevBtn.click(),
+        next: () => refs.nextBtn.click(),
+        skip: () => refs.skipBtn.click(),
+        review: () => refs.reviewBtn.click(),
+        scheme: (p) => {
+          refs.schemeToggle.checked = Boolean(p.value);
+          refs.schemeToggle.dispatchEvent(new Event('change'));
+        },
+        timerToggle: () => refs.toggleTimerProgressBtn.click(),
+        allQuestionsToggle: () => refs.toggleAllQuestionsBtn.click()
+      }, Number(replaySpeed?.value || 1));
+      refs.recordingStatus.textContent = 'Replay complete.';
+    });
+  }
 
   const timer = setInterval(() => {
     const remaining = Math.max(0, Math.round((state.deadline - Date.now()) / 1000));
@@ -359,7 +533,7 @@ function initTest() {
     }
   }, 1000);
 
-  renderTimer(refs.timerText, TEST_DURATION_SECONDS);
+  renderTimer(refs.timerText, Math.max(0, Math.round((state.deadline - Date.now()) / 1000)));
   refreshQuestionView();
 }
 
@@ -381,6 +555,21 @@ function initTracker() {
   );
 }
 
+function initAttempt() {
+  const history = getHistory();
+  const params = new URLSearchParams(window.location.search);
+  const idx = Number(params.get('i'));
+  const attempt = Number.isInteger(idx) ? history[idx] : null;
+  const root = document.getElementById('attemptRoot');
+
+  if (!attempt) {
+    root.innerHTML = '<section class="card"><p>Attempt not found.</p></section>';
+    return;
+  }
+
+  renderAttemptReview(root, attempt);
+}
+
 (async function bootstrap() {
   initGlobalUI();
   const page = currentPage();
@@ -388,4 +577,5 @@ function initTracker() {
   if (page === 'test') initTest();
   if (page === 'diagnostic') initDiagnostic();
   if (page === 'tracker') initTracker();
+  if (page === 'attempt') initAttempt();
 })();

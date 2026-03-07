@@ -1,4 +1,4 @@
-:root{--bg:#f5f7fb;--card:#fff;--ink:#1f2a37;--line:#d9e2ee;--brand:#1d4ed8;--success:#166534;--warn:#92400e;--danger:#b91c1c}
+:root{--bg:#f5f7fb;--card:#fff;--ink:#1f2a37;--line:#d9e2ee;--brand:#1d4ed8;--success:#166534;--warn:#92400e;--danger:#b91c1c;--passage-font-scale:1;--input-font-scale:1}
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.7}
 .site-header{background:var(--card);border-bottom:1px solid var(--line);padding:.8rem 1rem;position:sticky;top:0;z-index:10}
@@ -12,9 +12,9 @@ nav a,.button-link{color:var(--brand);text-decoration:none;font-weight:600}
 .container{max-width:980px;margin:1rem auto;padding:0 .8rem 5rem}
 .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:1rem;margin-bottom:1rem}
 .actions{display:flex;gap:.7rem;flex-wrap:wrap}
-.action-btn{color:#fff!important}
+.button-link.action-btn{border:0;background:var(--brand)!important;color:#fff!important;padding:.6rem .9rem;border-radius:8px;display:inline-block}
 .library-row{display:grid;grid-template-columns:170px 1fr 1fr auto;gap:.6rem;align-items:center;margin:.8rem 0}
-select,input[type="text"]{width:100%;padding:.55rem;border:1px solid #ccd6e2;border-radius:8px;background:#fff}
+select,input[type="text"]{width:100%;padding:.6rem;border:1px solid #ccd6e2;border-radius:8px;background:#fff;font-size:1rem}
 .toggle{display:flex;align-items:center;gap:.4rem;font-weight:600}
 .toggle input{margin:0}
 button,.button-link{border:0;background:var(--brand);color:#fff;padding:.6rem .9rem;border-radius:8px;cursor:pointer;display:inline-block}
@@ -26,10 +26,13 @@ button:disabled{opacity:.6;cursor:not-allowed}
 .progress-track{height:12px;background:#e5edf8;border-radius:999px;overflow:hidden}
 .progress-fill{height:100%;background:linear-gradient(90deg,#1d4ed8,#0ea5e9);width:0;transition:width .25s ease}
 .question{padding-top:.2rem}
+.question-title{font-size:1.15rem;font-weight:800;line-height:1.5}
+.question-spotlight{border:2px solid #93c5fd;border-radius:12px;padding:1rem;background:linear-gradient(0deg,#f8fbff,#fff)}
 label{font-weight:600;display:block;margin-bottom:.4rem}
-textarea{width:100%;padding:.55rem;border:1px solid #ccd6e2;border-radius:8px}
-.radio-group{display:grid;gap:.45rem}
-.radio-option{display:flex;gap:.45rem;align-items:flex-start;padding:.5rem;border:1px solid #d6e0ec;border-radius:8px}
+textarea{width:100%;padding:.7rem;border:1px solid #ccd6e2;border-radius:8px;font-size:calc(1.06rem * var(--input-font-scale));line-height:1.6}
+textarea::placeholder{font-size:calc(1.02rem * var(--input-font-scale))}
+.radio-group{display:grid;gap:.45rem;font-size:calc(1rem * var(--input-font-scale))}
+.radio-option{display:flex;gap:.45rem;align-items:flex-start;padding:.55rem;border:1px solid #d6e0ec;border-radius:8px}
 .scheme{margin-top:.7rem;background:#f8fbff;border-left:3px solid #8ab4ff;padding:.5rem;border-radius:6px}
 .row-between{display:flex;justify-content:space-between;align-items:center;gap:.8rem;flex-wrap:wrap}
 .question-actions{margin-top:.9rem}
@@ -45,6 +48,12 @@ th,td{border:1px solid var(--line);padding:.5rem;text-align:left;white-space:now
 .site-footer p{margin:0 auto 0 0;font-size:.9rem;color:#475569}
 .site-footer label{margin:0;font-weight:600}
 .site-footer select{width:auto;min-width:170px}
+.settings-panel{position:fixed;top:4rem;right:1rem;width:min(340px,calc(100vw - 2rem));background:var(--card);border:1px solid var(--line);border-radius:12px;padding:1rem;z-index:20;box-shadow:0 10px 24px rgba(0,0,0,.12);display:grid;gap:.7rem}
+.settings-panel h3,.settings-panel h4{margin:.2rem 0}
+.settings-panel input[type="range"]{width:100%}
+.settings-panel label{font-size:.95rem}
+#passage1,#passage2{font-size:calc(1rem * var(--passage-font-scale));line-height:1.8}
+.hide-marks .question-title::after{content:''}
 @media (max-width:700px){
   .site-header h1{font-size:1.05rem}
   nav a,.button-link{font-size:.9rem}
@@ -54,5 +63,6 @@ th,td{border:1px solid var(--line);padding:.5rem;text-align:left;white-space:now
   .library-row{grid-template-columns:1fr}
   .site-footer{flex-wrap:wrap;justify-content:flex-start}
   .site-footer p{width:100%}
+  .settings-panel{left:1rem;right:1rem;width:auto}
 }
-@media print{nav,.actions,.toggle,button,.button-link,.timer-card,.site-footer,.header-tools{display:none!important}.card{box-shadow:none}}
+@media print{nav,.actions,.toggle,button,.button-link,.timer-card,.site-footer,.header-tools,.settings-panel{display:none!important}.card{box-shadow:none}}

@@ -1,7 +1,8 @@
-function createQuestionInput(q, answerValue) {
+function createQuestionInput(q, answerValue, inputScale = 1) {
   if (q.questionType === 'mcq') {
     const wrap = document.createElement('div');
     wrap.className = 'radio-group';
+    wrap.style.fontSize = `${inputScale}rem`;
     (q.options || []).forEach((opt, idx) => {
       const row = document.createElement('label');
       row.className = 'radio-option';
@@ -25,31 +26,45 @@ function createQuestionInput(q, answerValue) {
   ta.rows = 4;
   ta.placeholder = 'Type your answer';
   ta.value = answerValue || '';
+  ta.style.fontSize = `${inputScale}rem`;
+  ta.setAttribute('autocomplete', 'off');
+  ta.setAttribute('autocorrect', 'off');
+  ta.setAttribute('autocapitalize', 'off');
+  ta.setAttribute('spellcheck', 'false');
   return ta;
+}
+
+function questionLabelText(q, index, hideMarks = false, gentleMode = false) {
+  const word = gentleMode ? 'Challenge' : 'Question';
+  return hideMarks
+    ? `${word} ${index + 1}. ${q.stem}`
+    : `${word} ${index + 1}. ${q.stem} (${q.marks} marks)`;
 }
 
 export function renderDashboardMeta(el, library) {
   el.textContent = `Year ${library.yearGroup} · Version ${library.version || 'n/a'} · Total tests available: ${(library.tests || []).length}.`;
 }
 
-export function renderTestMeta(test, refs) {
+export function renderTestMeta(test, refs, options = {}) {
+  const labelA = options.gentleMode ? 'Practice Session' : 'Test';
   refs.meta.innerHTML = `<h2>${test.title}</h2>
-    <p><strong>Test ID:</strong> ${test.id} · <strong>Week:</strong> ${test.week || '—'} · <strong>Sequence:</strong> ${test.sequence || '—'} · <strong>Difficulty:</strong> ${test.difficulty} · <strong>Total marks:</strong> ${test.totalMarks}</p>
+    <p><strong>${labelA} ID:</strong> ${test.id} · <strong>Week:</strong> ${test.week || '—'} · <strong>Sequence:</strong> ${test.sequence || '—'} · <strong>Difficulty:</strong> ${test.difficulty} · <strong>Total marks:</strong> ${test.totalMarks}</p>
     <p><strong>Domains:</strong> ${(test.domainsCovered || []).join(', ') || 'mixed'} · <strong>Topics:</strong> ${(test.topicsCovered || []).join(', ') || 'general reading'} · <strong>Genres:</strong> ${(test.passageGenres || []).join(', ') || 'mixed'}</p>
-    <p class="muted">This assessment includes two passages. Questions indicate which passage to refer to.</p>`;
+    <p class="muted">This includes two passages. Questions indicate which passage to refer to.</p>`;
   refs.passage1.textContent = test.passages?.[0]?.text || 'Passage 1 missing';
   refs.passage2.textContent = test.passages?.[1]?.text || 'Passage 2 missing';
 }
 
-export function renderQuestion(test, index, answerValue, showScheme, formEl) {
+export function renderQuestion(test, index, answerValue, showScheme, formEl, options = {}) {
   const q = test.questions[index];
   formEl.innerHTML = '';
 
   const block = document.createElement('section');
-  block.className = 'question';
+  block.className = 'question question-spotlight';
 
   const label = document.createElement('label');
-  label.textContent = `${index + 1}. ${q.stem} (${q.marks} marks)`;
+  label.className = 'question-title';
+  label.textContent = questionLabelText(q, index, options.hideMarks, options.gentleMode);
   block.appendChild(label);
 
   const passageRef = document.createElement('p');
@@ -57,7 +72,7 @@ export function renderQuestion(test, index, answerValue, showScheme, formEl) {
   passageRef.textContent = `Refer to Passage ${q.passageId === 'P2' ? '2' : '1'}`;
   block.appendChild(passageRef);
 
-  block.appendChild(createQuestionInput(q, answerValue));
+  block.appendChild(createQuestionInput(q, answerValue, options.inputFontScale || 1));
 
   const scheme = document.createElement('div');
   scheme.className = 'scheme';
@@ -71,7 +86,7 @@ export function renderQuestion(test, index, answerValue, showScheme, formEl) {
   formEl.appendChild(block);
 }
 
-export function renderAllQuestions(test, answers, showScheme, formEl) {
+export function renderAllQuestions(test, answers, showScheme, formEl, options = {}) {
   formEl.innerHTML = '';
 
   test.questions.forEach((q, index) => {
@@ -79,7 +94,8 @@ export function renderAllQuestions(test, answers, showScheme, formEl) {
     block.className = 'question';
 
     const label = document.createElement('label');
-    label.textContent = `${index + 1}. ${q.stem} (${q.marks} marks)`;
+    label.className = 'question-title';
+    label.textContent = questionLabelText(q, index, options.hideMarks, options.gentleMode);
     block.appendChild(label);
 
     const passageRef = document.createElement('p');
@@ -87,7 +103,7 @@ export function renderAllQuestions(test, answers, showScheme, formEl) {
     passageRef.textContent = `Refer to Passage ${q.passageId === 'P2' ? '2' : '1'}`;
     block.appendChild(passageRef);
 
-    block.appendChild(createQuestionInput(q, answers[q.id]));
+    block.appendChild(createQuestionInput(q, answers[q.id], options.inputFontScale || 1));
 
     const scheme = document.createElement('div');
     scheme.className = 'scheme';
@@ -107,7 +123,7 @@ export function readCurrentAnswer(formEl, question) {
   return String(data.get(question.id) || '').trim();
 }
 
-export function renderReview(test, answers, skippedSet, rootEl) {
+export function renderReview(test, answers, skippedSet, rootEl, options = {}) {
   rootEl.innerHTML = '';
   const list = document.createElement('div');
   list.className = 'review-list';
@@ -122,17 +138,18 @@ export function renderReview(test, answers, skippedSet, rootEl) {
 
     const row = document.createElement('div');
     row.className = `review-row status-${status.toLowerCase().replace(' ', '-')}`;
-    row.innerHTML = `<span>Q${idx + 1}</span><span>${status}</span><button type="button" data-jump="${idx}">Go to question</button>`;
+    row.innerHTML = `<span>${options.gentleMode ? 'Challenge' : 'Q'}${idx + 1}</span><span>${status}</span><button type="button" data-jump="${idx}">Go to question</button>`;
     list.appendChild(row);
   });
 
   rootEl.appendChild(list);
 }
 
-export function renderProgress(currentIndex, totalQuestions, answeredCount, progressFillEl, progressTextEl) {
+export function renderProgress(currentIndex, totalQuestions, answeredCount, progressFillEl, progressTextEl, options = {}) {
   const value = totalQuestions ? Math.round((answeredCount / totalQuestions) * 100) : 0;
   progressFillEl.style.width = `${value}%`;
-  progressTextEl.textContent = `Question ${currentIndex + 1} of ${totalQuestions} · Answered ${answeredCount}/${totalQuestions}`;
+  const word = options.gentleMode ? 'Challenge' : 'Question';
+  progressTextEl.textContent = `${word} ${currentIndex + 1} of ${totalQuestions} · Answered ${answeredCount}/${totalQuestions}`;
 }
 
 export function renderTimer(timerEl, totalSeconds) {
@@ -183,11 +200,11 @@ export function renderDiagnostic(root, diagnostic, record) {
 
 export function renderTracker(bodyEl, trendEl, diffEl, history) {
   bodyEl.innerHTML = '';
-  history.forEach((h) => {
+  history.forEach((h, idx) => {
     const tr = document.createElement('tr');
     const date = h.completedAt || h.date;
     const maxMarks = h.totalMarks || h.max;
-    tr.innerHTML = `<td>${new Date(date).toLocaleDateString('en-GB')}</td><td>${h.testId}</td><td>${h.score}/${maxMarks}</td><td>${h.percentage}%</td><td>${h.difficulty}</td>`;
+    tr.innerHTML = `<td>${new Date(date).toLocaleDateString('en-GB')}</td><td><a href="./attempt.html?i=${idx}">${h.testId}</a></td><td>${h.score}/${maxMarks}</td><td>${h.percentage}%</td><td>${h.difficulty}</td>`;
     bodyEl.appendChild(tr);
   });
 
@@ -197,4 +214,36 @@ export function renderTracker(bodyEl, trendEl, diffEl, history) {
   diffEl.textContent = history.length
     ? `Difficulty progression: ${history.map((h) => h.difficulty).join(' → ')}`
     : '';
+}
+
+export function renderAttemptReview(root, attempt) {
+  const test = attempt.testSnapshot;
+  if (!test) {
+    root.innerHTML = '<section class="card"><p>Saved test details were not found for this attempt.</p></section>';
+    return;
+  }
+
+  const answers = attempt.answers || {};
+  const questionRows = test.questions.map((q, idx) => {
+    const learner = answers[q.id] || '—';
+    return `<section class="question">
+      <p class="question-title">Q${idx + 1}. ${q.stem}</p>
+      <p><strong>Your answer:</strong> ${learner}</p>
+      <p><strong>Accepted:</strong> ${(q.acceptedAnswers || []).join(' | ') || '—'}</p>
+      <p><strong>Model (Gold):</strong> ${q.modelAnswerGold || '—'}</p>
+      <p><strong>Model (Silver):</strong> ${q.modelAnswerSilver || '—'}</p>
+      <p><strong>Notes:</strong> ${q.markingNotes || '—'}</p>
+    </section>`;
+  }).join('');
+
+  root.innerHTML = `
+    <section class="card">
+      <h2>${test.title}</h2>
+      <p><strong>Attempt:</strong> ${new Date(attempt.completedAt || attempt.date).toLocaleString('en-GB')}</p>
+      <p><strong>Score:</strong> ${attempt.score}/${attempt.totalMarks || test.totalMarks} (${attempt.percentage}%)</p>
+    </section>
+    <section class="card"><h3>Passage 1</h3><p>${test.passages?.[0]?.text || '—'}</p></section>
+    <section class="card"><h3>Passage 2</h3><p>${test.passages?.[1]?.text || '—'}</p></section>
+    <section class="card"><h3>Questions, your answers, and model answers</h3>${questionRows}</section>
+  `;
 }

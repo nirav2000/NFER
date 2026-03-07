@@ -1,0 +1,15 @@
+:root{
+  --bg:#f0f7ff;
+  --card:#ffffff;
+  --ink:#09213f;
+  --line:#b7d4f8;
+  --brand:#0f766e;
+  --danger:#b91c1c;
+}
+body{background:linear-gradient(90deg,#dff0ff 0 28%, #f7fbff 28% 100%);} 
+.container{max-width:none;margin:0;padding:1rem 1rem 5rem 30%;}
+.site-header{position:fixed;left:0;top:0;bottom:0;width:28%;padding:1.2rem;border-right:1px solid var(--line);border-bottom:none;display:flex;flex-direction:column;justify-content:flex-start}
+.site-header nav{margin-top:1rem;display:grid;gap:.35rem}
+.site-footer{left:28%}
+.card{border-radius:18px;box-shadow:0 8px 20px rgba(15,118,110,.08)}
+@media (max-width:900px){body{background:#f0f7ff}.site-header{position:sticky;width:auto;border-right:none;border-bottom:1px solid var(--line)}.container{padding:1rem .8rem 6rem;margin:0}.site-footer{left:0}}

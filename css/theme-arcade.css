@@ -1,0 +1,16 @@
+:root{
+  --bg:#140f2b;
+  --card:#201744;
+  --ink:#f6f0ff;
+  --line:#4f3c92;
+  --brand:#ff4fd8;
+  --danger:#ff8fab;
+}
+body{background:radial-gradient(circle at 0 0,#2f1b6d 0,#140f2b 60%);font-family:'Trebuchet MS',Verdana,sans-serif}
+.container{max-width:1200px;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1rem}
+.card{margin:0;border:2px solid #6f5cc9;box-shadow:0 0 0 2px rgba(255,79,216,.25) inset}
+#questionCard,#reviewCard{grid-column:1/-1}
+button,.button-link,.button-link.action-btn{background:linear-gradient(135deg,#ff4fd8,#7afcff)!important;color:#15062a!important;font-weight:800;text-transform:uppercase;letter-spacing:.03em}
+.progress-fill{background:linear-gradient(90deg,#ff4fd8,#7afcff,#7dff72)}
+.icon-btn{border-radius:6px}
+.site-footer{background:#201744;border-color:#5b46aa}

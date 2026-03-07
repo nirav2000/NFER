@@ -9,12 +9,24 @@
 </head>
 <body data-page="tracker">
   <header class="site-header">
-    <h1>Progress Tracker</h1>
+    <div class="header-row">
+      <h1>Progress Tracker</h1>
+      <button type="button" id="settingsToggleBtn" class="icon-btn" title="Settings">⚙️</button>
+    </div>
     <nav>
       <a href="./index.html">Dashboard</a>
       <a href="./test.html">Latest Test</a>
     </nav>
   </header>
+
+  <aside class="settings-panel" id="settingsPanel" hidden>
+    <h3>Settings</h3>
+    <label>Passage text size <input id="passageFontRange" type="range" min="0.9" max="1.5" step="0.05" /></label>
+    <label>Answer text size <input id="inputFontRange" type="range" min="0.95" max="1.45" step="0.05" /></label>
+    <label class="toggle"><input id="hideMarksToggle" type="checkbox" /> Hide marks per question</label>
+    <label class="toggle"><input id="gentleModeToggle" type="checkbox" /> Use gentler wording</label>
+    <button type="button" id="saveSettingsBtn">Save settings</button>
+  </aside>
 
   <main class="container">
     <section class="card">
@@ -40,6 +52,8 @@
       <option value="default">Default</option>
       <option value="ocean">Ocean Night</option>
       <option value="paper">Paper Garden</option>
+      <option value="split">Split Panel</option>
+      <option value="arcade">Arcade Grid</option>
     </select>
   </footer>
 
