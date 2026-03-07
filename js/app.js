@@ -89,15 +89,25 @@ function initGlobalUI() {
     themeSelect.addEventListener('change', (e) => applyTheme(e.target.value));
   }
 
-  const settings = getSettings();
+  let settings = getSettings();
   applySettingsToPage(settings);
 
   const settingsToggleBtn = document.getElementById('settingsToggleBtn');
+  const settingsCloseBtn = document.getElementById('settingsCloseBtn');
   const settingsPanel = document.getElementById('settingsPanel');
+
+  const openCloseSettings = (nextHidden) => {
+    if (settingsPanel) settingsPanel.hidden = nextHidden;
+  };
+
   if (settingsToggleBtn && settingsPanel) {
     settingsToggleBtn.addEventListener('click', () => {
-      settingsPanel.hidden = !settingsPanel.hidden;
+      openCloseSettings(!settingsPanel.hidden);
     });
+  }
+
+  if (settingsCloseBtn && settingsPanel) {
+    settingsCloseBtn.addEventListener('click', () => openCloseSettings(true));
   }
 
   const passageFontRange = document.getElementById('passageFontRange');
@@ -110,19 +120,24 @@ function initGlobalUI() {
   if (hideMarksToggle) hideMarksToggle.checked = Boolean(settings.hideMarks);
   if (gentleModeToggle) gentleModeToggle.checked = Boolean(settings.gentleMode);
 
+  const syncSettings = () => {
+    settings = {
+      passageFontScale: Number(passageFontRange?.value || 1),
+      inputFontScale: Number(inputFontRange?.value || 1),
+      hideMarks: Boolean(hideMarksToggle?.checked),
+      gentleMode: Boolean(gentleModeToggle?.checked)
+    };
+    saveSettings(settings);
+    applySettingsToPage(settings);
+    document.dispatchEvent(new CustomEvent('settings:changed', { detail: settings }));
+  };
+
+  [passageFontRange, inputFontRange].forEach((el) => el && el.addEventListener('input', syncSettings));
+  [hideMarksToggle, gentleModeToggle].forEach((el) => el && el.addEventListener('change', syncSettings));
+
   const saveSettingsBtn = document.getElementById('saveSettingsBtn');
   if (saveSettingsBtn) {
-    saveSettingsBtn.addEventListener('click', () => {
-      const next = {
-        passageFontScale: Number(passageFontRange?.value || 1),
-        inputFontScale: Number(inputFontRange?.value || 1),
-        hideMarks: Boolean(hideMarksToggle?.checked),
-        gentleMode: Boolean(gentleModeToggle?.checked)
-      };
-      saveSettings(next);
-      applySettingsToPage(next);
-      window.location.reload();
-    });
+    saveSettingsBtn.addEventListener('click', syncSettings);
   }
 }
 
@@ -228,7 +243,7 @@ function initTest() {
     return;
   }
 
-  const settings = getSettings();
+  let settings = getSettings();
   const recorder = createInteractionRecorder();
 
   const refs = {
@@ -264,7 +279,8 @@ function initTest() {
     showAllQuestions: savedSession?.showAllQuestions || false,
     showTimerProgress: savedSession?.showTimerProgress ?? true,
     startedAt: savedSession?.startedAt || Date.now(),
-    deadline: savedSession?.deadline || Date.now() + (TEST_DURATION_SECONDS * 1000)
+    deadline: savedSession?.deadline || Date.now() + (TEST_DURATION_SECONDS * 1000),
+    replayMode: false
   };
 
   refs.schemeToggle.checked = state.showScheme;
@@ -292,6 +308,14 @@ function initTest() {
 
   refs.passage1.style.fontSize = `${settings.passageFontScale}rem`;
   refs.passage2.style.fontSize = `${settings.passageFontScale}rem`;
+
+  document.addEventListener('settings:changed', (event) => {
+    settings = event.detail;
+    refs.passage1.style.fontSize = `${settings.passageFontScale}rem`;
+    refs.passage2.style.fontSize = `${settings.passageFontScale}rem`;
+    renderTestMeta(test, refs, { gentleMode: settings.gentleMode });
+    refreshQuestionView();
+  });
 
   const persistCurrentAnswer = () => {
     const q = test.questions[state.currentIndex];
@@ -388,12 +412,16 @@ function initTest() {
       testSnapshot: test
     };
 
+    if (recorder.isRecording()) {
+      recorder.stop();
+      refs.recordingStatus.textContent = 'Recording auto-saved on submit.';
+    }
     clearTestSession(test.id);
     saveResult(result);
     window.location.href = './diagnostic.html';
   };
 
-  const recordAction = (type, payload = {}) => recorder.log(type, payload);
+  const recordAction = (type, payload = {}) => recorder.log(type, { ...payload, scrollY: window.scrollY });
 
   refs.prevBtn.addEventListener('click', () => {
     persistCurrentAnswer();
@@ -470,28 +498,56 @@ function initTest() {
   });
 
   refs.form.addEventListener('input', () => {
-    recordAction('input');
     if (state.showAllQuestions) {
       state.answers = collectAllAnswersFromForm();
     } else {
       const q = test.questions[state.currentIndex];
       state.answers[q.id] = readCurrentAnswer(refs.form, q);
     }
+    recordAction('input', { currentIndex: state.currentIndex, answers: state.answers });
     persistSession();
   });
+
+
+  window.addEventListener('scroll', () => {
+    if (recorder.isRecording()) {
+      recordAction('scroll', { y: window.scrollY });
+    }
+  }, { passive: true });
 
   const recordingToggleBtn = document.getElementById('recordingToggleBtn');
   const replayBtn = document.getElementById('replayBtn');
   const replaySpeed = document.getElementById('replaySpeed');
 
+  let frameCaptureTimer = null;
+  const startFrameCapture = () => {
+    if (frameCaptureTimer) clearInterval(frameCaptureTimer);
+    frameCaptureTimer = setInterval(() => {
+      if (!recorder.isRecording()) return;
+      const remaining = Math.max(0, Math.round((state.deadline - Date.now()) / 1000));
+      recordAction('frame', {
+        currentIndex: state.currentIndex,
+        showAllQuestions: state.showAllQuestions,
+        showTimerProgress: state.showTimerProgress,
+        showScheme: state.showScheme,
+        answers: state.answers,
+        remaining,
+        scrollY: window.scrollY
+      });
+    }, 1000);
+  };
+
   if (recordingToggleBtn) {
     recordingToggleBtn.addEventListener('click', () => {
       if (recorder.isRecording()) {
         recorder.stop();
+        if (frameCaptureTimer) clearInterval(frameCaptureTimer);
         refs.recordingStatus.textContent = 'Recording saved.';
         recordingToggleBtn.textContent = 'Start Interaction Recording';
       } else {
         recorder.start();
+        recordAction('recordingStart', { startedAt: Date.now(), deadline: state.deadline });
+        startFrameCapture();
         refs.recordingStatus.textContent = 'Recording in progress...';
         recordingToggleBtn.textContent = 'Stop Interaction Recording';
       }
@@ -505,8 +561,33 @@ function initTest() {
         refs.recordingStatus.textContent = 'No recording found to replay.';
         return;
       }
+
+      state.replayMode = true;
       refs.recordingStatus.textContent = 'Replay in progress...';
+
       await replayInteractions(recording, {
+        frame: (p) => {
+          state.currentIndex = Number.isFinite(p.currentIndex) ? p.currentIndex : state.currentIndex;
+          state.showAllQuestions = Boolean(p.showAllQuestions);
+          state.showTimerProgress = Boolean(p.showTimerProgress);
+          state.showScheme = Boolean(p.showScheme);
+          state.answers = p.answers || state.answers;
+          if (typeof p.scrollY === 'number') window.scrollTo(0, p.scrollY);
+          if (typeof p.remaining === 'number') {
+            state.deadline = Date.now() + (p.remaining * 1000);
+            renderTimer(refs.timerText, p.remaining);
+          }
+          refs.schemeToggle.checked = state.showScheme;
+          refreshQuestionView();
+        },
+        scroll: (p) => {
+          if (typeof p.y === 'number') window.scrollTo(0, p.y);
+        },
+        input: (p) => {
+          if (p.answers) state.answers = p.answers;
+          if (Number.isFinite(p.currentIndex)) state.currentIndex = p.currentIndex;
+          refreshQuestionView();
+        },
         prev: () => refs.prevBtn.click(),
         next: () => refs.nextBtn.click(),
         skip: () => refs.skipBtn.click(),
@@ -518,11 +599,14 @@ function initTest() {
         timerToggle: () => refs.toggleTimerProgressBtn.click(),
         allQuestionsToggle: () => refs.toggleAllQuestionsBtn.click()
       }, Number(replaySpeed?.value || 1));
+
+      state.replayMode = false;
       refs.recordingStatus.textContent = 'Replay complete.';
     });
   }
 
   const timer = setInterval(() => {
+    if (state.replayMode) return;
     const remaining = Math.max(0, Math.round((state.deadline - Date.now()) / 1000));
     renderTimer(refs.timerText, remaining);
 

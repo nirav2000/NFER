@@ -24,7 +24,7 @@
   </header>
 
   <aside class="settings-panel" id="settingsPanel" hidden>
-    <h3>Settings</h3>
+    <div class="settings-header"><h3>Settings</h3><button type="button" id="settingsCloseBtn" class="icon-btn" title="Close settings">✕</button></div>
     <label>Passage text size <input id="passageFontRange" type="range" min="0.9" max="1.5" step="0.05" /></label>
     <label>Answer text size <input id="inputFontRange" type="range" min="0.95" max="1.45" step="0.05" /></label>
     <label class="toggle"><input id="hideMarksToggle" type="checkbox" /> Hide marks per question</label>
@@ -43,6 +43,7 @@
       </select>
     </div>
     <button type="button" id="replayBtn">Replay Last Recording</button>
+    <p class="muted">Replay reproduces navigation, inputs, scroll, and recorded timer states.</p>
     <p id="recordingStatus" class="muted">No recording in progress.</p>
   </aside>
 

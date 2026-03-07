@@ -15,7 +15,7 @@ It can also load compatible JSON files from `/data/` using the dashboard file se
 - `index.html` – dashboard (library overview, recommended test, random fallback, weak domains)
 - `test.html` – passages, questions, timer/progress, navigation, review, submission
 - `diagnostic.html` – score, percentage, domain breakdown, strengths, focus area
-- `tracker.html` – history table, score trend, difficulty progression
+- `tracker.html` – history table, score trend, difficulty progression (click `Test ID` to view full completed attempt)
 - `attempt.html` – full completed attempt view with learner answers and model answers
 
 ## UI themes and settings
@@ -27,8 +27,8 @@ It can also load compatible JSON files from `/data/` using the dashboard file se
   - `paper` (serif print feel)
   - `split` (alternate layout with side panel)
   - `arcade` (high-energy grid layout)
-- Theme preference is saved to LocalStorage.
-- Settings panel includes:
+- Theme preference is saved to LocalStorage and applied instantly.
+- Settings panel includes (auto-applied and auto-saved):
   - passage font size
   - input font size
   - hide marks per question
@@ -39,7 +39,7 @@ It can also load compatible JSON files from `/data/` using the dashboard file se
 - Header icon toggles for timer/progress and all-questions mode.
 - Autosave of in-progress test state with return-and-continue support.
 - Autocomplete/suggestion suppression on answer text fields.
-- Interaction recording and replay module with replay speed control.
+- Interaction recording and replay module with replay speed control (captures timer state, scroll, toggles, and inputs).
 
 ## Selection logic
 
