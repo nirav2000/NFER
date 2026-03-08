@@ -1,5 +1,5 @@
-import { loadLibrary, setLibraryPath, getStoredLibraryPath, generateTestRandom, selectNextTest, getWeakDomains } from './generator.js?v=3.4.6';
-import { markTest, buildDiagnostic } from './diagnostics.js?v=3.4.6';
+import { loadLibrary, setLibraryPath, getStoredLibraryPath, generateTestRandom, selectNextTest, getWeakDomains } from './generator.js?v=3.4.7';
+import { markTest, buildDiagnostic } from './diagnostics.js?v=3.4.7';
 import {
   saveCurrentTest,
   getCurrentTest,
@@ -12,7 +12,7 @@ import {
   clearTestSession,
   getSettings,
   saveSettings
-} from './storage.js?v=3.4.6';
+} from './storage.js?v=3.4.7';
 import {
   renderDashboardMeta,
   renderTestMeta,
@@ -27,14 +27,14 @@ import {
   renderTracker,
   renderAttemptReview,
   renderFeedbackAssist
-} from './renderer.js?v=3.4.6';
-import { createInteractionRecorder, getStoredReplay, replayInteractions } from './replay.js?v=3.4.6';
-import { createFeedbackPrompt, openPromptInChatGPT, copyPrompt, requestFeedbackFromAPI } from './feedback.js?v=3.4.6';
+} from './renderer.js?v=3.4.7';
+import { createInteractionRecorder, getStoredReplay, replayInteractions } from './replay.js?v=3.4.7';
+import { createFeedbackPrompt, openPromptInChatGPT, copyPrompt, requestFeedbackFromAPI } from './feedback.js?v=3.4.7';
 
 const TEST_DURATION_SECONDS = 35 * 60;
 const FEEDBACK_KEY_KEY = 'y4.openaiApiKey';
 const FEEDBACK_MODEL_KEY = 'y4.openaiModel';
-const APP_VERSION = 'v3.4.6';
+const APP_VERSION = 'v3.4.7';
 const THEME_KEY = 'y4.theme';
 const THEME_PATHS = {
   default: '',
@@ -44,6 +44,16 @@ const THEME_PATHS = {
   arcade: './css/theme-arcade.css',
   zen210: './css/theme-zen210.css'
 };
+
+function resolveThemeHref(path) {
+  if (!path) return '';
+  try {
+    const url = new URL(path, window.location.href);
+    return `${url.pathname}${url.search || ''}`;
+  } catch (_error) {
+    return path;
+  }
+}
 
 
 const RUNTIME_LOG_LIMIT = 80;
@@ -122,8 +132,9 @@ function applyTheme(themeName) {
 
   const themeLink = document.getElementById('themeStylesheet');
   if (themeLink) {
-    themeLink.setAttribute('href', THEME_PATHS[theme]);
+    themeLink.setAttribute('href', resolveThemeHref(THEME_PATHS[theme]));
   }
+  document.body.setAttribute('data-theme', theme);
 
   const selector = document.getElementById('themeSelect');
   if (selector && selector.value !== theme) selector.value = theme;
@@ -149,8 +160,67 @@ function applySettingsToPage(settings) {
   document.body.classList.toggle('gentle-mode', Boolean(settings.gentleMode));
 }
 
+
+function installInteractionFallbacks() {
+  document.addEventListener('click', async (event) => {
+    const settingsBtn = event.target.closest('#settingsToggleBtn');
+    if (settingsBtn) {
+      const panel = document.getElementById('settingsPanel');
+      if (panel) panel.hidden = !panel.hidden;
+      return;
+    }
+
+    const settingsClose = event.target.closest('#settingsCloseBtn');
+    if (settingsClose) {
+      const panel = document.getElementById('settingsPanel');
+      if (panel) panel.hidden = true;
+      return;
+    }
+
+    const generateBtn = event.target.closest('#generateBtn');
+    if (generateBtn && generateBtn.dataset.bound !== '1') {
+      event.preventDefault();
+      const errorEl = document.getElementById('dashboardError');
+      try {
+        const library = await loadLibrary();
+        const history = loadHistory();
+        const test = selectNextTest(library, history);
+        if (!test) throw new Error('No test available in selected library');
+        saveCurrentTest(test);
+        window.location.href = './test.html';
+      } catch (error) {
+        if (errorEl) errorEl.textContent = `Could not generate a test: ${error.message}`;
+        reportRuntime('error', 'Fallback start test failed', error.message);
+      }
+      return;
+    }
+
+    const randomBtn = event.target.closest('#randomBtn');
+    if (randomBtn && randomBtn.dataset.bound !== '1') {
+      event.preventDefault();
+      const errorEl = document.getElementById('dashboardError');
+      try {
+        const test = await generateTestRandom();
+        saveCurrentTest(test);
+        window.location.href = './test.html';
+      } catch (error) {
+        if (errorEl) errorEl.textContent = `Could not generate a random test: ${error.message}`;
+        reportRuntime('error', 'Fallback random test failed', error.message);
+      }
+      return;
+    }
+  });
+
+  document.addEventListener('change', (event) => {
+    if (event.target.id === 'themeSelect') {
+      applyTheme(event.target.value);
+    }
+  });
+}
+
 function initGlobalUI() {
   installRuntimeDiagnostics();
+  installInteractionFallbacks();
   const versionInfo = document.getElementById('versionInfo');
   if (versionInfo) versionInfo.textContent = `NFER Reading Builder ${APP_VERSION}`;
 
@@ -314,10 +384,12 @@ async function initDashboard() {
     }
   });
 
+  generateBtn.dataset.bound = '1';
   generateBtn.addEventListener('click', async () => {
     await startTestWithSelection((library, history) => selectNextTest(library, history), errorEl);
   });
 
+  randomBtn.dataset.bound = '1';
   randomBtn.addEventListener('click', async () => {
     try {
       const test = await generateTestRandom();
