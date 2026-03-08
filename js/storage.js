@@ -6,6 +6,8 @@ const KEYS = {
   settings: 'y4.settings'
 };
 
+const WINDOW_STATE_KEY = '__NFER_LOCAL_FALLBACK__';
+
 function safeParse(raw, fallback) {
   if (!raw) return fallback;
   try {
@@ -15,19 +17,51 @@ function safeParse(raw, fallback) {
   }
 }
 
-function safeGet(key, fallback) {
+function getWindowState() {
+  if (typeof window === 'undefined') return {};
+  const state = safeParse(window.name || '', {});
+  return state && typeof state === 'object' ? state : {};
+}
+
+function setWindowState(nextState) {
+  if (typeof window === 'undefined') return;
   try {
-    return safeParse(localStorage.getItem(key), fallback);
+    window.name = JSON.stringify(nextState || {});
   } catch (_error) {
-    return fallback;
+    // Ignore window.name fallback errors.
   }
 }
 
+function safeGet(key, fallback) {
+  try {
+    const fromLocal = localStorage.getItem(key);
+    if (fromLocal != null) return safeParse(fromLocal, fallback);
+  } catch (_error) {
+    // continue to fallback
+  }
+
+  const fromWindow = getWindowState()[WINDOW_STATE_KEY]?.[key];
+  if (fromWindow === undefined) return fallback;
+  return fromWindow;
+}
+
 function safeSet(key, value) {
+  let savedToLocal = false;
   try {
     localStorage.setItem(key, JSON.stringify(value));
+    savedToLocal = true;
   } catch (_error) {
     // Ignore storage errors to avoid breaking button interactions.
+  }
+
+  if (!savedToLocal) {
+    const state = getWindowState();
+    const bag = state[WINDOW_STATE_KEY] && typeof state[WINDOW_STATE_KEY] === 'object'
+      ? state[WINDOW_STATE_KEY]
+      : {};
+    bag[key] = value;
+    state[WINDOW_STATE_KEY] = bag;
+    setWindowState(state);
   }
 }
 
