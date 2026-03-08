@@ -103,3 +103,48 @@ export function summariseFeedbackPreview(promptText) {
   const lines = safeLines(promptText);
   return lines.slice(0, 4).join(' ');
 }
+
+
+function extractResponseText(data) {
+  if (!data) return '';
+  if (typeof data.output_text === 'string' && data.output_text.trim()) return data.output_text.trim();
+
+  const output = Array.isArray(data.output) ? data.output : [];
+  const chunks = [];
+  for (const item of output) {
+    const content = Array.isArray(item?.content) ? item.content : [];
+    for (const part of content) {
+      if (typeof part?.text === 'string') chunks.push(part.text);
+    }
+  }
+  return chunks.join('
+').trim();
+}
+
+export async function requestFeedbackFromAPI({ apiKey, promptText, model = 'gpt-4.1-mini' }) {
+  const key = cleanText(apiKey);
+  if (!key) throw new Error('Missing API key');
+
+  const response = await fetch('https://api.openai.com/v1/responses', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${key}`
+    },
+    body: JSON.stringify({
+      model,
+      input: promptText
+    })
+  });
+
+  if (!response.ok) {
+    const errText = await response.text();
+    throw new Error(`API request failed (${response.status}): ${errText.slice(0, 300)}`);
+  }
+
+  const data = await response.json();
+  return {
+    raw: data,
+    text: extractResponseText(data)
+  };
+}
