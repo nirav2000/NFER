@@ -1,4 +1,4 @@
-const VERSION = '3.4.9';
+const VERSION = '3.4.10';
 const THEME_KEY = 'y4.theme';
 const LIB_KEY = 'y4.libraryPath';
 const CURRENT_TEST_KEY = 'y4.currentTest';
@@ -118,14 +118,21 @@ function installFallbackStatus() {
   panel.hidden = true;
   panel.style.cssText = 'position:fixed;left:1rem;bottom:3.1rem;z-index:30;background:#0b1220;color:#dbeafe;padding:.6rem .7rem;border-radius:8px;max-width:90vw;font-size:.8rem;line-height:1.35';
 
-  const appReady = Boolean(window.__NFER_APP_READY);
-  panel.textContent = appReady
-    ? `Primary app module ready (v${VERSION}). Fallback listeners are on standby.`
-    : `Primary app module not confirmed ready yet. Fallback listeners are active.`;
+  const refresh = () => {
+    const appReady = Boolean(window.__NFER_APP_READY);
+    panel.textContent = appReady
+      ? `Primary app module ready. Fallback listeners are on standby. (fallback v${VERSION})`
+      : `Primary app module not confirmed ready yet. Fallback listeners are active. (fallback v${VERSION})`;
+  };
+  refresh();
 
   badge.addEventListener('click', () => {
     panel.hidden = !panel.hidden;
+    refresh();
   });
+
+  window.addEventListener('nfer:app-ready', refresh);
+  setTimeout(refresh, 1200);
 
   document.body.appendChild(badge);
   document.body.appendChild(panel);

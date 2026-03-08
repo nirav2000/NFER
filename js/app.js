@@ -1,5 +1,5 @@
-import { loadLibrary, setLibraryPath, getStoredLibraryPath, generateTestRandom, selectNextTest, getWeakDomains } from './generator.js?v=3.4.9';
-import { markTest, buildDiagnostic } from './diagnostics.js?v=3.4.9';
+import { loadLibrary, setLibraryPath, getStoredLibraryPath, generateTestRandom, selectNextTest, getWeakDomains } from './generator.js?v=3.4.10';
+import { markTest, buildDiagnostic } from './diagnostics.js?v=3.4.10';
 import {
   saveCurrentTest,
   getCurrentTest,
@@ -12,7 +12,7 @@ import {
   clearTestSession,
   getSettings,
   saveSettings
-} from './storage.js?v=3.4.9';
+} from './storage.js?v=3.4.10';
 import {
   renderDashboardMeta,
   renderTestMeta,
@@ -27,14 +27,14 @@ import {
   renderTracker,
   renderAttemptReview,
   renderFeedbackAssist
-} from './renderer.js?v=3.4.9';
-import { createInteractionRecorder, getStoredReplay, replayInteractions } from './replay.js?v=3.4.9';
-import { createFeedbackPrompt, openPromptInChatGPT, copyPrompt, requestFeedbackFromAPI } from './feedback.js?v=3.4.9';
+} from './renderer.js?v=3.4.10';
+import { createInteractionRecorder, getStoredReplay, replayInteractions } from './replay.js?v=3.4.10';
+import { createFeedbackPrompt, openPromptInChatGPT, copyPrompt, requestFeedbackFromAPI } from './feedback.js?v=3.4.10';
 
 const TEST_DURATION_SECONDS = 35 * 60;
 const FEEDBACK_KEY_KEY = 'y4.openaiApiKey';
 const FEEDBACK_MODEL_KEY = 'y4.openaiModel';
-const APP_VERSION = 'v3.4.9';
+const APP_VERSION = 'v3.4.10';
 const THEME_KEY = 'y4.theme';
 const THEME_PATHS = {
   default: '',
@@ -918,6 +918,7 @@ function initAttempt() {
     if (page === 'tracker') initTracker();
     if (page === 'attempt') initAttempt();
     window.__NFER_APP_READY = true;
+    window.dispatchEvent(new Event('nfer:app-ready'));
     reportRuntime('info', 'Bootstrap complete');
   } catch (error) {
     console.error('App bootstrap failed:', error);

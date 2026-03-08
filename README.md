@@ -99,7 +99,7 @@ This helps generate richer feedback while keeping the app itself fully static an
 
 ## Cache busting
 
-- JS assets are versioned via query string (for example `app.js?v=3.4.9`).
+- JS assets are versioned via query string (for example `app.js?v=3.4.10`).
 - When releasing a fix, increment `APP_VERSION` in `js/app.js` and update the script query versions in HTML/imports so browsers fetch the latest modules instead of stale cache.
 
 - Added `js/fallback.js` as a resilient core-interaction fallback module for theme/settings/start actions if the main app module fails to initialise.

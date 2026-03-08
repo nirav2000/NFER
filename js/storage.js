@@ -42,6 +42,7 @@ function safeGet(key, fallback) {
 
   const fromWindow = getWindowState()[WINDOW_STATE_KEY]?.[key];
   if (fromWindow === undefined) return fallback;
+  if (typeof fromWindow === 'string') return safeParse(fromWindow, fallback);
   return fromWindow;
 }
 
