@@ -85,8 +85,5 @@ On **Diagnostic** and **Completed Attempt** pages, the app now generates a struc
 
 - `Copy prompt` copies the full JSON-oriented instruction prompt.
 - `Open in ChatGPT` opens ChatGPT with the prompt prefilled in the query URL.
-- Optional **Generate AI feedback in app** can call the OpenAI Responses API directly from the browser using your own API key.
-
-> Security note: because this is a static GitHub Pages app (no backend), any API key entered is client-side only and stored in browser LocalStorage for convenience. Use a restricted/rotatable key.
 
 This helps generate richer feedback while keeping the app itself fully static and client-side.
