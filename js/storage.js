@@ -46,6 +46,14 @@ function safeGet(key, fallback) {
   return fromWindow;
 }
 
+function toCurrentTestStorage(test) {
+  if (!test || typeof test !== 'object') return null;
+  if (typeof test.id === 'string' && test.id.trim()) {
+    return { id: test.id.trim() };
+  }
+  return test;
+}
+
 function safeSet(key, value) {
   let savedToLocal = false;
   try {
@@ -67,7 +75,7 @@ function safeSet(key, value) {
 }
 
 export function saveCurrentTest(test) {
-  safeSet(KEYS.currentTest, test);
+  safeSet(KEYS.currentTest, toCurrentTestStorage(test));
 }
 
 export function getCurrentTest() {

@@ -1,5 +1,5 @@
-import { loadLibrary, setLibraryPath, getStoredLibraryPath, generateTestRandom, selectNextTest, getWeakDomains } from './generator.js?v=3.4.10';
-import { markTest, buildDiagnostic } from './diagnostics.js?v=3.4.10';
+import { loadLibrary, setLibraryPath, getStoredLibraryPath, generateTestRandom, selectNextTest, getWeakDomains } from './generator.js?v=3.4.11';
+import { markTest, buildDiagnostic } from './diagnostics.js?v=3.4.11';
 import {
   saveCurrentTest,
   getCurrentTest,
@@ -12,7 +12,7 @@ import {
   clearTestSession,
   getSettings,
   saveSettings
-} from './storage.js?v=3.4.10';
+} from './storage.js?v=3.4.11';
 import {
   renderDashboardMeta,
   renderTestMeta,
@@ -27,14 +27,14 @@ import {
   renderTracker,
   renderAttemptReview,
   renderFeedbackAssist
-} from './renderer.js?v=3.4.10';
-import { createInteractionRecorder, getStoredReplay, replayInteractions } from './replay.js?v=3.4.10';
-import { createFeedbackPrompt, openPromptInChatGPT, copyPrompt, requestFeedbackFromAPI } from './feedback.js?v=3.4.10';
+} from './renderer.js?v=3.4.11';
+import { createInteractionRecorder, getStoredReplay, replayInteractions } from './replay.js?v=3.4.11';
+import { createFeedbackPrompt, openPromptInChatGPT, copyPrompt, requestFeedbackFromAPI } from './feedback.js?v=3.4.11';
 
 const TEST_DURATION_SECONDS = 35 * 60;
 const FEEDBACK_KEY_KEY = 'y4.openaiApiKey';
 const FEEDBACK_MODEL_KEY = 'y4.openaiModel';
-const APP_VERSION = 'v3.4.10';
+const APP_VERSION = 'v3.4.11';
 const THEME_KEY = 'y4.theme';
 const THEME_PATHS = {
   default: '',
@@ -402,7 +402,19 @@ async function initDashboard() {
   });
 }
 
-function initTest() {
+async function resolveCurrentTestRecord(saved) {
+  if (!saved) return null;
+  if (saved && Array.isArray(saved.questions) && Array.isArray(saved.passages)) return saved;
+  if (saved && typeof saved.id === 'string') {
+    const library = await loadLibrary();
+    const tests = library.tests || [];
+    return tests.find((item) => item.id === saved.id) || null;
+  }
+  return null;
+}
+
+async function initTest() {
+
   const test = getCurrentTest();
   if (!test) {
     document.getElementById('testMeta').innerHTML = '<h2>No test generated</h2><p>Go back to Dashboard and click Start Recommended Test.</p>';
@@ -913,12 +925,10 @@ function initAttempt() {
     const page = currentPage();
     reportRuntime('info', `Bootstrap start on ${page} page`);
     if (page === 'dashboard') await initDashboard();
-    if (page === 'test') initTest();
+    if (page === 'test') await initTest();
     if (page === 'diagnostic') initDiagnostic();
     if (page === 'tracker') initTracker();
     if (page === 'attempt') initAttempt();
-    window.__NFER_APP_READY = true;
-    window.dispatchEvent(new Event('nfer:app-ready'));
     reportRuntime('info', 'Bootstrap complete');
   } catch (error) {
     console.error('App bootstrap failed:', error);
@@ -927,5 +937,8 @@ function initAttempt() {
     if (container) {
       container.insertAdjacentHTML('afterbegin', `<section class="card"><p class="error">App error: ${error.message}</p></section>`);
     }
+  } finally {
+    window.__NFER_APP_READY = true;
+    window.dispatchEvent(new Event('nfer:app-ready'));
   }
 })();

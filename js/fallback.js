@@ -1,4 +1,4 @@
-const VERSION = '3.4.10';
+const VERSION = '3.4.11';
 const THEME_KEY = 'y4.theme';
 const LIB_KEY = 'y4.libraryPath';
 const CURRENT_TEST_KEY = 'y4.currentTest';
@@ -55,7 +55,8 @@ function safeSet(key, val) {
 }
 
 function saveCurrentTest(test) {
-  safeSet(CURRENT_TEST_KEY, JSON.stringify(test));
+  const payload = test && test.id ? { id: test.id } : test;
+  safeSet(CURRENT_TEST_KEY, JSON.stringify(payload));
 }
 
 function applyTheme(theme) {
