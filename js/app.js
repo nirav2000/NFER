@@ -1,5 +1,5 @@
-import { loadLibrary, setLibraryPath, getStoredLibraryPath, generateTestRandom, selectNextTest, getWeakDomains } from './generator.js?v=3.4.5';
-import { markTest, buildDiagnostic } from './diagnostics.js?v=3.4.5';
+import { loadLibrary, setLibraryPath, getStoredLibraryPath, generateTestRandom, selectNextTest, getWeakDomains } from './generator.js?v=3.4.6';
+import { markTest, buildDiagnostic } from './diagnostics.js?v=3.4.6';
 import {
   saveCurrentTest,
   getCurrentTest,
@@ -12,7 +12,7 @@ import {
   clearTestSession,
   getSettings,
   saveSettings
-} from './storage.js?v=3.4.5';
+} from './storage.js?v=3.4.6';
 import {
   renderDashboardMeta,
   renderTestMeta,
@@ -27,14 +27,14 @@ import {
   renderTracker,
   renderAttemptReview,
   renderFeedbackAssist
-} from './renderer.js?v=3.4.5';
-import { createInteractionRecorder, getStoredReplay, replayInteractions } from './replay.js?v=3.4.5';
-import { createFeedbackPrompt, openPromptInChatGPT, copyPrompt, requestFeedbackFromAPI } from './feedback.js?v=3.4.5';
+} from './renderer.js?v=3.4.6';
+import { createInteractionRecorder, getStoredReplay, replayInteractions } from './replay.js?v=3.4.6';
+import { createFeedbackPrompt, openPromptInChatGPT, copyPrompt, requestFeedbackFromAPI } from './feedback.js?v=3.4.6';
 
 const TEST_DURATION_SECONDS = 35 * 60;
 const FEEDBACK_KEY_KEY = 'y4.openaiApiKey';
 const FEEDBACK_MODEL_KEY = 'y4.openaiModel';
-const APP_VERSION = 'v3.4.5';
+const APP_VERSION = 'v3.4.6';
 const THEME_KEY = 'y4.theme';
 const THEME_PATHS = {
   default: '',
@@ -44,6 +44,56 @@ const THEME_PATHS = {
   arcade: './css/theme-arcade.css',
   zen210: './css/theme-zen210.css'
 };
+
+
+const RUNTIME_LOG_LIMIT = 80;
+const runtimeLogs = [];
+
+function reportRuntime(level, message, detail = '') {
+  const entry = {
+    time: new Date().toISOString(),
+    level,
+    message,
+    detail: detail ? String(detail) : ''
+  };
+  runtimeLogs.push(entry);
+  if (runtimeLogs.length > RUNTIME_LOG_LIMIT) runtimeLogs.shift();
+
+  const output = document.getElementById('runtimeDiagnosticsOutput');
+  if (output) {
+    output.textContent = runtimeLogs.map((item) => `[${item.time}] ${item.level.toUpperCase()} ${item.message}${item.detail ? ` :: ${item.detail}` : ''}`).join('
+');
+  }
+}
+
+function installRuntimeDiagnostics() {
+  if (document.getElementById('runtimeDiagnosticsPanel')) return;
+  const panel = document.createElement('aside');
+  panel.id = 'runtimeDiagnosticsPanel';
+  panel.className = 'runtime-diagnostics';
+  panel.hidden = true;
+  panel.innerHTML = `
+    <div class="runtime-diagnostics-head">
+      <strong>Runtime diagnostics</strong>
+      <button type="button" id="runtimeDiagnosticsCloseBtn" class="icon-btn" aria-label="Close diagnostics">✕</button>
+    </div>
+    <p class="muted">Shows recent client-side errors so broken buttons can be diagnosed quickly.</p>
+    <pre id="runtimeDiagnosticsOutput">No runtime errors captured.</pre>
+  `;
+
+  const toggle = document.createElement('button');
+  toggle.type = 'button';
+  toggle.id = 'runtimeDiagnosticsToggleBtn';
+  toggle.className = 'runtime-diagnostics-toggle';
+  toggle.textContent = 'Diagnostics';
+
+  document.body.appendChild(toggle);
+  document.body.appendChild(panel);
+
+  const setPanel = (open) => { panel.hidden = !open; };
+  toggle.addEventListener('click', () => setPanel(panel.hidden));
+  panel.querySelector('#runtimeDiagnosticsCloseBtn')?.addEventListener('click', () => setPanel(false));
+}
 
 function safeStorageGet(key, fallback = '') {
   try {
@@ -100,6 +150,7 @@ function applySettingsToPage(settings) {
 }
 
 function initGlobalUI() {
+  installRuntimeDiagnostics();
   const versionInfo = document.getElementById('versionInfo');
   if (versionInfo) versionInfo.textContent = `NFER Reading Builder ${APP_VERSION}`;
 
@@ -202,6 +253,7 @@ async function startTestWithSelection(selectionFn, errorEl) {
     window.location.href = './test.html';
   } catch (error) {
     errorEl.textContent = `Could not generate a test: ${error.message}`;
+    reportRuntime('error', 'Start recommended test failed', error.message);
   }
 }
 
@@ -239,6 +291,7 @@ async function initDashboard() {
     } catch (fallbackError) {
       document.getElementById('libraryMeta').textContent = 'Unable to load the reading test library.';
       errorEl.textContent = `Error: ${fallbackError.message}`;
+      reportRuntime('error', 'Dashboard fallback library load failed', fallbackError.message);
       generateBtn.disabled = true;
       randomBtn.disabled = true;
       return;
@@ -255,6 +308,7 @@ async function initDashboard() {
       randomBtn.disabled = false;
     } catch (error) {
       errorEl.textContent = `Error: ${error.message}`;
+      reportRuntime('error', 'Dashboard load/apply error', error.message);
       generateBtn.disabled = true;
       randomBtn.disabled = true;
     }
@@ -271,6 +325,7 @@ async function initDashboard() {
       window.location.href = './test.html';
     } catch (error) {
       errorEl.textContent = `Could not generate a random test: ${error.message}`;
+      reportRuntime('error', 'Random test generation failed', error.message);
     }
   });
 }
@@ -774,16 +829,26 @@ function initAttempt() {
 }
 
 (async function bootstrap() {
+  window.addEventListener('error', (event) => {
+    reportRuntime('error', event.message || 'Unhandled error', event.error?.stack || '');
+  });
+  window.addEventListener('unhandledrejection', (event) => {
+    reportRuntime('error', 'Unhandled promise rejection', event.reason?.message || String(event.reason || 'Unknown rejection'));
+  });
+
   try {
     initGlobalUI();
     const page = currentPage();
+    reportRuntime('info', `Bootstrap start on ${page} page`);
     if (page === 'dashboard') await initDashboard();
     if (page === 'test') initTest();
     if (page === 'diagnostic') initDiagnostic();
     if (page === 'tracker') initTracker();
     if (page === 'attempt') initAttempt();
+    reportRuntime('info', 'Bootstrap complete');
   } catch (error) {
     console.error('App bootstrap failed:', error);
+    reportRuntime('error', 'App bootstrap failed', error.message || error);
     const container = document.querySelector('.container');
     if (container) {
       container.insertAdjacentHTML('afterbegin', `<section class="card"><p class="error">App error: ${error.message}</p></section>`);

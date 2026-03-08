@@ -64,6 +64,12 @@ th,td{border:1px solid var(--line);padding:.5rem;text-align:left;white-space:now
 #feedbackApiOutput{width:100%;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.9rem;line-height:1.45;background:#f8fafc}
 #passage1,#passage2{font-size:calc(1rem * var(--passage-font-scale));line-height:1.8}
 .hide-marks .question-title::after{content:''}
+
+.runtime-diagnostics-toggle{position:fixed;right:1rem;bottom:4.2rem;z-index:22;padding:.45rem .7rem;font-size:.85rem}
+.runtime-diagnostics{position:fixed;right:1rem;bottom:7.1rem;z-index:23;width:min(560px,calc(100vw - 2rem));max-height:50vh;overflow:auto;background:var(--card);border:1px solid var(--line);border-radius:10px;box-shadow:0 12px 28px rgba(0,0,0,.18);padding:.8rem}
+.runtime-diagnostics-head{display:flex;justify-content:space-between;align-items:center;gap:.5rem}
+#runtimeDiagnosticsOutput{white-space:pre-wrap;background:#0b1220;color:#dbeafe;border-radius:8px;padding:.6rem;max-height:32vh;overflow:auto;font-size:.8rem;line-height:1.35}
+
 @media (max-width:700px){
   .site-header h1{font-size:1.05rem}
   nav a,.button-link{font-size:.9rem}
@@ -74,5 +80,6 @@ th,td{border:1px solid var(--line);padding:.5rem;text-align:left;white-space:now
   .site-footer{flex-wrap:wrap;justify-content:flex-start}
   .site-footer p{width:100%}
   .settings-panel{left:1rem;right:1rem;width:auto}
+  .runtime-diagnostics{left:.6rem;right:.6rem;width:auto}
 }
 @media print{nav,.actions,.toggle,button,.button-link,.timer-card,.site-footer,.header-tools,.settings-panel{display:none!important}.card{box-shadow:none}}
