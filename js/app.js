@@ -1,5 +1,5 @@
-import { loadLibrary, setLibraryPath, getStoredLibraryPath, generateTestRandom, selectNextTest, getWeakDomains } from './generator.js';
-import { markTest, buildDiagnostic } from './diagnostics.js';
+import { loadLibrary, setLibraryPath, getStoredLibraryPath, generateTestRandom, selectNextTest, getWeakDomains } from './generator.js?v=3.4.1';
+import { markTest, buildDiagnostic } from './diagnostics.js?v=3.4.1';
 import {
   saveCurrentTest,
   getCurrentTest,
@@ -12,7 +12,7 @@ import {
   clearTestSession,
   getSettings,
   saveSettings
-} from './storage.js';
+} from './storage.js?v=3.4.1';
 import {
   renderDashboardMeta,
   renderTestMeta,
@@ -27,20 +27,20 @@ import {
   renderTracker,
   renderAttemptReview,
   renderFeedbackAssist
-} from './renderer.js';
-import { createInteractionRecorder, getStoredReplay, replayInteractions } from './replay.js';
-import { createFeedbackPrompt, openPromptInChatGPT, copyPrompt } from './feedback.js';
+} from './renderer.js?v=3.4.1';
+import { createInteractionRecorder, getStoredReplay, replayInteractions } from './replay.js?v=3.4.1';
+import { createFeedbackPrompt, openPromptInChatGPT, copyPrompt } from './feedback.js?v=3.4.1';
 
 const TEST_DURATION_SECONDS = 35 * 60;
-const APP_VERSION = 'v3.4.0';
+const APP_VERSION = 'v3.4.1';
 const THEME_KEY = 'y4.theme';
 const THEME_PATHS = {
   default: '',
-  ocean: './css/theme-ocean.css',
-  paper: './css/theme-paper.css',
-  split: './css/theme-split.css',
-  arcade: './css/theme-arcade.css',
-  zen210: './css/theme-zen210.css'
+  ocean: './css/theme-ocean.css?v=3.4.1',
+  paper: './css/theme-paper.css?v=3.4.1',
+  split: './css/theme-split.css?v=3.4.1',
+  arcade: './css/theme-arcade.css?v=3.4.1',
+  zen210: './css/theme-zen210.css?v=3.4.1'
 };
 
 function currentPage() {
