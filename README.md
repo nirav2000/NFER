@@ -6,7 +6,7 @@ A static Year 4 reading assessment app that runs fully client-side in the browse
 
 The app uses:
 
-- `/data/year4_combined_50_test_library_v3.json`
+- `./data/year4_combined_50_test_library_v3.json`
 
 It can also load compatible JSON files from `/data/` using the dashboard file selector.
 
@@ -99,7 +99,7 @@ This helps generate richer feedback while keeping the app itself fully static an
 
 ## Cache busting
 
-- JS assets are versioned via query string (for example `app.js?v=3.4.13`).
+- JS assets are versioned via query string (for example `app.js?v=3.4.14`).
 - When releasing a fix, increment `APP_VERSION` in `js/app.js` and update the script query versions in HTML/imports so browsers fetch the latest modules instead of stale cache.
 
 - Added `js/fallback.js` as a resilient core-interaction fallback module for theme/settings/start actions if the main app module fails to initialise.
@@ -109,3 +109,5 @@ This helps generate richer feedback while keeping the app itself fully static an
 - Added `js/testResolver.js` so both primary app and fallback use the same URL/id test-resolution logic.
 - Test launch now navigates with `?test=<id>` for deterministic reload/recovery if browser storage is unavailable.
 - Fallback listeners now activate only after a short readiness timeout, reducing conflicts with the primary module.
+
+- Primary module now sets `window.__NFER_APP_BOOTSTRAPPED` immediately so fallback waits for real module-failure states before activating.

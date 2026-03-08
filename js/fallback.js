@@ -1,9 +1,9 @@
-import { buildTestUrl, resolveTestById } from './testResolver.js?v=3.4.13';
-const VERSION = '3.4.13';
+import { buildTestUrl, resolveTestById } from './testResolver.js?v=3.4.14';
+const VERSION = '3.4.14';
 const THEME_KEY = 'y4.theme';
 const LIB_KEY = 'y4.libraryPath';
 const CURRENT_TEST_KEY = 'y4.currentTest';
-const DEFAULT_LIB = '/data/year4_combined_50_test_library_v3.json';
+const DEFAULT_LIB = './data/year4_combined_50_test_library_v3.json';
 const FALLBACK_NS = '__NFER_FALLBACK_STATE__';
 
 const stepLogs = [];
@@ -311,6 +311,10 @@ window.addEventListener('nfer:app-ready', () => {
   logStep('fallback-standby', 'primary app ready');
 });
 
+window.addEventListener('nfer:app-failed', (event) => {
+  activateFallback(`app-failed:${event.detail || 'unknown'}`);
+});
+
 setTimeout(() => {
-  if (!window.__NFER_APP_READY) activateFallback('app-ready-timeout');
-}, 1800);
+  if (!window.__NFER_APP_READY && !window.__NFER_APP_BOOTSTRAPPED) activateFallback('app-bootstrap-timeout');
+}, 5000);

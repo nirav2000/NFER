@@ -1,4 +1,4 @@
-const DEFAULT_LIBRARY_PATH = '/data/year4_combined_50_test_library_v3.json';
+const DEFAULT_LIBRARY_PATH = './data/year4_combined_50_test_library_v3.json';
 const LIBRARY_PATH_KEY = 'y4.libraryPath';
 
 let libraryCache = null;
@@ -24,7 +24,7 @@ function safeStorageWrite(key, value) {
 function normalisePath(path) {
   if (!path) return DEFAULT_LIBRARY_PATH;
   if (path.startsWith('./') || path.startsWith('/')) return path;
-  return `/data/${path}`;
+  return `./data/${path}`;
 }
 
 function getLibraryPath() {

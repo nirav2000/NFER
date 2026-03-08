@@ -1,5 +1,5 @@
-import { loadLibrary, setLibraryPath, getStoredLibraryPath, generateTestRandom, selectNextTest, getWeakDomains } from './generator.js?v=3.4.13';
-import { markTest, buildDiagnostic } from './diagnostics.js?v=3.4.13';
+import { loadLibrary, setLibraryPath, getStoredLibraryPath, generateTestRandom, selectNextTest, getWeakDomains } from './generator.js?v=3.4.14';
+import { markTest, buildDiagnostic } from './diagnostics.js?v=3.4.14';
 import {
   saveCurrentTest,
   getCurrentTest,
@@ -12,7 +12,7 @@ import {
   clearTestSession,
   getSettings,
   saveSettings
-} from './storage.js?v=3.4.13';
+} from './storage.js?v=3.4.14';
 import {
   renderDashboardMeta,
   renderTestMeta,
@@ -27,15 +27,15 @@ import {
   renderTracker,
   renderAttemptReview,
   renderFeedbackAssist
-} from './renderer.js?v=3.4.13';
-import { createInteractionRecorder, getStoredReplay, replayInteractions } from './replay.js?v=3.4.13';
-import { createFeedbackPrompt, openPromptInChatGPT, copyPrompt, requestFeedbackFromAPI } from './feedback.js?v=3.4.13';
-import { getTestIdFromLocation, buildTestUrl, resolveTestById } from './testResolver.js?v=3.4.13';
+} from './renderer.js?v=3.4.14';
+import { createInteractionRecorder, getStoredReplay, replayInteractions } from './replay.js?v=3.4.14';
+import { createFeedbackPrompt, openPromptInChatGPT, copyPrompt, requestFeedbackFromAPI } from './feedback.js?v=3.4.14';
+import { getTestIdFromLocation, buildTestUrl, resolveTestById } from './testResolver.js?v=3.4.14';
 
 const TEST_DURATION_SECONDS = 35 * 60;
 const FEEDBACK_KEY_KEY = 'y4.openaiApiKey';
 const FEEDBACK_MODEL_KEY = 'y4.openaiModel';
-const APP_VERSION = 'v3.4.13';
+const APP_VERSION = 'v3.4.14';
 const THEME_KEY = 'y4.theme';
 const THEME_PATHS = {
   default: '',
@@ -45,6 +45,8 @@ const THEME_PATHS = {
   arcade: './css/theme-arcade.css',
   zen210: './css/theme-zen210.css'
 };
+
+window.__NFER_APP_BOOTSTRAPPED = true;
 
 function resolveThemeHref(path) {
   if (!path) return '';
@@ -351,7 +353,7 @@ async function initDashboard() {
     errorEl.textContent = '';
   } catch (error) {
     // Recover from stale/custom invalid library path by resetting to default.
-    setLibraryPath('/data/year4_combined_50_test_library_v3.json');
+    setLibraryPath('./data/year4_combined_50_test_library_v3.json');
     libraryFileSelect.value = getStoredLibraryPath();
     libraryPathInput.value = getStoredLibraryPath();
     try {
@@ -941,6 +943,8 @@ function initAttempt() {
   } catch (error) {
     console.error('App bootstrap failed:', error);
     reportRuntime('error', 'App bootstrap failed', error.message || error);
+    window.__NFER_APP_FAILED = true;
+    window.dispatchEvent(new CustomEvent('nfer:app-failed', { detail: String(error?.message || error) }));
     const container = document.querySelector('.container');
     if (container) {
       container.insertAdjacentHTML('afterbegin', `<section class="card"><p class="error">App error: ${error.message}</p></section>`);
