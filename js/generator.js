@@ -1,42 +1,25 @@
-const DEFAULT_LIBRARY_PATH = './data/year4_combined_50_test_library_v3.json';
+const DEFAULT_LIBRARY_PATH = '/data/year4_combined_50_test_library_v3.json';
 const LIBRARY_PATH_KEY = 'y4.libraryPath';
 
 let libraryCache = null;
 let libraryPathCache = null;
 
-function safeStorageRead(key, fallback = '') {
-  try {
-    const value = localStorage.getItem(key);
-    return value == null ? fallback : value;
-  } catch (_error) {
-    return fallback;
-  }
-}
-
-function safeStorageWrite(key, value) {
-  try {
-    localStorage.setItem(key, value);
-  } catch (_error) {
-    // Ignore storage failures to avoid breaking startup in restricted browsers.
-  }
-}
-
 function normalisePath(path) {
   if (!path) return DEFAULT_LIBRARY_PATH;
   if (path.startsWith('./') || path.startsWith('/')) return path;
-  return `./data/${path}`;
+  return `/data/${path}`;
 }
 
 function getLibraryPath() {
   if (libraryPathCache) return libraryPathCache;
-  const stored = safeStorageRead(LIBRARY_PATH_KEY, "");
+  const stored = localStorage.getItem(LIBRARY_PATH_KEY);
   libraryPathCache = normalisePath(stored || DEFAULT_LIBRARY_PATH);
   return libraryPathCache;
 }
 
 export function setLibraryPath(path) {
   const normalised = normalisePath(path);
-  safeStorageWrite(LIBRARY_PATH_KEY, normalised);
+  localStorage.setItem(LIBRARY_PATH_KEY, normalised);
   libraryPathCache = normalised;
   libraryCache = null;
 }

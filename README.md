@@ -6,7 +6,7 @@ A static Year 4 reading assessment app that runs fully client-side in the browse
 
 The app uses:
 
-- `./data/year4_combined_50_test_library_v3.json`
+- `/data/year4_combined_50_test_library_v3.json`
 
 It can also load compatible JSON files from `/data/` using the dashboard file selector.
 

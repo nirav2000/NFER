@@ -45,30 +45,13 @@ const THEME_PATHS = {
   zen210: './css/theme-zen210.css'
 };
 
-function safeStorageGet(key, fallback = '') {
-  try {
-    const value = localStorage.getItem(key);
-    return value == null ? fallback : value;
-  } catch (_error) {
-    return fallback;
-  }
-}
-
-function safeStorageSet(key, value) {
-  try {
-    localStorage.setItem(key, value);
-  } catch (_error) {
-    // Ignore storage write failures in restricted browser modes.
-  }
-}
-
 function currentPage() {
   return document.body.dataset.page;
 }
 
 function applyTheme(themeName) {
   const theme = THEME_PATHS[themeName] != null ? themeName : 'default';
-  safeStorageSet(THEME_KEY, theme);
+  localStorage.setItem(THEME_KEY, theme);
 
   const themeLink = document.getElementById('themeStylesheet');
   if (themeLink) {
@@ -103,7 +86,7 @@ function initGlobalUI() {
   const versionInfo = document.getElementById('versionInfo');
   if (versionInfo) versionInfo.textContent = `NFER Reading Builder ${APP_VERSION}`;
 
-  const selectedTheme = safeStorageGet(THEME_KEY, 'default') || 'default';
+  const selectedTheme = localStorage.getItem(THEME_KEY) || 'default';
   applyTheme(selectedTheme);
 
   const themeSelect = document.getElementById('themeSelect');
@@ -659,8 +642,8 @@ function bindFeedbackAssist(promptText) {
   const modelInput = document.getElementById('feedbackModelInput');
   const outputBox = document.getElementById('feedbackApiOutput');
 
-  if (apiKeyInput) apiKeyInput.value = safeStorageGet(FEEDBACK_KEY_KEY, '') || '';
-  if (modelInput) modelInput.value = safeStorageGet(FEEDBACK_MODEL_KEY, '') || modelInput.value || 'gpt-4.1-mini';
+  if (apiKeyInput) apiKeyInput.value = localStorage.getItem(FEEDBACK_KEY_KEY) || '';
+  if (modelInput) modelInput.value = localStorage.getItem(FEEDBACK_MODEL_KEY) || modelInput.value || 'gpt-4.1-mini';
 
   if (copyBtn) {
     copyBtn.addEventListener('click', async () => {
@@ -684,8 +667,8 @@ function bindFeedbackAssist(promptText) {
     runApiBtn.addEventListener('click', async () => {
       const apiKey = apiKeyInput?.value?.trim() || '';
       const model = modelInput?.value?.trim() || 'gpt-4.1-mini';
-      safeStorageSet(FEEDBACK_KEY_KEY, apiKey);
-      safeStorageSet(FEEDBACK_MODEL_KEY, model);
+      localStorage.setItem(FEEDBACK_KEY_KEY, apiKey);
+      localStorage.setItem(FEEDBACK_MODEL_KEY, model);
 
       if (!apiKey) {
         if (statusEl) statusEl.textContent = 'Please enter an API key first.';
@@ -757,19 +740,11 @@ function initAttempt() {
 }
 
 (async function bootstrap() {
-  try {
-    initGlobalUI();
-    const page = currentPage();
-    if (page === 'dashboard') await initDashboard();
-    if (page === 'test') initTest();
-    if (page === 'diagnostic') initDiagnostic();
-    if (page === 'tracker') initTracker();
-    if (page === 'attempt') initAttempt();
-  } catch (error) {
-    console.error('App bootstrap failed:', error);
-    const container = document.querySelector('.container');
-    if (container) {
-      container.insertAdjacentHTML('afterbegin', `<section class="card"><p class="error">App failed to start. ${error?.message || error}</p></section>`);
-    }
-  }
+  initGlobalUI();
+  const page = currentPage();
+  if (page === 'dashboard') await initDashboard();
+  if (page === 'test') initTest();
+  if (page === 'diagnostic') initDiagnostic();
+  if (page === 'tracker') initTracker();
+  if (page === 'attempt') initAttempt();
 })();
