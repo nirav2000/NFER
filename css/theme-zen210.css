@@ -1,0 +1,84 @@
+:root{
+  --bg:#f0efe6;
+  --card:#fffdf7;
+  --ink:#222;
+  --line:#d8d1bf;
+  --brand:#7b2f30;
+}
+
+body{
+  background:
+    linear-gradient(90deg, #d9c6a5 0 72px, transparent 72px),
+    linear-gradient(#f4f1e7,#ece6d4);
+  color:var(--ink);
+  font-family:"Trebuchet MS", "Avenir Next", system-ui, sans-serif;
+}
+
+.site-header{
+  position:sticky;
+  top:0;
+  border-bottom:3px double #8a6b3f;
+  background:rgba(255,250,240,.96);
+}
+
+.container{
+  max-width:1200px;
+  display:grid;
+  grid-template-columns:1.2fr .8fr;
+  gap:1rem;
+}
+
+.container > .card:first-child,
+.container > .card:last-child{
+  grid-column:1/-1;
+}
+
+.card{
+  border-radius:0;
+  border:2px solid #b89d6c;
+  box-shadow:6px 6px 0 #d6c197;
+  background:var(--card);
+}
+
+#questionCard,
+#reviewCard,
+#attemptRoot .card:last-child,
+#diagnosticRoot .card:last-child{
+  grid-column:1/-1;
+}
+
+h1,h2,h3{
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+
+button,.button-link.action-btn{
+  border-radius:2px;
+  background:#7b2f30!important;
+  border:2px solid #4b1d1d;
+  box-shadow:2px 2px 0 #d9b1b1;
+}
+
+button:hover,.button-link.action-btn:hover{transform:translate(-1px,-1px)}
+
+.settings-panel{
+  border-radius:0;
+  border:3px double #8a6b3f;
+  box-shadow:10px 10px 0 #ceb484;
+}
+
+.site-footer{
+  background:#2c2c2c;
+  color:#f8f5ea;
+  border-top:0;
+}
+
+.site-footer p,
+.site-footer label{color:#f8f5ea}
+
+.progress-track{background:#e5d7bb}
+.progress-fill{background:linear-gradient(90deg,#7b2f30,#cc8f46)}
+
+@media (max-width: 900px){
+  .container{display:block;max-width:980px}
+}

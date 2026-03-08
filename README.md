@@ -27,6 +27,7 @@ It can also load compatible JSON files from `/data/` using the dashboard file se
   - `paper` (serif print feel)
   - `split` (alternate layout with side panel)
   - `arcade` (high-energy grid layout)
+  - `zen210` (layout-driven retro editorial style inspired by CSS Zen Garden principles)
 - Theme preference is saved to LocalStorage and applied instantly.
 - Settings panel includes (auto-applied and auto-saved):
   - passage font size
@@ -77,3 +78,12 @@ Open `http://localhost:8000/`.
 ## GitHub Pages
 
 Deploy from the `main` branch, folder `/ (root)`.
+
+## AI feedback assist
+
+On **Diagnostic** and **Completed Attempt** pages, the app now generates a structured ChatGPT prompt containing passage text, question data, learner answers, and marking context.
+
+- `Copy prompt` copies the full JSON-oriented instruction prompt.
+- `Open in ChatGPT` opens ChatGPT with the prompt prefilled in the query URL.
+
+This helps generate richer feedback while keeping the app itself fully static and client-side.

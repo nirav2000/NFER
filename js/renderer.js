@@ -198,6 +198,28 @@ export function renderDiagnostic(root, diagnostic, record) {
   `;
 }
 
+export function renderFeedbackAssist(root, promptText, heading = 'AI Feedback Assist') {
+  const safePrompt = String(promptText || '');
+  const wrapper = document.createElement('section');
+  wrapper.className = 'card';
+  wrapper.innerHTML = `
+    <h3>${heading}</h3>
+    <p class="muted">Use this structured prompt with ChatGPT to generate richer feedback, coaching steps, and follow-up activities.</p>
+    <div class="actions">
+      <button type="button" id="copyFeedbackPromptBtn">Copy prompt</button>
+      <button type="button" id="openFeedbackPromptBtn">Open in ChatGPT</button>
+    </div>
+    <label for="feedbackPromptBox">Prompt preview</label>
+    <textarea id="feedbackPromptBox" rows="10" readonly></textarea>
+    <p id="feedbackPromptStatus" class="muted"></p>
+  `;
+
+  const box = wrapper.querySelector('#feedbackPromptBox');
+  if (box) box.value = safePrompt;
+
+  root.appendChild(wrapper);
+}
+
 export function renderTracker(bodyEl, trendEl, diffEl, history) {
   bodyEl.innerHTML = '';
   history.forEach((h, idx) => {
