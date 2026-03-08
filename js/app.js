@@ -25,19 +25,22 @@ import {
   toggleSchemes,
   renderDiagnostic,
   renderTracker,
-  renderAttemptReview
+  renderAttemptReview,
+  renderFeedbackAssist
 } from './renderer.js';
 import { createInteractionRecorder, getStoredReplay, replayInteractions } from './replay.js';
+import { createFeedbackPrompt, openPromptInChatGPT, copyPrompt } from './feedback.js';
 
 const TEST_DURATION_SECONDS = 35 * 60;
-const APP_VERSION = 'v3.3.0';
+const APP_VERSION = 'v3.4.0';
 const THEME_KEY = 'y4.theme';
 const THEME_PATHS = {
   default: '',
   ocean: './css/theme-ocean.css',
   paper: './css/theme-paper.css',
   split: './css/theme-split.css',
-  arcade: './css/theme-arcade.css'
+  arcade: './css/theme-arcade.css',
+  zen210: './css/theme-zen210.css'
 };
 
 function currentPage() {
@@ -627,13 +630,46 @@ function initTest() {
   refreshQuestionView();
 }
 
+
+function bindFeedbackAssist(promptText) {
+  const copyBtn = document.getElementById('copyFeedbackPromptBtn');
+  const openBtn = document.getElementById('openFeedbackPromptBtn');
+  const statusEl = document.getElementById('feedbackPromptStatus');
+
+  if (copyBtn) {
+    copyBtn.addEventListener('click', async () => {
+      try {
+        await copyPrompt(promptText);
+        if (statusEl) statusEl.textContent = 'Prompt copied. Paste it into ChatGPT.';
+      } catch (_error) {
+        if (statusEl) statusEl.textContent = 'Could not copy automatically. Select and copy the prompt manually.';
+      }
+    });
+  }
+
+  if (openBtn) {
+    openBtn.addEventListener('click', () => {
+      openPromptInChatGPT(promptText);
+      if (statusEl) statusEl.textContent = 'Opened ChatGPT in a new tab with the prompt.';
+    });
+  }
+}
+
 function initDiagnostic() {
   const last = getLastDiagnostic();
+  const root = document.getElementById('diagnosticRoot');
   if (!last) {
-    document.getElementById('diagnosticRoot').innerHTML = '<section class="card"><p>No diagnostic available yet.</p></section>';
+    root.innerHTML = '<section class="card"><p>No diagnostic available yet.</p></section>';
     return;
   }
-  renderDiagnostic(document.getElementById('diagnosticRoot'), last, last);
+  renderDiagnostic(root, last, last);
+  const prompt = createFeedbackPrompt({
+    test: last.testSnapshot,
+    result: last,
+    answers: last.answers
+  });
+  renderFeedbackAssist(root, prompt, 'AI Feedback Assist (Diagnostic)');
+  bindFeedbackAssist(prompt);
 }
 
 function initTracker() {
@@ -658,6 +694,13 @@ function initAttempt() {
   }
 
   renderAttemptReview(root, attempt);
+  const prompt = createFeedbackPrompt({
+    test: attempt.testSnapshot,
+    result: attempt,
+    answers: attempt.answers
+  });
+  renderFeedbackAssist(root, prompt, 'AI Feedback Assist (Completed Attempt)');
+  bindFeedbackAssist(prompt);
 }
 
 (async function bootstrap() {

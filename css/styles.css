@@ -56,6 +56,9 @@ th,td{border:1px solid var(--line);padding:.5rem;text-align:left;white-space:now
 .settings-header .icon-btn{width:1.9rem;height:1.9rem;font-size:.9rem}
 .settings-panel input[type="range"]{width:100%}
 .settings-panel label{font-size:.95rem}
+
+#feedbackPromptBox{width:100%;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.9rem;line-height:1.45;background:#f8fafc}
+.feedback-tools{display:flex;gap:.6rem;flex-wrap:wrap}
 #passage1,#passage2{font-size:calc(1rem * var(--passage-font-scale));line-height:1.8}
 .hide-marks .question-title::after{content:''}
 @media (max-width:700px){
