@@ -1,4 +1,5 @@
-const VERSION = '3.4.12';
+import { buildTestUrl, resolveTestById } from './testResolver.js?v=3.4.13';
+const VERSION = '3.4.13';
 const THEME_KEY = 'y4.theme';
 const LIB_KEY = 'y4.libraryPath';
 const CURRENT_TEST_KEY = 'y4.currentTest';
@@ -112,7 +113,7 @@ async function resolveCurrentTestRecord() {
   if (Array.isArray(saved.questions) && Array.isArray(saved.passages)) return saved;
   if (typeof saved.id === 'string') {
     const library = await loadLibrary();
-    return (library.tests || []).find((item) => item.id === saved.id) || null;
+    return resolveTestById(library, saved.id);
   }
   return null;
 }
@@ -262,7 +263,7 @@ function bindCoreFallbacks() {
         if (!tests.length) throw new Error('No tests in library');
         saveCurrentTestRecord(tests[0]);
         logStep('fallback-start-test', tests[0].id || 'unknown-id');
-        window.location.href = './test.html';
+        window.location.href = buildTestUrl(tests[0].id);
       } catch (error) {
         const errorEl = document.getElementById('dashboardError');
         if (errorEl) errorEl.textContent = `Fallback start failed: ${error.message}`;
@@ -282,7 +283,7 @@ function bindCoreFallbacks() {
         const test = tests[Math.floor(Math.random() * tests.length)];
         saveCurrentTestRecord(test);
         logStep('fallback-random-test', test.id || 'unknown-id');
-        window.location.href = './test.html';
+        window.location.href = buildTestUrl(test.id);
       } catch (error) {
         const errorEl = document.getElementById('dashboardError');
         if (errorEl) errorEl.textContent = `Fallback random failed: ${error.message}`;
@@ -295,6 +296,21 @@ function bindCoreFallbacks() {
   if (versionInfo) versionInfo.textContent = `NFER Reading Builder v${VERSION}`;
 }
 
-bindCoreFallbacks();
 installFallbackStatus();
-ensureTestPageFallback();
+
+let fallbackActivated = false;
+function activateFallback(reason) {
+  if (fallbackActivated) return;
+  fallbackActivated = true;
+  logStep('fallback-activate', reason);
+  bindCoreFallbacks();
+  ensureTestPageFallback();
+}
+
+window.addEventListener('nfer:app-ready', () => {
+  logStep('fallback-standby', 'primary app ready');
+});
+
+setTimeout(() => {
+  if (!window.__NFER_APP_READY) activateFallback('app-ready-timeout');
+}, 1800);

@@ -99,9 +99,13 @@ This helps generate richer feedback while keeping the app itself fully static an
 
 ## Cache busting
 
-- JS assets are versioned via query string (for example `app.js?v=3.4.12`).
+- JS assets are versioned via query string (for example `app.js?v=3.4.13`).
 - When releasing a fix, increment `APP_VERSION` in `js/app.js` and update the script query versions in HTML/imports so browsers fetch the latest modules instead of stale cache.
 
 - Added `js/fallback.js` as a resilient core-interaction fallback module for theme/settings/start actions if the main app module fails to initialise.
 
 - `fallback.js` now shows a **Fallback status** toggle so you can confirm whether fallback mode is active or primary app bootstrap completed.
+
+- Added `js/testResolver.js` so both primary app and fallback use the same URL/id test-resolution logic.
+- Test launch now navigates with `?test=<id>` for deterministic reload/recovery if browser storage is unavailable.
+- Fallback listeners now activate only after a short readiness timeout, reducing conflicts with the primary module.

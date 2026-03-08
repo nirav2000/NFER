@@ -1,5 +1,5 @@
-import { loadLibrary, setLibraryPath, getStoredLibraryPath, generateTestRandom, selectNextTest, getWeakDomains } from './generator.js?v=3.4.12';
-import { markTest, buildDiagnostic } from './diagnostics.js?v=3.4.12';
+import { loadLibrary, setLibraryPath, getStoredLibraryPath, generateTestRandom, selectNextTest, getWeakDomains } from './generator.js?v=3.4.13';
+import { markTest, buildDiagnostic } from './diagnostics.js?v=3.4.13';
 import {
   saveCurrentTest,
   getCurrentTest,
@@ -12,7 +12,7 @@ import {
   clearTestSession,
   getSettings,
   saveSettings
-} from './storage.js?v=3.4.12';
+} from './storage.js?v=3.4.13';
 import {
   renderDashboardMeta,
   renderTestMeta,
@@ -27,14 +27,15 @@ import {
   renderTracker,
   renderAttemptReview,
   renderFeedbackAssist
-} from './renderer.js?v=3.4.12';
-import { createInteractionRecorder, getStoredReplay, replayInteractions } from './replay.js?v=3.4.12';
-import { createFeedbackPrompt, openPromptInChatGPT, copyPrompt, requestFeedbackFromAPI } from './feedback.js?v=3.4.12';
+} from './renderer.js?v=3.4.13';
+import { createInteractionRecorder, getStoredReplay, replayInteractions } from './replay.js?v=3.4.13';
+import { createFeedbackPrompt, openPromptInChatGPT, copyPrompt, requestFeedbackFromAPI } from './feedback.js?v=3.4.13';
+import { getTestIdFromLocation, buildTestUrl, resolveTestById } from './testResolver.js?v=3.4.13';
 
 const TEST_DURATION_SECONDS = 35 * 60;
 const FEEDBACK_KEY_KEY = 'y4.openaiApiKey';
 const FEEDBACK_MODEL_KEY = 'y4.openaiModel';
-const APP_VERSION = 'v3.4.12';
+const APP_VERSION = 'v3.4.13';
 const THEME_KEY = 'y4.theme';
 const THEME_PATHS = {
   default: '',
@@ -320,7 +321,7 @@ async function startTestWithSelection(selectionFn, errorEl) {
     const test = selectionFn(library, history);
     if (!test) throw new Error('No test available in selected library');
     saveCurrentTest(test);
-    window.location.href = './test.html';
+    window.location.href = buildTestUrl(test.id);
   } catch (error) {
     errorEl.textContent = `Could not generate a test: ${error.message}`;
     reportRuntime('error', 'Start recommended test failed', error.message);
@@ -394,7 +395,7 @@ async function initDashboard() {
     try {
       const test = await generateTestRandom();
       saveCurrentTest(test);
-      window.location.href = './test.html';
+      window.location.href = buildTestUrl(test.id);
     } catch (error) {
       errorEl.textContent = `Could not generate a random test: ${error.message}`;
       reportRuntime('error', 'Random test generation failed', error.message);
@@ -403,13 +404,19 @@ async function initDashboard() {
 }
 
 async function resolveCurrentTestRecord(saved) {
+  const library = await loadLibrary();
+  const requestedId = getTestIdFromLocation();
+  if (requestedId) {
+    const matched = resolveTestById(library, requestedId);
+    if (matched) {
+      saveCurrentTest({ id: matched.id });
+      return matched;
+    }
+  }
+
   if (!saved) return null;
   if (saved && Array.isArray(saved.questions) && Array.isArray(saved.passages)) return saved;
-  if (saved && typeof saved.id === 'string') {
-    const library = await loadLibrary();
-    const tests = library.tests || [];
-    return tests.find((item) => item.id === saved.id) || null;
-  }
+  if (saved && typeof saved.id === 'string') return resolveTestById(library, saved.id);
   return null;
 }
 
