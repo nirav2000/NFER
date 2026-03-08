@@ -414,10 +414,11 @@ async function resolveCurrentTestRecord(saved) {
 }
 
 async function initTest() {
-
-  const test = getCurrentTest();
+  const saved = getCurrentTest();
+  const test = await resolveCurrentTestRecord(saved);
   if (!test) {
     document.getElementById('testMeta').innerHTML = '<h2>No test generated</h2><p>Go back to Dashboard and click Start Recommended Test.</p>';
+    reportRuntime('error', 'No test record found for test page load');
     return;
   }
 
