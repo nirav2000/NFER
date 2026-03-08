@@ -90,3 +90,8 @@ On **Diagnostic** and **Completed Attempt** pages, the app now generates a struc
 > Security note: because this is a static GitHub Pages app (no backend), any API key entered is client-side only and stored in browser LocalStorage for convenience. Use a restricted/rotatable key.
 
 This helps generate richer feedback while keeping the app itself fully static and client-side.
+
+## Versioning
+
+- App version is set in `js/app.js` (`APP_VERSION`) and displayed in every page footer.
+- For each push that changes behaviour/UI, patch version is incremented (e.g. `v3.4.1` → `v3.4.2`).

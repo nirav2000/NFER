@@ -34,7 +34,7 @@ import { createFeedbackPrompt, openPromptInChatGPT, copyPrompt, requestFeedbackF
 const TEST_DURATION_SECONDS = 35 * 60;
 const FEEDBACK_KEY_KEY = 'y4.openaiApiKey';
 const FEEDBACK_MODEL_KEY = 'y4.openaiModel';
-const APP_VERSION = 'v3.4.1';
+const APP_VERSION = 'v3.4.2';
 const THEME_KEY = 'y4.theme';
 const THEME_PATHS = {
   default: '',
