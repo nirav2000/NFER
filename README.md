@@ -27,7 +27,7 @@ It can also load compatible JSON files from `/data/` using the dashboard file se
   - `paper` (serif print feel)
   - `split` (alternate layout with side panel)
   - `arcade` (high-energy grid layout)
-  - `zen210` (layout-driven retro editorial style inspired by CSS Zen Garden principles)
+  - `zen210` (layout-driven retro editorial style inspired by CSS Zen Garden principles, scoped so test interactions remain stable)
 - Theme preference is saved to LocalStorage and applied instantly.
 - Settings panel includes (auto-applied and auto-saved):
   - passage font size
@@ -85,7 +85,7 @@ On **Diagnostic** and **Completed Attempt** pages, the app now generates a struc
 
 - `Copy prompt` copies the full JSON-oriented instruction prompt.
 - `Open in ChatGPT` opens ChatGPT with the prompt prefilled in the query URL.
-- Optional **Generate AI feedback in app** can call the OpenAI Responses API directly from the browser using your own API key.
+- Optional **Generate AI feedback in app** can call the OpenAI API directly from the browser using your own API key (Responses API with chat-completions fallback for compatibility).
 
 > Security note: because this is a static GitHub Pages app (no backend), any API key entered is client-side only and stored in browser LocalStorage for convenience. Use a restricted/rotatable key.
 

@@ -125,26 +125,51 @@ export async function requestFeedbackFromAPI({ apiKey, promptText, model = 'gpt-
   const key = cleanText(apiKey);
   if (!key) throw new Error('Missing API key');
 
-  const response = await fetch('https://api.openai.com/v1/responses', {
+  const headers = {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${key}`
+  };
+
+  const responsesAttempt = await fetch('https://api.openai.com/v1/responses', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${key}`
-    },
+    headers,
     body: JSON.stringify({
       model,
       input: promptText
     })
   });
 
-  if (!response.ok) {
-    const errText = await response.text();
-    throw new Error(`API request failed (${response.status}): ${errText.slice(0, 300)}`);
+  if (responsesAttempt.ok) {
+    const data = await responsesAttempt.json();
+    return {
+      raw: data,
+      text: extractResponseText(data)
+    };
   }
 
-  const data = await response.json();
+  // Fallback for keys/models that only support chat completions
+  const chatAttempt = await fetch('https://api.openai.com/v1/chat/completions', {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({
+      model,
+      messages: [
+        { role: 'system', content: 'Return the final feedback in valid JSON.' },
+        { role: 'user', content: promptText }
+      ]
+    })
+  });
+
+  if (!chatAttempt.ok) {
+    const errA = await responsesAttempt.text();
+    const errB = await chatAttempt.text();
+    throw new Error(`API failed (responses ${responsesAttempt.status}; chat ${chatAttempt.status}): ${(errB || errA).slice(0, 300)}`);
+  }
+
+  const chat = await chatAttempt.json();
+  const text = chat?.choices?.[0]?.message?.content || '';
   return {
-    raw: data,
-    text: extractResponseText(data)
+    raw: chat,
+    text: String(text).trim()
   };
 }

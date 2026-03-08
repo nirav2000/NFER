@@ -34,7 +34,7 @@ import { createFeedbackPrompt, openPromptInChatGPT, copyPrompt, requestFeedbackF
 const TEST_DURATION_SECONDS = 35 * 60;
 const FEEDBACK_KEY_KEY = 'y4.openaiApiKey';
 const FEEDBACK_MODEL_KEY = 'y4.openaiModel';
-const APP_VERSION = 'v3.4.0';
+const APP_VERSION = 'v3.4.1';
 const THEME_KEY = 'y4.theme';
 const THEME_PATHS = {
   default: '',
@@ -642,8 +642,14 @@ function bindFeedbackAssist(promptText) {
   const modelInput = document.getElementById('feedbackModelInput');
   const outputBox = document.getElementById('feedbackApiOutput');
 
-  if (apiKeyInput) apiKeyInput.value = localStorage.getItem(FEEDBACK_KEY_KEY) || '';
-  if (modelInput) modelInput.value = localStorage.getItem(FEEDBACK_MODEL_KEY) || modelInput.value || 'gpt-4.1-mini';
+  if (apiKeyInput) {
+    apiKeyInput.value = localStorage.getItem(FEEDBACK_KEY_KEY) || '';
+    apiKeyInput.addEventListener('input', () => localStorage.setItem(FEEDBACK_KEY_KEY, apiKeyInput.value.trim()));
+  }
+  if (modelInput) {
+    modelInput.value = localStorage.getItem(FEEDBACK_MODEL_KEY) || modelInput.value || 'gpt-4.1-mini';
+    modelInput.addEventListener('input', () => localStorage.setItem(FEEDBACK_MODEL_KEY, modelInput.value.trim()));
+  }
 
   if (copyBtn) {
     copyBtn.addEventListener('click', async () => {

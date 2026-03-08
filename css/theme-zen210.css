@@ -21,15 +21,24 @@ body{
   background:rgba(255,250,240,.96);
 }
 
-.container{
+body[data-page="dashboard"] .container,
+body[data-page="diagnostic"] .container,
+body[data-page="tracker"] .container,
+body[data-page="attempt"] .container{
   max-width:1200px;
   display:grid;
   grid-template-columns:1.2fr .8fr;
   gap:1rem;
 }
 
-.container > .card:first-child,
-.container > .card:last-child{
+body[data-page="dashboard"] .container > .card:first-child,
+body[data-page="dashboard"] .container > .card:last-child,
+body[data-page="diagnostic"] .container > .card:first-child,
+body[data-page="diagnostic"] .container > .card:last-child,
+body[data-page="tracker"] .container > .card:first-child,
+body[data-page="tracker"] .container > .card:last-child,
+body[data-page="attempt"] .container > .card:first-child,
+body[data-page="attempt"] .container > .card:last-child{
   grid-column:1/-1;
 }
 
@@ -40,8 +49,8 @@ body{
   background:var(--card);
 }
 
-#questionCard,
-#reviewCard,
+body[data-page="test"] #questionCard,
+body[data-page="test"] #reviewCard,
 #attemptRoot .card:last-child,
 #diagnosticRoot .card:last-child{
   grid-column:1/-1;
@@ -80,5 +89,8 @@ button:hover,.button-link.action-btn:hover{transform:translate(-1px,-1px)}
 .progress-fill{background:linear-gradient(90deg,#7b2f30,#cc8f46)}
 
 @media (max-width: 900px){
-  .container{display:block;max-width:980px}
+  body[data-page="dashboard"] .container,
+  body[data-page="diagnostic"] .container,
+  body[data-page="tracker"] .container,
+  body[data-page="attempt"] .container{display:block;max-width:980px}
 }
