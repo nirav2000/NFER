@@ -209,9 +209,22 @@ export function renderFeedbackAssist(root, promptText, heading = 'AI Feedback As
       <button type="button" id="copyFeedbackPromptBtn">Copy prompt</button>
       <button type="button" id="openFeedbackPromptBtn">Open in ChatGPT</button>
     </div>
+    <details>
+      <summary>Optional: get response directly in the app (bring your own API key)</summary>
+      <div class="feedback-api-grid">
+        <label for="feedbackApiKeyInput">OpenAI API key</label>
+        <input id="feedbackApiKeyInput" type="password" autocomplete="off" placeholder="sk-..." />
+        <label for="feedbackModelInput">Model</label>
+        <input id="feedbackModelInput" type="text" value="gpt-4.1-mini" autocomplete="off" />
+        <button type="button" id="runFeedbackApiBtn">Generate AI feedback in app</button>
+        <p class="muted">Key is stored only in your browser LocalStorage for convenience.</p>
+      </div>
+    </details>
     <label for="feedbackPromptBox">Prompt preview</label>
     <textarea id="feedbackPromptBox" rows="10" readonly></textarea>
     <p id="feedbackPromptStatus" class="muted"></p>
+    <label for="feedbackApiOutput">AI response</label>
+    <textarea id="feedbackApiOutput" rows="12" readonly placeholder="AI response will appear here after generation."></textarea>
   `;
 
   const box = wrapper.querySelector('#feedbackPromptBox');

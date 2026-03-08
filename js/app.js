@@ -29,9 +29,11 @@ import {
   renderFeedbackAssist
 } from './renderer.js';
 import { createInteractionRecorder, getStoredReplay, replayInteractions } from './replay.js';
-import { createFeedbackPrompt, openPromptInChatGPT, copyPrompt } from './feedback.js';
+import { createFeedbackPrompt, openPromptInChatGPT, copyPrompt, requestFeedbackFromAPI } from './feedback.js';
 
 const TEST_DURATION_SECONDS = 35 * 60;
+const FEEDBACK_KEY_KEY = 'y4.openaiApiKey';
+const FEEDBACK_MODEL_KEY = 'y4.openaiModel';
 const APP_VERSION = 'v3.4.0';
 const THEME_KEY = 'y4.theme';
 const THEME_PATHS = {
@@ -634,7 +636,14 @@ function initTest() {
 function bindFeedbackAssist(promptText) {
   const copyBtn = document.getElementById('copyFeedbackPromptBtn');
   const openBtn = document.getElementById('openFeedbackPromptBtn');
+  const runApiBtn = document.getElementById('runFeedbackApiBtn');
   const statusEl = document.getElementById('feedbackPromptStatus');
+  const apiKeyInput = document.getElementById('feedbackApiKeyInput');
+  const modelInput = document.getElementById('feedbackModelInput');
+  const outputBox = document.getElementById('feedbackApiOutput');
+
+  if (apiKeyInput) apiKeyInput.value = localStorage.getItem(FEEDBACK_KEY_KEY) || '';
+  if (modelInput) modelInput.value = localStorage.getItem(FEEDBACK_MODEL_KEY) || modelInput.value || 'gpt-4.1-mini';
 
   if (copyBtn) {
     copyBtn.addEventListener('click', async () => {
@@ -651,6 +660,33 @@ function bindFeedbackAssist(promptText) {
     openBtn.addEventListener('click', () => {
       openPromptInChatGPT(promptText);
       if (statusEl) statusEl.textContent = 'Opened ChatGPT in a new tab with the prompt.';
+    });
+  }
+
+  if (runApiBtn) {
+    runApiBtn.addEventListener('click', async () => {
+      const apiKey = apiKeyInput?.value?.trim() || '';
+      const model = modelInput?.value?.trim() || 'gpt-4.1-mini';
+      localStorage.setItem(FEEDBACK_KEY_KEY, apiKey);
+      localStorage.setItem(FEEDBACK_MODEL_KEY, model);
+
+      if (!apiKey) {
+        if (statusEl) statusEl.textContent = 'Please enter an API key first.';
+        return;
+      }
+
+      runApiBtn.disabled = true;
+      if (statusEl) statusEl.textContent = 'Requesting AI feedback...';
+
+      try {
+        const result = await requestFeedbackFromAPI({ apiKey, model, promptText });
+        if (outputBox) outputBox.value = result.text || JSON.stringify(result.raw, null, 2);
+        if (statusEl) statusEl.textContent = 'AI feedback generated successfully.';
+      } catch (error) {
+        if (statusEl) statusEl.textContent = `AI feedback failed: ${error.message}`;
+      } finally {
+        runApiBtn.disabled = false;
+      }
     });
   }
 }

@@ -59,6 +59,9 @@ th,td{border:1px solid var(--line);padding:.5rem;text-align:left;white-space:now
 
 #feedbackPromptBox{width:100%;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.9rem;line-height:1.45;background:#f8fafc}
 .feedback-tools{display:flex;gap:.6rem;flex-wrap:wrap}
+
+.feedback-api-grid{display:grid;gap:.5rem;margin:.6rem 0 .8rem}
+#feedbackApiOutput{width:100%;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.9rem;line-height:1.45;background:#f8fafc}
 #passage1,#passage2{font-size:calc(1rem * var(--passage-font-scale));line-height:1.8}
 .hide-marks .question-title::after{content:''}
 @media (max-width:700px){
