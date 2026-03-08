@@ -95,3 +95,9 @@ This helps generate richer feedback while keeping the app itself fully static an
 
 - App version is set in `js/app.js` (`APP_VERSION`) and displayed in every page footer.
 - For each push that changes behaviour/UI, patch version is incremented (e.g. `v3.4.1` → `v3.4.2`).
+
+
+## Cache busting
+
+- JS assets are versioned via query string (for example `app.js?v=3.4.4`).
+- When releasing a fix, increment `APP_VERSION` in `js/app.js` and update the script query versions in HTML/imports so browsers fetch the latest modules instead of stale cache.

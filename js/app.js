@@ -1,5 +1,5 @@
-import { loadLibrary, setLibraryPath, getStoredLibraryPath, generateTestRandom, selectNextTest, getWeakDomains } from './generator.js';
-import { markTest, buildDiagnostic } from './diagnostics.js';
+import { loadLibrary, setLibraryPath, getStoredLibraryPath, generateTestRandom, selectNextTest, getWeakDomains } from './generator.js?v=3.4.4';
+import { markTest, buildDiagnostic } from './diagnostics.js?v=3.4.4';
 import {
   saveCurrentTest,
   getCurrentTest,
@@ -12,7 +12,7 @@ import {
   clearTestSession,
   getSettings,
   saveSettings
-} from './storage.js';
+} from './storage.js?v=3.4.4';
 import {
   renderDashboardMeta,
   renderTestMeta,
@@ -27,14 +27,14 @@ import {
   renderTracker,
   renderAttemptReview,
   renderFeedbackAssist
-} from './renderer.js';
-import { createInteractionRecorder, getStoredReplay, replayInteractions } from './replay.js';
-import { createFeedbackPrompt, openPromptInChatGPT, copyPrompt, requestFeedbackFromAPI } from './feedback.js';
+} from './renderer.js?v=3.4.4';
+import { createInteractionRecorder, getStoredReplay, replayInteractions } from './replay.js?v=3.4.4';
+import { createFeedbackPrompt, openPromptInChatGPT, copyPrompt, requestFeedbackFromAPI } from './feedback.js?v=3.4.4';
 
 const TEST_DURATION_SECONDS = 35 * 60;
 const FEEDBACK_KEY_KEY = 'y4.openaiApiKey';
 const FEEDBACK_MODEL_KEY = 'y4.openaiModel';
-const APP_VERSION = 'v3.4.3';
+const APP_VERSION = 'v3.4.4';
 const THEME_KEY = 'y4.theme';
 const THEME_PATHS = {
   default: '',
