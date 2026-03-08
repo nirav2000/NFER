@@ -34,7 +34,7 @@ import { createFeedbackPrompt, openPromptInChatGPT, copyPrompt, requestFeedbackF
 const TEST_DURATION_SECONDS = 35 * 60;
 const FEEDBACK_KEY_KEY = 'y4.openaiApiKey';
 const FEEDBACK_MODEL_KEY = 'y4.openaiModel';
-const APP_VERSION = 'v3.4.2';
+const APP_VERSION = 'v3.4.3';
 const THEME_KEY = 'y4.theme';
 const THEME_PATHS = {
   default: '',
@@ -210,11 +210,22 @@ async function initDashboard() {
     await refreshDashboard();
     errorEl.textContent = '';
   } catch (error) {
-    document.getElementById('libraryMeta').textContent = 'Unable to load the reading test library.';
-    errorEl.textContent = `Error: ${error.message}`;
-    generateBtn.disabled = true;
-    randomBtn.disabled = true;
-    return;
+    // Recover from stale/custom invalid library path by resetting to default.
+    setLibraryPath('/data/year4_combined_50_test_library_v3.json');
+    libraryFileSelect.value = getStoredLibraryPath();
+    libraryPathInput.value = getStoredLibraryPath();
+    try {
+      await refreshDashboard();
+      errorEl.textContent = `Recovered from invalid library path. Reset to default file. (${error.message})`;
+      generateBtn.disabled = false;
+      randomBtn.disabled = false;
+    } catch (fallbackError) {
+      document.getElementById('libraryMeta').textContent = 'Unable to load the reading test library.';
+      errorEl.textContent = `Error: ${fallbackError.message}`;
+      generateBtn.disabled = true;
+      randomBtn.disabled = true;
+      return;
+    }
   }
 
   applyLibraryBtn.addEventListener('click', async () => {
@@ -746,11 +757,19 @@ function initAttempt() {
 }
 
 (async function bootstrap() {
-  initGlobalUI();
-  const page = currentPage();
-  if (page === 'dashboard') await initDashboard();
-  if (page === 'test') initTest();
-  if (page === 'diagnostic') initDiagnostic();
-  if (page === 'tracker') initTracker();
-  if (page === 'attempt') initAttempt();
+  try {
+    initGlobalUI();
+    const page = currentPage();
+    if (page === 'dashboard') await initDashboard();
+    if (page === 'test') initTest();
+    if (page === 'diagnostic') initDiagnostic();
+    if (page === 'tracker') initTracker();
+    if (page === 'attempt') initAttempt();
+  } catch (error) {
+    console.error('App bootstrap failed:', error);
+    const container = document.querySelector('.container');
+    if (container) {
+      container.insertAdjacentHTML('afterbegin', `<section class="card"><p class="error">App error: ${error.message}</p></section>`);
+    }
+  }
 })();

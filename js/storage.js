@@ -6,18 +6,42 @@ const KEYS = {
   settings: 'y4.settings'
 };
 
+function safeParse(raw, fallback) {
+  if (!raw) return fallback;
+  try {
+    return JSON.parse(raw);
+  } catch (_error) {
+    return fallback;
+  }
+}
+
+function safeGet(key, fallback) {
+  try {
+    return safeParse(localStorage.getItem(key), fallback);
+  } catch (_error) {
+    return fallback;
+  }
+}
+
+function safeSet(key, value) {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch (_error) {
+    // Ignore storage errors to avoid breaking button interactions.
+  }
+}
+
 export function saveCurrentTest(test) {
-  localStorage.setItem(KEYS.currentTest, JSON.stringify(test));
+  safeSet(KEYS.currentTest, test);
 }
 
 export function getCurrentTest() {
-  const raw = localStorage.getItem(KEYS.currentTest);
-  return raw ? JSON.parse(raw) : null;
+  return safeGet(KEYS.currentTest, null);
 }
 
 export function loadHistory() {
-  const raw = localStorage.getItem(KEYS.history);
-  return raw ? JSON.parse(raw) : [];
+  const history = safeGet(KEYS.history, []);
+  return Array.isArray(history) ? history : [];
 }
 
 export function getHistory() {
@@ -27,8 +51,8 @@ export function getHistory() {
 export function saveResult(result) {
   const history = loadHistory();
   history.push(result);
-  localStorage.setItem(KEYS.history, JSON.stringify(history));
-  localStorage.setItem(KEYS.lastDiagnostic, JSON.stringify(result));
+  safeSet(KEYS.history, history);
+  safeSet(KEYS.lastDiagnostic, result);
 }
 
 export function saveDiagnostic(diagRecord) {
@@ -36,14 +60,13 @@ export function saveDiagnostic(diagRecord) {
 }
 
 export function getLastDiagnostic() {
-  const raw = localStorage.getItem(KEYS.lastDiagnostic);
-  return raw ? JSON.parse(raw) : null;
+  return safeGet(KEYS.lastDiagnostic, null);
 }
 
 export function saveTestSession(testId, session) {
   const all = getAllTestSessions();
   all[testId] = session;
-  localStorage.setItem(KEYS.testSession, JSON.stringify(all));
+  safeSet(KEYS.testSession, all);
 }
 
 export function getTestSession(testId) {
@@ -54,12 +77,12 @@ export function getTestSession(testId) {
 export function clearTestSession(testId) {
   const all = getAllTestSessions();
   delete all[testId];
-  localStorage.setItem(KEYS.testSession, JSON.stringify(all));
+  safeSet(KEYS.testSession, all);
 }
 
 function getAllTestSessions() {
-  const raw = localStorage.getItem(KEYS.testSession);
-  return raw ? JSON.parse(raw) : {};
+  const sessions = safeGet(KEYS.testSession, {});
+  return sessions && typeof sessions === 'object' && !Array.isArray(sessions) ? sessions : {};
 }
 
 const DEFAULT_SETTINGS = {
@@ -70,10 +93,10 @@ const DEFAULT_SETTINGS = {
 };
 
 export function getSettings() {
-  const raw = localStorage.getItem(KEYS.settings);
-  return raw ? { ...DEFAULT_SETTINGS, ...JSON.parse(raw) } : { ...DEFAULT_SETTINGS };
+  const settings = safeGet(KEYS.settings, DEFAULT_SETTINGS);
+  return { ...DEFAULT_SETTINGS, ...(settings && typeof settings === 'object' ? settings : {}) };
 }
 
 export function saveSettings(settings) {
-  localStorage.setItem(KEYS.settings, JSON.stringify({ ...DEFAULT_SETTINGS, ...settings }));
+  safeSet(KEYS.settings, { ...DEFAULT_SETTINGS, ...settings });
 }
