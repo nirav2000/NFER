@@ -4,13 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Reading Journey</title>
-  <link rel="stylesheet" href="./css/styles.css?v=3.4.12" />
+  <link rel="stylesheet" href="./css/styles.css?v=3.4.13" />
   <link rel="stylesheet" href="" id="themeStylesheet" />
 </head>
 <body data-page="test">
   <header class="site-header">
     <div class="header-row">
-      <h1 id="sessionHeading" class="session-heading" role="button" tabindex="0" aria-expanded="false" aria-controls="testMeta">Reading Journey</h1>
+      <h1 id="sessionHeading" class="session-heading" role="button" tabindex="0" aria-expanded="false" aria-controls="testMetaCard">Reading Journey</h1>
       <div class="header-tools" aria-label="Test display options">
         <button type="button" id="toggleTimerProgressBtn" class="icon-btn" title="Toggle timer and progress" aria-pressed="true">🕒</button>
         <button type="button" id="toggleAllQuestionsBtn" class="icon-btn" title="Toggle show all questions" aria-pressed="false">📄</button>
@@ -56,7 +56,7 @@
   </aside>
 
   <main class="container">
-    <section class="card meta-card">
+    <section class="card meta-card" id="testMetaCard" hidden>
       <div id="testMeta" hidden></div>
     </section>
 
@@ -129,6 +129,6 @@
     </select>
   </footer>
 
-  <script type="module" src="./js/app.js?v=3.4.12"></script>
+  <script type="module" src="./js/app.js?v=3.4.13"></script>
 </body>
 </html>

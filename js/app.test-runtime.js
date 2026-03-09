@@ -1,4 +1,4 @@
-import { markTest, buildDiagnostic } from './diagnostics.js?v=3.4.12';
+import { markTest, buildDiagnostic } from './diagnostics.js?v=3.4.13';
 import {
   getCurrentTest,
   saveResult,
@@ -6,7 +6,7 @@ import {
   getTestSession,
   clearTestSession,
   getSettings
-} from './storage.js?v=3.4.12';
+} from './storage.js?v=3.4.13';
 import {
   renderTestMeta,
   renderQuestion,
@@ -16,15 +16,18 @@ import {
   renderProgress,
   renderTimer,
   toggleSchemes
-} from './renderer.js?v=3.4.12';
-import { mountInteractionReplay } from './interactionReplayModule.js?v=3.4.12';
+} from './renderer.js?v=3.4.13';
+import { mountInteractionReplay } from './interactionReplayModule.js?v=3.4.13';
 
 const TEST_DURATION_SECONDS = 35 * 60;
 
 export function initTestRuntime() {
   const test = getCurrentTest();
   if (!test) {
-    document.getElementById('testMeta').innerHTML = '<h2>No session ready</h2><p>Go back to Dashboard and click Start Recommended Session.</p>';
+    const meta = document.getElementById('testMeta');
+    const metaCard = document.getElementById('testMetaCard');
+    if (meta) meta.innerHTML = '<h2>No session ready</h2><p>Go back to Dashboard and click Start Recommended Session.</p>';
+    if (metaCard) metaCard.hidden = false;
     return;
   }
 
@@ -32,6 +35,7 @@ export function initTestRuntime() {
 
   const refs = {
     meta: document.getElementById('testMeta'),
+    metaCard: document.getElementById('testMetaCard'),
     passage1: document.getElementById('passage1'),
     passage2: document.getElementById('passage2'),
     form: document.getElementById('answersForm'),
@@ -100,10 +104,17 @@ export function initTestRuntime() {
   }
 
   if (refs.sessionHeading && refs.meta) {
+    const setMetaVisibility = (show) => {
+      refs.sessionHeading.setAttribute('aria-expanded', String(show));
+      refs.meta.hidden = !show;
+      if (refs.metaCard) refs.metaCard.hidden = !show;
+    };
+
+    setMetaVisibility(false);
+
     const toggleMeta = () => {
       const expanded = refs.sessionHeading.getAttribute('aria-expanded') === 'true';
-      refs.sessionHeading.setAttribute('aria-expanded', String(!expanded));
-      refs.meta.hidden = expanded;
+      setMetaVisibility(!expanded);
     };
 
     refs.sessionHeading.addEventListener('click', toggleMeta);
