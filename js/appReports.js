@@ -1,5 +1,5 @@
 export function bindFeedbackAssist(promptText, deps) {
-  const { copyPrompt, openPromptInChatGPT } = deps;
+  const { copyPrompt, openPromptInChatGPT, bindInAppFeedbackFn } = deps;
   const copyBtn = document.getElementById('copyFeedbackPromptBtn');
   const openBtn = document.getElementById('openFeedbackPromptBtn');
   const statusEl = document.getElementById('feedbackPromptStatus');
@@ -20,6 +20,10 @@ export function bindFeedbackAssist(promptText, deps) {
       openPromptInChatGPT(promptText);
       if (statusEl) statusEl.textContent = 'Opened ChatGPT in a new tab with the prompt.';
     });
+  }
+
+  if (typeof bindInAppFeedbackFn === 'function') {
+    bindInAppFeedbackFn(promptText, statusEl);
   }
 }
 

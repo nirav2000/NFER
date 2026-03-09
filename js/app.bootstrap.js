@@ -1,15 +1,17 @@
-import { loadLibrary, setLibraryPath, getStoredLibraryPath, generateTestRandom, selectNextTest, getWeakDomains } from './generator.js?v=3.4.5';
-import { getLastDiagnostic, loadHistory, saveCurrentTest, getHistory } from './storage.js?v=3.4.5';
-import { renderDashboardMeta, renderDiagnostic, renderTracker, renderAttemptReview, renderFeedbackAssist } from './renderer.js?v=3.4.5';
-import { createFeedbackPrompt, openPromptInChatGPT, copyPrompt } from './feedback.js?v=3.4.5';
-import { installRuntimeDiagnostics } from './runtimeDiagnostics.js?v=3.4.5';
-import { initGlobalUI, currentPage } from './app.global-ui.js?v=3.4.5';
-import { initDashboardPage } from './appDashboard.js?v=3.4.5';
-import { bindFeedbackAssist, initDiagnosticPage, initTrackerPage, initAttemptPage } from './appReports.js?v=3.4.5';
-import { initTestRuntime } from './app.test-runtime.js?v=3.4.5';
+import { loadLibrary, setLibraryPath, getStoredLibraryPath, generateTestRandom, selectNextTest, getWeakDomains } from './generator.js?v=3.4.6';
+import { getLastDiagnostic, loadHistory, saveCurrentTest, getHistory } from './storage.js?v=3.4.6';
+import { renderDashboardMeta, renderDiagnostic, renderTracker, renderAttemptReview, renderFeedbackAssist } from './renderer.js?v=3.4.6';
+import { createFeedbackPrompt, openPromptInChatGPT, copyPrompt } from './feedback.js?v=3.4.6';
+import { installRuntimeDiagnostics } from './runtimeDiagnostics.js?v=3.4.6';
+import { initGlobalUI, currentPage } from './app.global-ui.js?v=3.4.6';
+import { initDashboardPage } from './appDashboard.js?v=3.4.6';
+import { bindFeedbackAssist, initDiagnosticPage, initTrackerPage, initAttemptPage } from './appReports.js?v=3.4.6';
+import { initTestRuntime } from './app.test-runtime.js?v=3.4.6';
+import { createOpenAIFeedbackModule } from './feedbackOpenAI.js?v=3.4.6';
 
 export async function bootstrapApp() {
   const runtimeDiagnostics = installRuntimeDiagnostics();
+  const inAppFeedback = createOpenAIFeedbackModule({ enabledByDefault: false });
   try {
     initGlobalUI();
     const page = currentPage();
@@ -31,7 +33,11 @@ export async function bootstrapApp() {
       renderDiagnostic,
       createFeedbackPrompt,
       renderFeedbackAssist,
-      bindFeedbackAssistFn: (prompt) => bindFeedbackAssist(prompt, { copyPrompt, openPromptInChatGPT })
+      bindFeedbackAssistFn: (prompt) => bindFeedbackAssist(prompt, {
+        copyPrompt,
+        openPromptInChatGPT,
+        bindInAppFeedbackFn: (promptText, statusEl) => inAppFeedback.bind(promptText, statusEl)
+      })
     });
     if (page === 'tracker') initTrackerPage({ renderTracker, getHistory });
     if (page === 'attempt') initAttemptPage({
@@ -39,7 +45,11 @@ export async function bootstrapApp() {
       renderAttemptReview,
       createFeedbackPrompt,
       renderFeedbackAssist,
-      bindFeedbackAssistFn: (prompt) => bindFeedbackAssist(prompt, { copyPrompt, openPromptInChatGPT })
+      bindFeedbackAssistFn: (prompt) => bindFeedbackAssist(prompt, {
+        copyPrompt,
+        openPromptInChatGPT,
+        bindInAppFeedbackFn: (promptText, statusEl) => inAppFeedback.bind(promptText, statusEl)
+      })
     });
     runtimeDiagnostics.report('info', 'Bootstrap complete');
   } catch (error) {

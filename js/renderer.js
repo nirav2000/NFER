@@ -211,6 +211,20 @@ export function renderFeedbackAssist(root, promptText, heading = 'AI Feedback As
     </div>
     <label for="feedbackPromptBox">Prompt preview</label>
     <textarea id="feedbackPromptBox" rows="10" readonly></textarea>
+    <details class="in-app-feedback">
+      <summary>Optional in-app OpenAI feedback (experimental)</summary>
+      <p class="muted">This module is isolated and can be disabled at any time. If it fails, standard prompt copy/open tools still work.</p>
+      <label class="toggle"><input id="openAIFeedbackToggle" type="checkbox" /> Enable in-app OpenAI feedback</label>
+      <div id="inAppFeedbackControls" class="feedback-tools" hidden>
+        <input id="openAIApiKeyInput" type="password" placeholder="OpenAI API key (stored in this browser only)" autocomplete="off" />
+        <button type="button" id="saveOpenAIApiKeyBtn">Save key</button>
+        <button type="button" id="generateInAppFeedbackBtn">Generate in app</button>
+      </div>
+      <div id="inAppFeedbackOutputWrap" hidden>
+        <label for="inAppFeedbackOutput">In-app feedback output</label>
+        <pre id="inAppFeedbackOutput"></pre>
+      </div>
+    </details>
     <p id="feedbackPromptStatus" class="muted"></p>
   `;
 
