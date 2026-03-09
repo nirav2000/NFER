@@ -67,6 +67,26 @@ Each completed test record includes fields such as:
 - `answers`
 - `testSnapshot`
 
+
+## Schema compatibility (legacy + v6 trial)
+
+The app now normalises both schemas at load time:
+
+- Legacy library format (`{ tests: [...] }`)
+- New v6 single-passage schema (`structure.units[]`)
+- Single unit JSON root objects (for quick trial files)
+
+Adapter module: `js/schemaAdapter.js`
+
+Mapping reference for future schema work:
+
+- `data/schema_key_mapping_v6_to_legacy.json`
+
+Trial data files:
+
+- `/data/year4_unit_001_gold_standard.json`
+- `/data/year4_single_passage_schema_v6.json`
+
 ## Run locally
 
 ```bash

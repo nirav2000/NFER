@@ -1,14 +1,14 @@
-import { getSettings, saveSettings } from './storage.js?v=3.4.13';
+import { getSettings, saveSettings } from './storage.js?v=3.4.14';
 
-const APP_VERSION = 'v3.4.13';
+const APP_VERSION = 'v3.4.14';
 const THEME_KEY = 'y4.theme';
 const THEME_PATHS = {
   default: '',
-  ocean: './css/theme-ocean.css?v=3.4.13',
-  paper: './css/theme-paper.css?v=3.4.13',
-  split: './css/theme-split.css?v=3.4.13',
-  arcade: './css/theme-arcade.css?v=3.4.13',
-  zen210: './css/theme-zen210.css?v=3.4.13'
+  ocean: './css/theme-ocean.css?v=3.4.14',
+  paper: './css/theme-paper.css?v=3.4.14',
+  split: './css/theme-split.css?v=3.4.14',
+  arcade: './css/theme-arcade.css?v=3.4.14',
+  zen210: './css/theme-zen210.css?v=3.4.14'
 };
 
 function currentPage() {

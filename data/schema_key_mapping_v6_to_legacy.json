@@ -1,0 +1,38 @@
+{
+  "library": {
+    "legacy.tests[]": "v6.structure.units[] OR single unit root",
+    "legacy.version": "v6.version",
+    "legacy.yearGroup": "v6.yearGroup (or default 4)",
+    "legacy.libraryTitle": "v6.libraryTitle (or 'Single Unit Import')"
+  },
+  "test": {
+    "legacy.id": "unit.unitId",
+    "legacy.title": "unit.title",
+    "legacy.week": "unit.week",
+    "legacy.sequence": "unit.unitNumber",
+    "legacy.difficulty": "unit.difficulty",
+    "legacy.totalMarks": "unit.totalCoreMarks",
+    "legacy.questionCount": "unit.coreQuestions.length",
+    "legacy.topicsCovered": "[unit.topic, unit.subtopic]",
+    "legacy.domainsCovered": "unique(unit.coreQuestions[].domain)",
+    "legacy.passageGenres": "[unit.genre]",
+    "legacy.passages[0].text": "unit.passage.text",
+    "legacy.passages[1].text": "static placeholder for single-passage mode"
+  },
+  "question": {
+    "legacy.id": "question.questionId",
+    "legacy.questionNumber": "question.questionNumber",
+    "legacy.passageId": "'P1'",
+    "legacy.domain": "question.domain",
+    "legacy.questionType": "question.questionType (mcq | short-answer)",
+    "legacy.marks": "question.marks",
+    "legacy.difficulty": "question.difficulty",
+    "legacy.stem": "question.stem",
+    "legacy.options": "question.options (mcq only)",
+    "legacy.acceptedAnswers": "question.acceptedAnswers OR [question.correctAnswer]",
+    "legacy.modelAnswerGold": "question.modelAnswerGold",
+    "legacy.modelAnswerSilver": "question.modelAnswerSilver",
+    "legacy.markingNotes": "flatten(question.markScheme)",
+    "legacy.requiresManualReview": "question.requiresManualReview"
+  }
+}

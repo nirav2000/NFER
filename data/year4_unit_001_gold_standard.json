@@ -1,0 +1,144 @@
+{
+  "unitId": "Y4_U001",
+  "unitNumber": 1,
+  "week": 1,
+  "title": "The Last Boat In",
+  "genre": "fiction",
+  "topic": "mystery",
+  "subtopic": "harbour",
+  "difficulty": 3,
+  "wordCount": 345,
+  "estimatedTimeMinutes": 20,
+  "totalCoreMarks": 12,
+  "editorialStatus": "reviewed",
+
+  "passage": {
+    "passageId": "Y4_U001_P1",
+    "passageNumber": 1,
+    "text": "The harbour was quieter than usual that evening. Noah stood on the wooden pier watching the last fishing boat move slowly toward the shore. The water was calm, but the sky above the harbour had turned a dull grey. Usually the harbour was full of voices and clattering ropes, yet tonight the only sound was the creak of the pier beneath his feet."
+  },
+
+  "coreQuestions": [
+
+    {
+      "questionId": "Y4_U001_Q01",
+      "questionNumber": 1,
+      "displayLabel": "Q1",
+      "section": "core",
+      "passageId": "Y4_U001_P1",
+      "domain": "retrieval",
+      "fineSkillTag": "locating stated information",
+      "questionType": "mcq",
+      "difficulty": 2,
+      "marks": 1,
+      "stem": "Where is Noah standing at the beginning of the story?",
+      "options": [
+        "on the wooden pier",
+        "inside a lighthouse",
+        "on the fishing boat",
+        "at the village market"
+      ],
+      "correctAnswer": "on the wooden pier",
+      "acceptedAnswers": ["on the wooden pier"],
+      "markScheme": {
+        "1": "Award 1 mark for 'on the wooden pier'."
+      },
+      "modelAnswerGold": null,
+      "modelAnswerSilver": null,
+      "commonWrongAnswer": "on the fishing boat",
+      "whyWrong": "Noah watches the boat from the pier; he is not on the boat."
+    },
+
+    {
+      "questionId": "Y4_U001_Q02",
+      "questionNumber": 2,
+      "displayLabel": "Q2",
+      "section": "core",
+      "passageId": "Y4_U001_P1",
+      "domain": "vocabulary",
+      "fineSkillTag": "word meaning in context",
+      "questionType": "mcq",
+      "difficulty": 2,
+      "marks": 1,
+      "stem": "What does the word 'creak' suggest about the pier?",
+      "options": [
+        "It makes a soft wooden sound.",
+        "It is completely silent.",
+        "It moves quickly in the wind.",
+        "It is made of metal."
+      ],
+      "correctAnswer": "It makes a soft wooden sound.",
+      "acceptedAnswers": ["It makes a soft wooden sound."],
+      "markScheme": {
+        "1": "Award 1 mark for identifying the wooden sound."
+      }
+    },
+
+    {
+      "questionId": "Y4_U001_Q03",
+      "questionNumber": 3,
+      "displayLabel": "Q3",
+      "section": "core",
+      "passageId": "Y4_U001_P1",
+      "domain": "inference",
+      "fineSkillTag": "atmosphere",
+      "questionType": "short-answer",
+      "difficulty": 3,
+      "marks": 2,
+      "stem": "How can you tell that the harbour feels unusually quiet?",
+      "options": [],
+      "correctAnswer": null,
+      "acceptedAnswers": [
+        "The passage says there are no voices and only the creak of the pier can be heard."
+      ],
+      "markScheme": {
+        "2": "Award 2 marks for identifying the quiet atmosphere with evidence.",
+        "1": "Award 1 mark for identifying the quiet atmosphere without evidence."
+      },
+      "modelAnswerGold": "The harbour feels unusually quiet because the usual sounds of voices and ropes are missing, leaving only the creaking pier.",
+      "modelAnswerSilver": "It is quiet because there are no voices."
+    }
+
+  ],
+
+  "additionalQuestionBank": [
+
+    {
+      "questionId": "Y4_U001_A01",
+      "questionNumber": 8,
+      "displayLabel": "Extra Q1",
+      "section": "additional",
+      "passageId": "Y4_U001_P1",
+      "domain": "inference",
+      "fineSkillTag": "character feelings",
+      "questionType": "short-answer",
+      "difficulty": 3,
+      "marks": 2,
+      "stem": "What might Noah be thinking as he watches the last boat arrive?",
+      "options": [],
+      "correctAnswer": null,
+      "acceptedAnswers": [
+        "He might be wondering why the harbour is so quiet or waiting for something unusual to happen."
+      ],
+      "markScheme": {
+        "2": "Award 2 marks for a plausible inference linked to the atmosphere.",
+        "1": "Award 1 mark for a plausible but unsupported inference."
+      }
+    }
+
+  ],
+
+  "teacherNotes": {
+    "mainFocus": "inference from atmosphere and setting",
+    "commonMisconceptions": [
+      "choosing answers not supported by the passage",
+      "describing the setting without linking to the question"
+    ]
+  },
+
+  "diagnosticHooks": {
+    "recommendedExtraIfWeak": {
+      "inference": ["Y4_U001_A01"]
+    }
+  }
+}

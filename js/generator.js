@@ -1,3 +1,4 @@
+import { normaliseLibrarySchema } from './schemaAdapter.js?v=3.4.14';
 const DEFAULT_LIBRARY_PATH = '/data/year4_combined_50_test_library_v3.json';
 const LIBRARY_PATH_KEY = 'y4.libraryPath';
 
@@ -53,7 +54,7 @@ export async function loadLibrary() {
 
   for (const url of candidates) {
     try {
-      libraryCache = await fetchLibrary(url);
+      libraryCache = normaliseLibrarySchema(await fetchLibrary(url));
       return libraryCache;
     } catch (error) {
       lastError = error;

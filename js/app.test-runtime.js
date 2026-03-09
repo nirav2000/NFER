@@ -1,4 +1,4 @@
-import { markTest, buildDiagnostic } from './diagnostics.js?v=3.4.13';
+import { markTest, buildDiagnostic } from './diagnostics.js?v=3.4.14';
 import {
   getCurrentTest,
   saveResult,
@@ -6,7 +6,7 @@ import {
   getTestSession,
   clearTestSession,
   getSettings
-} from './storage.js?v=3.4.13';
+} from './storage.js?v=3.4.14';
 import {
   renderTestMeta,
   renderQuestion,
@@ -16,8 +16,8 @@ import {
   renderProgress,
   renderTimer,
   toggleSchemes
-} from './renderer.js?v=3.4.13';
-import { mountInteractionReplay } from './interactionReplayModule.js?v=3.4.13';
+} from './renderer.js?v=3.4.14';
+import { mountInteractionReplay } from './interactionReplayModule.js?v=3.4.14';
 
 const TEST_DURATION_SECONDS = 35 * 60;
 
