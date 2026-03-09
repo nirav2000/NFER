@@ -1,25 +1,28 @@
-const REPLAY_KEY = 'y4.interactionReplay';
+const DEFAULT_REPLAY_KEY = 'y4.interactionReplay';
 
-export function createInteractionRecorder() {
+export function createInteractionRecorder({ storageKey = DEFAULT_REPLAY_KEY } = {}) {
   const state = {
     recording: false,
     startedAt: 0,
-    events: []
+    events: [],
+    meta: {}
   };
 
   return {
-    start() {
+    start(meta = {}) {
       state.recording = true;
       state.startedAt = Date.now();
       state.events = [];
+      state.meta = { ...meta };
     },
     stop() {
       state.recording = false;
       const payload = {
         createdAt: new Date().toISOString(),
+        meta: { ...state.meta },
         events: [...state.events]
       };
-      localStorage.setItem(REPLAY_KEY, JSON.stringify(payload));
+      localStorage.setItem(storageKey, JSON.stringify(payload));
       return payload;
     },
     log(type, payload = {}) {
@@ -36,9 +39,13 @@ export function createInteractionRecorder() {
   };
 }
 
-export function getStoredReplay() {
-  const raw = localStorage.getItem(REPLAY_KEY);
+export function getStoredReplay(storageKey = DEFAULT_REPLAY_KEY) {
+  const raw = localStorage.getItem(storageKey);
   return raw ? JSON.parse(raw) : null;
+}
+
+export function clearStoredReplay(storageKey = DEFAULT_REPLAY_KEY) {
+  localStorage.removeItem(storageKey);
 }
 
 export async function replayInteractions(recording, handlers, speed = 1) {

@@ -1,4 +1,4 @@
-import { markTest, buildDiagnostic } from './diagnostics.js?v=3.4.6';
+import { markTest, buildDiagnostic } from './diagnostics.js?v=3.4.7';
 import {
   getCurrentTest,
   saveResult,
@@ -6,7 +6,7 @@ import {
   getTestSession,
   clearTestSession,
   getSettings
-} from './storage.js?v=3.4.6';
+} from './storage.js?v=3.4.7';
 import {
   renderTestMeta,
   renderQuestion,
@@ -16,8 +16,8 @@ import {
   renderProgress,
   renderTimer,
   toggleSchemes
-} from './renderer.js?v=3.4.6';
-import { createInteractionRecorder, getStoredReplay, replayInteractions } from './replay.js?v=3.4.6';
+} from './renderer.js?v=3.4.7';
+import { mountInteractionReplay } from './interactionReplayModule.js?v=3.4.7';
 
 const TEST_DURATION_SECONDS = 35 * 60;
 
@@ -42,7 +42,6 @@ export function initTestRuntime() {
   }
 
   let settings = getSettings();
-  const recorder = createInteractionRecorder();
 
   const refs = {
     meta: document.getElementById('testMeta'),
@@ -210,16 +209,15 @@ export function initTestRuntime() {
       testSnapshot: test
     };
 
-    if (recorder.isRecording()) {
-      recorder.stop();
-      refs.recordingStatus.textContent = 'Recording auto-saved on submit.';
+    if (interactionReplay.isRecording()) {
+      interactionReplay.stop('Recording auto-saved on submit.');
     }
     clearTestSession(test.id);
     saveResult(result);
     window.location.href = './diagnostic.html';
   };
 
-  const recordAction = (type, payload = {}) => recorder.log(type, { ...payload, scrollY: window.scrollY });
+  const recordAction = (type, payload = {}) => interactionReplay.record(type, payload);
 
   refs.prevBtn.addEventListener('click', () => {
     persistCurrentAnswer();
@@ -307,101 +305,59 @@ export function initTestRuntime() {
   });
 
 
-  window.addEventListener('scroll', () => {
-    if (recorder.isRecording()) {
-      recordAction('scroll', { y: window.scrollY });
-    }
-  }, { passive: true });
-
-  const recordingToggleBtn = document.getElementById('recordingToggleBtn');
-  const replayBtn = document.getElementById('replayBtn');
-  const replaySpeed = document.getElementById('replaySpeed');
-
-  let frameCaptureTimer = null;
-  const startFrameCapture = () => {
-    if (frameCaptureTimer) clearInterval(frameCaptureTimer);
-    frameCaptureTimer = setInterval(() => {
-      if (!recorder.isRecording()) return;
-      const remaining = Math.max(0, Math.round((state.deadline - Date.now()) / 1000));
-      recordAction('frame', {
-        currentIndex: state.currentIndex,
-        showAllQuestions: state.showAllQuestions,
-        showTimerProgress: state.showTimerProgress,
-        showScheme: state.showScheme,
-        answers: state.answers,
-        remaining,
-        scrollY: window.scrollY
-      });
-    }, 1000);
-  };
-
-  if (recordingToggleBtn) {
-    recordingToggleBtn.addEventListener('click', () => {
-      if (recorder.isRecording()) {
-        recorder.stop();
-        if (frameCaptureTimer) clearInterval(frameCaptureTimer);
-        refs.recordingStatus.textContent = 'Recording saved.';
-        recordingToggleBtn.textContent = 'Start Interaction Recording';
-      } else {
-        recorder.start();
-        recordAction('recordingStart', { startedAt: Date.now(), deadline: state.deadline });
-        startFrameCapture();
-        refs.recordingStatus.textContent = 'Recording in progress...';
-        recordingToggleBtn.textContent = 'Stop Interaction Recording';
+  const interactionReplay = mountInteractionReplay({
+    refs: {
+      recordingStatusEl: refs.recordingStatus,
+      recordingToggleBtn: document.getElementById('recordingToggleBtn'),
+      replayBtn: document.getElementById('replayBtn'),
+      replaySpeedEl: document.getElementById('replaySpeed')
+    },
+    getSnapshot: () => ({
+      currentIndex: state.currentIndex,
+      showAllQuestions: state.showAllQuestions,
+      showTimerProgress: state.showTimerProgress,
+      showScheme: state.showScheme,
+      answers: state.answers,
+      remaining: Math.max(0, Math.round((state.deadline - Date.now()) / 1000))
+    }),
+    applySnapshot: (p) => {
+      state.currentIndex = Number.isFinite(p.currentIndex) ? p.currentIndex : state.currentIndex;
+      state.showAllQuestions = Boolean(p.showAllQuestions);
+      state.showTimerProgress = Boolean(p.showTimerProgress);
+      state.showScheme = Boolean(p.showScheme);
+      state.answers = p.answers || state.answers;
+      if (typeof p.scrollY === 'number') window.scrollTo(0, p.scrollY);
+      if (typeof p.remaining === 'number') {
+        state.deadline = Date.now() + (p.remaining * 1000);
+        renderTimer(refs.timerText, p.remaining);
       }
-    });
-  }
-
-  if (replayBtn) {
-    replayBtn.addEventListener('click', async () => {
-      const recording = getStoredReplay();
-      if (!recording) {
-        refs.recordingStatus.textContent = 'No recording found to replay.';
-        return;
-      }
-
+      refs.schemeToggle.checked = state.showScheme;
+      refreshQuestionView();
+    },
+    actionHandlers: {
+      input: (p) => {
+        if (p.answers) state.answers = p.answers;
+        if (Number.isFinite(p.currentIndex)) state.currentIndex = p.currentIndex;
+        refreshQuestionView();
+      },
+      prev: () => refs.prevBtn.click(),
+      next: () => refs.nextBtn.click(),
+      skip: () => refs.skipBtn.click(),
+      review: () => refs.reviewBtn.click(),
+      scheme: (p) => {
+        refs.schemeToggle.checked = Boolean(p.value);
+        refs.schemeToggle.dispatchEvent(new Event('change'));
+      },
+      timerToggle: () => refs.toggleTimerProgressBtn.click(),
+      allQuestionsToggle: () => refs.toggleAllQuestionsBtn.click()
+    },
+    onReplayStart: () => {
       state.replayMode = true;
-      refs.recordingStatus.textContent = 'Replay in progress...';
-
-      await replayInteractions(recording, {
-        frame: (p) => {
-          state.currentIndex = Number.isFinite(p.currentIndex) ? p.currentIndex : state.currentIndex;
-          state.showAllQuestions = Boolean(p.showAllQuestions);
-          state.showTimerProgress = Boolean(p.showTimerProgress);
-          state.showScheme = Boolean(p.showScheme);
-          state.answers = p.answers || state.answers;
-          if (typeof p.scrollY === 'number') window.scrollTo(0, p.scrollY);
-          if (typeof p.remaining === 'number') {
-            state.deadline = Date.now() + (p.remaining * 1000);
-            renderTimer(refs.timerText, p.remaining);
-          }
-          refs.schemeToggle.checked = state.showScheme;
-          refreshQuestionView();
-        },
-        scroll: (p) => {
-          if (typeof p.y === 'number') window.scrollTo(0, p.y);
-        },
-        input: (p) => {
-          if (p.answers) state.answers = p.answers;
-          if (Number.isFinite(p.currentIndex)) state.currentIndex = p.currentIndex;
-          refreshQuestionView();
-        },
-        prev: () => refs.prevBtn.click(),
-        next: () => refs.nextBtn.click(),
-        skip: () => refs.skipBtn.click(),
-        review: () => refs.reviewBtn.click(),
-        scheme: (p) => {
-          refs.schemeToggle.checked = Boolean(p.value);
-          refs.schemeToggle.dispatchEvent(new Event('change'));
-        },
-        timerToggle: () => refs.toggleTimerProgressBtn.click(),
-        allQuestionsToggle: () => refs.toggleAllQuestionsBtn.click()
-      }, Number(replaySpeed?.value || 1));
-
+    },
+    onReplayEnd: () => {
       state.replayMode = false;
-      refs.recordingStatus.textContent = 'Replay complete.';
-    });
-  }
+    }
+  });
 
   const timer = setInterval(() => {
     if (state.replayMode) return;

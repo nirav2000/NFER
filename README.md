@@ -101,3 +101,6 @@ This helps generate richer feedback while keeping the app itself fully static an
 - Boot orchestration is now in `js/app.bootstrap.js`, with dedicated modules: `js/app.global-ui.js`, `js/app.dashboard.js`, `js/app.test-runtime.js`, `js/app.diagnostic.js`, `js/app.tracker.js`, `js/app.attempt.js`.
 
 - Optional in-app OpenAI feedback generation is isolated in `js/feedbackOpenAI.js` and gated by an explicit toggle in the feedback card so it can be disabled without affecting core app flow.
+
+- Interaction recording/replay orchestration is now packaged in reusable module `js/interactionReplayModule.js`, built on generic recorder primitives in `js/replay.js`.
+
