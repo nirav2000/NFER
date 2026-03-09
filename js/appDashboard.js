@@ -84,6 +84,34 @@ export async function initDashboardPage(deps) {
     }
   };
 
+
+  const applySelectedPath = async () => {
+    const selectedPath = libraryPathInput.value.trim() || libraryFileSelect.value;
+    const existing = new Set(Array.from(libraryFileSelect.options).map((opt) => opt.value));
+    if (selectedPath && !existing.has(selectedPath)) {
+      const option = document.createElement('option');
+      option.value = selectedPath;
+      option.textContent = `Custom: ${selectedPath.split('/').pop()}`;
+      libraryFileSelect.appendChild(option);
+    }
+    if (selectedPath) libraryFileSelect.value = selectedPath;
+
+    setLibraryPath(selectedPath);
+    if (schemaScanStatus) schemaScanStatus.textContent = `Loading ${selectedPath}…`;
+    try {
+      await refreshDashboard();
+      errorEl.textContent = '';
+      generateBtn.disabled = false;
+      randomBtn.disabled = false;
+      if (schemaScanStatus) schemaScanStatus.textContent = `Loaded: ${selectedPath}`;
+    } catch (error) {
+      errorEl.textContent = `Error: ${error.message}`;
+      generateBtn.disabled = true;
+      randomBtn.disabled = true;
+      if (schemaScanStatus) schemaScanStatus.textContent = `Failed: ${selectedPath}`;
+    }
+  };
+
   const autoScanFiles = async () => {
     if (!schemaScanStatus) return;
     schemaScanStatus.textContent = 'Scanning data files…';
@@ -133,6 +161,10 @@ export async function initDashboardPage(deps) {
   libraryFileSelect.value = getStoredLibraryPath();
   libraryPathInput.value = getStoredLibraryPath();
 
+  libraryFileSelect.addEventListener('change', () => {
+    libraryPathInput.value = libraryFileSelect.value;
+  });
+
   try {
     await refreshDashboard();
     errorEl.textContent = '';
@@ -144,21 +176,9 @@ export async function initDashboardPage(deps) {
   }
 
   if (autoScanBtn) autoScanBtn.addEventListener('click', autoScanFiles);
+  await autoScanFiles();
 
-  applyLibraryBtn.addEventListener('click', async () => {
-    const selectedPath = libraryPathInput.value.trim() || libraryFileSelect.value;
-    setLibraryPath(selectedPath);
-    try {
-      await refreshDashboard();
-      errorEl.textContent = '';
-      generateBtn.disabled = false;
-      randomBtn.disabled = false;
-    } catch (error) {
-      errorEl.textContent = `Error: ${error.message}`;
-      generateBtn.disabled = true;
-      randomBtn.disabled = true;
-    }
-  });
+  applyLibraryBtn.addEventListener('click', applySelectedPath);
 
   generateBtn.addEventListener('click', async () => {
     await startTestWithSelection((library, history) => selectNextTest(library, history));

@@ -1,14 +1,14 @@
-import { loadLibrary, setLibraryPath, getStoredLibraryPath, generateTestRandom, selectNextTest, getWeakDomains } from './generator.js?v=3.4.15';
-import { getLastDiagnostic, loadHistory, saveCurrentTest, getHistory } from './storage.js?v=3.4.15';
-import { renderDashboardMeta, renderDiagnostic, renderTracker, renderAttemptReview, renderFeedbackAssist } from './renderer.js?v=3.4.15';
-import { createFeedbackPrompt, openPromptInChatGPT, copyPrompt } from './feedback.js?v=3.4.15';
-import { installRuntimeDiagnostics } from './runtimeDiagnostics.js?v=3.4.15';
-import { initGlobalUI, currentPage } from './app.global-ui.js?v=3.4.15';
-import { initDashboardPage } from './appDashboard.js?v=3.4.15';
-import { bindFeedbackAssist, initDiagnosticPage, initTrackerPage, initAttemptPage } from './appReports.js?v=3.4.15';
-import { initTestRuntime } from './app.test-runtime.js?v=3.4.15';
-import { createOpenAIFeedbackModule } from './feedbackOpenAI.js?v=3.4.15';
-import { inspectLibraryCompatibility } from './schemaAdapter.js?v=3.4.15';
+import { loadLibrary, setLibraryPath, getStoredLibraryPath, generateTestRandom, selectNextTest, getWeakDomains } from './generator.js?v=3.4.16';
+import { getLastDiagnostic, loadHistory, saveCurrentTest, getHistory } from './storage.js?v=3.4.16';
+import { renderDashboardMeta, renderDiagnostic, renderTracker, renderAttemptReview, renderFeedbackAssist } from './renderer.js?v=3.4.16';
+import { createFeedbackPrompt, openPromptInChatGPT, copyPrompt } from './feedback.js?v=3.4.16';
+import { installRuntimeDiagnostics } from './runtimeDiagnostics.js?v=3.4.16';
+import { initGlobalUI, currentPage } from './app.global-ui.js?v=3.4.16';
+import { initDashboardPage } from './appDashboard.js?v=3.4.16';
+import { bindFeedbackAssist, initDiagnosticPage, initTrackerPage, initAttemptPage } from './appReports.js?v=3.4.16';
+import { initTestRuntime } from './app.test-runtime.js?v=3.4.16';
+import { createOpenAIFeedbackModule } from './feedbackOpenAI.js?v=3.4.16';
+import { inspectLibraryCompatibility } from './schemaAdapter.js?v=3.4.16';
 
 export async function bootstrapApp() {
   const runtimeDiagnostics = installRuntimeDiagnostics();
