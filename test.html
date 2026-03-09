@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Generated Test</title>
-  <link rel="stylesheet" href="./css/styles.css?v=3.4.8" />
+  <link rel="stylesheet" href="./css/styles.css?v=3.4.9" />
   <link rel="stylesheet" href="" id="themeStylesheet" />
 </head>
 <body data-page="test">
@@ -42,8 +42,15 @@
         <option value="8">8x</option>
       </select>
     </div>
-    <button type="button" id="replayBtn">Replay Last Recording</button>
-    <p class="muted">Replay reproduces navigation, inputs, scroll, and recorded timer states.</p>
+    <div class="row-between">
+      <label for="replaySelect">Recording</label>
+      <select id="replaySelect"></select>
+    </div>
+    <div class="actions">
+      <button type="button" id="replayRefreshBtn">Refresh list</button>
+      <button type="button" id="replayBtn">Replay Selected Recording</button>
+    </div>
+    <p class="muted">Replay reproduces navigation, text input pacing, cursor movement, scroll, and recorded timer states.</p>
     <p id="recordingStatus" class="muted">No recording in progress.</p>
   </aside>
 
@@ -96,6 +103,15 @@
     </section>
   </main>
 
+
+
+  <div id="replayControlBar" class="replay-control-bar" hidden>
+    <button type="button" id="replayStopBtn">Stop</button>
+    <button type="button" id="replayPlayPauseBtn">Pause</button>
+    <button type="button" id="replayStepBackBtn">Step Back</button>
+    <button type="button" id="replayStepForwardBtn">Step Forward</button>
+  </div>
+
   <footer class="site-footer">
     <p id="versionInfo">Version</p>
     <label for="themeSelect">Style</label>
@@ -109,6 +125,6 @@
     </select>
   </footer>
 
-  <script type="module" src="./js/app.js?v=3.4.8"></script>
+  <script type="module" src="./js/app.js?v=3.4.9"></script>
 </body>
 </html>

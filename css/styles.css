@@ -84,3 +84,10 @@ th,td{border:1px solid var(--line);padding:.5rem;text-align:left;white-space:now
 .runtime-diagnostics-panel pre{white-space:pre-wrap;background:#020617;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:.6rem;max-height:260px;overflow:auto}
 .runtime-diagnostics-head{display:flex;justify-content:space-between;align-items:center;gap:.6rem}
 .runtime-diagnostics-head .icon-btn{width:1.8rem;height:1.8rem}
+
+.replay-control-bar{position:fixed;left:50%;transform:translateX(-50%);bottom:3.8rem;z-index:35;background:#0b1220;color:#fff;border:1px solid #334155;border-radius:10px;padding:.45rem;display:flex;gap:.45rem;box-shadow:0 10px 20px rgba(0,0,0,.25)}
+.replay-control-bar button{background:#1e293b;padding:.45rem .7rem}
+.replay-pop{animation:replay-pop .22s ease}
+@keyframes replay-pop{0%{transform:scale(1)}50%{transform:scale(1.18)}100%{transform:scale(1)}}
+#replayCursor{position:fixed;left:0;top:0;width:14px;height:14px;border-radius:50%;background:#ef4444;border:2px solid #fff;z-index:50;pointer-events:none;box-shadow:0 0 0 2px rgba(239,68,68,.3)}
+body.replay-active #settingsPanel, body.replay-active #settingsToggleBtn{display:none!important}

@@ -7,40 +7,38 @@ function openReplayDb() {
     const request = indexedDB.open(IDB_NAME, 1);
     request.onupgradeneeded = () => {
       const db = request.result;
-      if (!db.objectStoreNames.contains(IDB_STORE)) {
-        db.createObjectStore(IDB_STORE, { keyPath: 'key' });
-      }
+      if (!db.objectStoreNames.contains(IDB_STORE)) db.createObjectStore(IDB_STORE, { keyPath: 'key' });
     };
     request.onsuccess = () => resolve(request.result);
     request.onerror = () => reject(request.error);
   });
 }
 
-function saveReplayToIndexedDb(storageKey, payload) {
+function saveReplayToIndexedDb(key, payload) {
   return openReplayDb().then((db) => new Promise((resolve, reject) => {
     const tx = db.transaction(IDB_STORE, 'readwrite');
-    tx.objectStore(IDB_STORE).put({ key: storageKey, payload, savedAt: Date.now() });
+    tx.objectStore(IDB_STORE).put({ key, payload, savedAt: Date.now() });
     tx.oncomplete = () => resolve(true);
     tx.onerror = () => reject(tx.error);
   })).catch(() => false);
 }
 
-function loadReplayFromIndexedDb(storageKey) {
+function loadReplayFromIndexedDb(key) {
   return openReplayDb().then((db) => new Promise((resolve, reject) => {
     const tx = db.transaction(IDB_STORE, 'readonly');
-    const req = tx.objectStore(IDB_STORE).get(storageKey);
+    const req = tx.objectStore(IDB_STORE).get(key);
     req.onsuccess = () => resolve(req.result?.payload || null);
     req.onerror = () => reject(req.error);
   })).catch(() => null);
 }
 
-function clearReplayFromIndexedDb(storageKey) {
-  return openReplayDb().then((db) => new Promise((resolve, reject) => {
-    const tx = db.transaction(IDB_STORE, 'readwrite');
-    tx.objectStore(IDB_STORE).delete(storageKey);
-    tx.oncomplete = () => resolve(true);
-    tx.onerror = () => reject(tx.error);
-  })).catch(() => false);
+const indexKey = (storageKey) => `${storageKey}:index`;
+
+function addReplayIndex(storageKey, entry) {
+  const raw = localStorage.getItem(indexKey(storageKey));
+  const list = raw ? JSON.parse(raw) : [];
+  list.unshift(entry);
+  localStorage.setItem(indexKey(storageKey), JSON.stringify(list.slice(0, 20)));
 }
 
 function buildAnswerDelta(prevAnswers, nextAnswers = {}) {
@@ -55,51 +53,39 @@ function buildAnswerDelta(prevAnswers, nextAnswers = {}) {
 }
 
 function compressEvents(events = []) {
-  const compressed = [];
   let previousAnswers = {};
-
-  events.forEach((event) => {
+  return events.map((event) => {
     const next = { ...event, payload: { ...(event.payload || {}) } };
-
     if ((event.type === 'frame' || event.type === 'input') && event.payload?.answers && typeof event.payload.answers === 'object') {
       const delta = buildAnswerDelta(previousAnswers, event.payload.answers);
       next.payload.answerDelta = delta;
       delete next.payload.answers;
       previousAnswers = { ...previousAnswers, ...delta };
     }
-
-    compressed.push(next);
+    return next;
   });
-
-  return compressed;
 }
 
 function decompressEvents(events = []) {
-  const expanded = [];
   let previousAnswers = {};
-
-  events.forEach((event) => {
+  return events.map((event) => {
     const next = { ...event, payload: { ...(event.payload || {}) } };
-
     if ((event.type === 'frame' || event.type === 'input') && next.payload?.answerDelta && typeof next.payload.answerDelta === 'object') {
       previousAnswers = { ...previousAnswers, ...next.payload.answerDelta };
       next.payload.answers = { ...previousAnswers };
       delete next.payload.answerDelta;
     }
-
-    expanded.push(next);
+    return next;
   });
+}
 
-  return expanded;
+function persistPayload(key, payload) {
+  try { localStorage.setItem(key, JSON.stringify(payload)); } catch (_error) {}
+  void saveReplayToIndexedDb(key, payload);
 }
 
 export function createInteractionRecorder({ storageKey = DEFAULT_REPLAY_KEY } = {}) {
-  const state = {
-    recording: false,
-    startedAt: 0,
-    events: [],
-    meta: {}
-  };
+  const state = { recording: false, startedAt: 0, events: [], meta: {} };
 
   return {
     start(meta = {}) {
@@ -116,21 +102,15 @@ export function createInteractionRecorder({ storageKey = DEFAULT_REPLAY_KEY } = 
         events: compressEvents(state.events)
       };
 
-      try {
-        localStorage.setItem(storageKey, JSON.stringify(payload));
-      } catch (_error) {
-        // Fall back to IndexedDB for larger recordings.
-      }
-      void saveReplayToIndexedDb(storageKey, payload);
-      return payload;
+      const replayId = `${storageKey}:${Date.now()}`;
+      persistPayload(storageKey, payload);      // latest
+      persistPayload(replayId, payload);        // archive item
+      addReplayIndex(storageKey, { id: replayId, createdAt: payload.createdAt, eventCount: payload.events.length });
+      return { ...payload, replayId };
     },
     log(type, payload = {}) {
       if (!state.recording) return;
-      state.events.push({
-        t: Date.now() - state.startedAt,
-        type,
-        payload
-      });
+      state.events.push({ t: Date.now() - state.startedAt, type, payload });
     },
     isRecording() {
       return state.recording;
@@ -138,47 +118,38 @@ export function createInteractionRecorder({ storageKey = DEFAULT_REPLAY_KEY } = 
   };
 }
 
+export function getReplayIndex(storageKey = DEFAULT_REPLAY_KEY) {
+  const raw = localStorage.getItem(indexKey(storageKey));
+  return raw ? JSON.parse(raw) : [];
+}
+
 export async function getStoredReplay(storageKey = DEFAULT_REPLAY_KEY) {
   const raw = localStorage.getItem(storageKey);
-  if (raw) {
-    const payload = JSON.parse(raw);
-    return {
-      ...payload,
-      events: payload?.meta?.compressed ? decompressEvents(payload.events) : (payload.events || [])
-    };
-  }
-
-  const fromDb = await loadReplayFromIndexedDb(storageKey);
-  if (!fromDb) return null;
-
-  return {
-    ...fromDb,
-    events: fromDb?.meta?.compressed ? decompressEvents(fromDb.events) : (fromDb.events || [])
-  };
+  const payload = raw ? JSON.parse(raw) : await loadReplayFromIndexedDb(storageKey);
+  if (!payload) return null;
+  return { ...payload, events: payload?.meta?.compressed ? decompressEvents(payload.events) : (payload.events || []) };
 }
 
-export async function clearStoredReplay(storageKey = DEFAULT_REPLAY_KEY) {
-  localStorage.removeItem(storageKey);
-  await clearReplayFromIndexedDb(storageKey);
-}
-
-export async function replayInteractions(recording, handlers, speed = 1) {
+export async function replayInteractions(recording, handlers, speed = 1, controls = {}) {
   if (!recording || !Array.isArray(recording.events) || !recording.events.length) return;
-
   const safeSpeed = Math.max(0.25, Number(speed) || 1);
   let lastT = 0;
 
   for (let index = 0; index < recording.events.length; index += 1) {
+    if (controls.isStopped?.()) break;
+
+    while (controls.isPaused?.() && !controls.isStopped?.()) {
+      if (controls.consumeStep?.()) break;
+      await new Promise((r) => setTimeout(r, 40));
+    }
+
     const event = recording.events[index];
     const wait = Math.max(0, (event.t - lastT) / safeSpeed);
     lastT = event.t;
-    if (wait) {
-      await new Promise((resolve) => setTimeout(resolve, wait));
-    }
+    if (wait) await new Promise((resolve) => setTimeout(resolve, wait));
 
     const handler = handlers[event.type];
-    if (handler) {
-      handler(event.payload, { waitMs: wait, index, total: recording.events.length, event });
-    }
+    if (handler) handler(event.payload, { waitMs: wait, index, total: recording.events.length, event });
+    controls.onEventApplied?.(event, index);
   }
 }

@@ -1,4 +1,4 @@
-import { markTest, buildDiagnostic } from './diagnostics.js?v=3.4.8';
+import { markTest, buildDiagnostic } from './diagnostics.js?v=3.4.9';
 import {
   getCurrentTest,
   saveResult,
@@ -6,7 +6,7 @@ import {
   getTestSession,
   clearTestSession,
   getSettings
-} from './storage.js?v=3.4.8';
+} from './storage.js?v=3.4.9';
 import {
   renderTestMeta,
   renderQuestion,
@@ -16,8 +16,8 @@ import {
   renderProgress,
   renderTimer,
   toggleSchemes
-} from './renderer.js?v=3.4.8';
-import { mountInteractionReplay } from './interactionReplayModule.js?v=3.4.8';
+} from './renderer.js?v=3.4.9';
+import { mountInteractionReplay } from './interactionReplayModule.js?v=3.4.9';
 
 const TEST_DURATION_SECONDS = 35 * 60;
 
@@ -313,7 +313,14 @@ export function initTestRuntime() {
       recordingStatusEl: refs.recordingStatus,
       recordingToggleBtn: document.getElementById('recordingToggleBtn'),
       replayBtn: document.getElementById('replayBtn'),
-      replaySpeedEl: document.getElementById('replaySpeed')
+      replaySpeedEl: document.getElementById('replaySpeed'),
+      replaySelectEl: document.getElementById('replaySelect'),
+      replayRefreshBtn: document.getElementById('replayRefreshBtn'),
+      replayControlBarEl: document.getElementById('replayControlBar'),
+      replayPlayPauseBtn: document.getElementById('replayPlayPauseBtn'),
+      replayStopBtn: document.getElementById('replayStopBtn'),
+      replayStepBackBtn: document.getElementById('replayStepBackBtn'),
+      replayStepForwardBtn: document.getElementById('replayStepForwardBtn')
     },
     getSnapshot: () => ({
       currentIndex: state.currentIndex,
