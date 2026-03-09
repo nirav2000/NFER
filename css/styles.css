@@ -73,10 +73,3 @@ th,td{border:1px solid var(--line);padding:.5rem;text-align:left;white-space:now
   .settings-panel{left:1rem;right:1rem;width:auto}
 }
 @media print{nav,.actions,.toggle,button,.button-link,.timer-card,.site-footer,.header-tools,.settings-panel{display:none!important}.card{box-shadow:none}}
-
-
-.footer-diagnostics-btn{background:#0f172a;color:#fff;padding:.42rem .65rem;font-size:.85rem;border-radius:8px}
-.runtime-diagnostics-panel{position:fixed;right:1rem;bottom:3.6rem;z-index:30;background:#0b1220;color:#dbeafe;border:1px solid #334155;border-radius:12px;padding:.7rem .8rem;width:min(560px,calc(100vw - 2rem));max-height:45vh;overflow:auto;box-shadow:0 12px 28px rgba(0,0,0,.28)}
-.runtime-diagnostics-panel pre{white-space:pre-wrap;background:#020617;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:.6rem;max-height:260px;overflow:auto}
-.runtime-diagnostics-head{display:flex;justify-content:space-between;align-items:center;gap:.6rem}
-.runtime-diagnostics-head .icon-btn{width:1.8rem;height:1.8rem}

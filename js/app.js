@@ -1,5 +1,5 @@
-import { loadLibrary, setLibraryPath, getStoredLibraryPath, generateTestRandom, selectNextTest, getWeakDomains } from './generator.js?v=3.4.2';
-import { markTest, buildDiagnostic } from './diagnostics.js?v=3.4.2';
+import { loadLibrary, setLibraryPath, getStoredLibraryPath, generateTestRandom, selectNextTest, getWeakDomains } from './generator.js?v=3.4.1';
+import { markTest, buildDiagnostic } from './diagnostics.js?v=3.4.1';
 import {
   saveCurrentTest,
   getCurrentTest,
@@ -12,7 +12,7 @@ import {
   clearTestSession,
   getSettings,
   saveSettings
-} from './storage.js?v=3.4.2';
+} from './storage.js?v=3.4.1';
 import {
   renderDashboardMeta,
   renderTestMeta,
@@ -27,76 +27,21 @@ import {
   renderTracker,
   renderAttemptReview,
   renderFeedbackAssist
-} from './renderer.js?v=3.4.2';
-import { createInteractionRecorder, getStoredReplay, replayInteractions } from './replay.js?v=3.4.2';
-import { createFeedbackPrompt, openPromptInChatGPT, copyPrompt } from './feedback.js?v=3.4.2';
+} from './renderer.js?v=3.4.1';
+import { createInteractionRecorder, getStoredReplay, replayInteractions } from './replay.js?v=3.4.1';
+import { createFeedbackPrompt, openPromptInChatGPT, copyPrompt } from './feedback.js?v=3.4.1';
 
 const TEST_DURATION_SECONDS = 35 * 60;
-const APP_VERSION = 'v3.4.2';
+const APP_VERSION = 'v3.4.1';
 const THEME_KEY = 'y4.theme';
 const THEME_PATHS = {
   default: '',
-  ocean: './css/theme-ocean.css?v=3.4.2',
-  paper: './css/theme-paper.css?v=3.4.2',
-  split: './css/theme-split.css?v=3.4.2',
-  arcade: './css/theme-arcade.css?v=3.4.2',
-  zen210: './css/theme-zen210.css?v=3.4.2'
+  ocean: './css/theme-ocean.css?v=3.4.1',
+  paper: './css/theme-paper.css?v=3.4.1',
+  split: './css/theme-split.css?v=3.4.1',
+  arcade: './css/theme-arcade.css?v=3.4.1',
+  zen210: './css/theme-zen210.css?v=3.4.1'
 };
-
-
-const RUNTIME_LOG_LIMIT = 80;
-const runtimeLogs = [];
-
-function reportRuntime(level, message, detail = '') {
-  const entry = {
-    time: new Date().toISOString(),
-    level,
-    message,
-    detail: detail ? String(detail) : ''
-  };
-  runtimeLogs.push(entry);
-  if (runtimeLogs.length > RUNTIME_LOG_LIMIT) runtimeLogs.shift();
-
-  const output = document.getElementById('runtimeDiagnosticsOutput');
-  if (output) {
-    output.textContent = runtimeLogs.map((item) => `[${item.time}] ${item.level.toUpperCase()} ${item.message}${item.detail ? ` :: ${item.detail}` : ''}`).join('
-');
-  }
-}
-
-function installRuntimeDiagnosticsFooter() {
-  const footer = document.querySelector('.site-footer');
-  if (!footer || document.getElementById('runtimeDiagnosticsToggleBtn')) return;
-
-  const toggle = document.createElement('button');
-  toggle.type = 'button';
-  toggle.id = 'runtimeDiagnosticsToggleBtn';
-  toggle.className = 'footer-diagnostics-btn';
-  toggle.textContent = 'Diagnostics';
-
-  const panel = document.createElement('section');
-  panel.id = 'runtimeDiagnosticsPanel';
-  panel.className = 'runtime-diagnostics-panel';
-  panel.hidden = true;
-  panel.innerHTML = `
-    <div class="runtime-diagnostics-head">
-      <strong>Runtime diagnostics</strong>
-      <button type="button" id="runtimeDiagnosticsCloseBtn" class="icon-btn" aria-label="Close diagnostics">✕</button>
-    </div>
-    <p class="muted">Recent client-side errors and warnings.</p>
-    <pre id="runtimeDiagnosticsOutput">No runtime errors captured.</pre>
-  `;
-
-  const closeBtn = panel.querySelector('#runtimeDiagnosticsCloseBtn');
-  const setOpen = (open) => { panel.hidden = !open; };
-
-  toggle.addEventListener('click', () => setOpen(panel.hidden));
-  if (closeBtn) closeBtn.addEventListener('click', () => setOpen(false));
-
-  footer.insertBefore(toggle, footer.querySelector('#versionInfo')?.nextSibling || footer.firstChild);
-  footer.parentElement.appendChild(panel);
-}
-
 
 function currentPage() {
   return document.body.dataset.page;
@@ -138,7 +83,6 @@ function applySettingsToPage(settings) {
 function initGlobalUI() {
   const versionInfo = document.getElementById('versionInfo');
   if (versionInfo) versionInfo.textContent = `NFER Reading Builder ${APP_VERSION}`;
-  installRuntimeDiagnosticsFooter();
 
   const selectedTheme = localStorage.getItem(THEME_KEY) || 'default';
   applyTheme(selectedTheme);
@@ -760,28 +704,11 @@ function initAttempt() {
 }
 
 (async function bootstrap() {
-  window.addEventListener('error', (event) => {
-    reportRuntime('error', event.message || 'Unhandled error', event.error?.stack || '');
-  });
-  window.addEventListener('unhandledrejection', (event) => {
-    reportRuntime('error', 'Unhandled promise rejection', event.reason?.message || String(event.reason || 'Unknown rejection'));
-  });
-
-  try {
-    initGlobalUI();
-    const page = currentPage();
-    reportRuntime('info', `Bootstrap start on ${page} page`);
-    if (page === 'dashboard') await initDashboard();
-    if (page === 'test') initTest();
-    if (page === 'diagnostic') initDiagnostic();
-    if (page === 'tracker') initTracker();
-    if (page === 'attempt') initAttempt();
-    reportRuntime('info', 'Bootstrap complete');
-  } catch (error) {
-    reportRuntime('error', 'App bootstrap failed', error?.message || error);
-    const container = document.querySelector('.container');
-    if (container) {
-      container.insertAdjacentHTML('afterbegin', `<section class="card"><p class="error">App error: ${error?.message || error}</p></section>`);
-    }
-  }
+  initGlobalUI();
+  const page = currentPage();
+  if (page === 'dashboard') await initDashboard();
+  if (page === 'test') initTest();
+  if (page === 'diagnostic') initDiagnostic();
+  if (page === 'tracker') initTracker();
+  if (page === 'attempt') initAttempt();
 })();
