@@ -1,0 +1,67 @@
+{
+  "version": "6.0",
+  "yearGroup": 4,
+  "libraryTitle": "Year 4 Single Passage Reading Assessment Bank",
+  "description": "Curated editorial reading comprehension units designed for UK primary reading assessment style.",
+  "structure": {
+    "units": [
+      {
+        "unitId": "string",
+        "unitNumber": "number",
+        "week": "number",
+        "title": "string",
+        "genre": "fiction | nonfiction",
+        "topic": "string",
+        "subtopic": "string",
+        "difficulty": "1-5",
+        "wordCount": "number",
+        "estimatedTimeMinutes": "number",
+        "totalCoreMarks": "number",
+        "editorialStatus": "draft | reviewed | approved",
+        "passage": {
+          "passageId": "string",
+          "passageNumber": "1",
+          "text": "string"
+        },
+        "coreQuestions": [
+          {
+            "questionId": "string",
+            "questionNumber": "number",
+            "displayLabel": "string",
+            "section": "core",
+            "passageId": "string",
+            "domain": "retrieval | vocabulary | inference | structure | authorIntent",
+            "fineSkillTag": "string",
+            "questionType": "mcq | short-answer",
+            "difficulty": "1-5",
+            "marks": "number",
+            "stem": "string",
+            "options": [],
+            "correctAnswer": "string",
+            "acceptedAnswers": [],
+            "markScheme": {},
+            "modelAnswerGold": "string",
+            "modelAnswerSilver": "string",
+            "commonWrongAnswer": "string",
+            "whyWrong": "string",
+            "requiresManualReview": false
+          }
+        ],
+        "additionalQuestionBank": [],
+        "teacherNotes": {
+          "mainFocus": "string",
+          "commonMisconceptions": []
+        },
+        "diagnosticHooks": {
+          "recommendedExtraIfWeak": {
+            "retrieval": [],
+            "vocabulary": [],
+            "inference": [],
+            "structure": [],
+            "authorIntent": []
+          }
+        }
+      }
+    ]
+  }
+}
