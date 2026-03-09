@@ -1,5 +1,5 @@
-import { loadLibrary, setLibraryPath, getStoredLibraryPath, generateTestRandom, selectNextTest, getWeakDomains } from './generator.js?v=3.4.3';
-import { markTest, buildDiagnostic } from './diagnostics.js?v=3.4.3';
+import { loadLibrary, setLibraryPath, getStoredLibraryPath, generateTestRandom, selectNextTest, getWeakDomains } from './generator.js?v=3.4.4';
+import { markTest, buildDiagnostic } from './diagnostics.js?v=3.4.4';
 import {
   saveCurrentTest,
   getCurrentTest,
@@ -12,7 +12,7 @@ import {
   clearTestSession,
   getSettings,
   saveSettings
-} from './storage.js?v=3.4.3';
+} from './storage.js?v=3.4.4';
 import {
   renderDashboardMeta,
   renderTestMeta,
@@ -27,21 +27,23 @@ import {
   renderTracker,
   renderAttemptReview,
   renderFeedbackAssist
-} from './renderer.js?v=3.4.3';
-import { createInteractionRecorder, getStoredReplay, replayInteractions } from './replay.js?v=3.4.3';
-import { createFeedbackPrompt, openPromptInChatGPT, copyPrompt } from './feedback.js?v=3.4.3';
-import { installRuntimeDiagnostics } from './runtimeDiagnostics.js?v=3.4.3';
+} from './renderer.js?v=3.4.4';
+import { createInteractionRecorder, getStoredReplay, replayInteractions } from './replay.js?v=3.4.4';
+import { createFeedbackPrompt, openPromptInChatGPT, copyPrompt } from './feedback.js?v=3.4.4';
+import { installRuntimeDiagnostics } from './runtimeDiagnostics.js?v=3.4.4';
+import { initDashboardPage } from './appDashboard.js?v=3.4.4';
+import { bindFeedbackAssist, initDiagnosticPage, initTrackerPage, initAttemptPage } from './appReports.js?v=3.4.4';
 
 const TEST_DURATION_SECONDS = 35 * 60;
-const APP_VERSION = 'v3.4.3';
+const APP_VERSION = 'v3.4.4';
 const THEME_KEY = 'y4.theme';
 const THEME_PATHS = {
   default: '',
-  ocean: './css/theme-ocean.css?v=3.4.3',
-  paper: './css/theme-paper.css?v=3.4.3',
-  split: './css/theme-split.css?v=3.4.3',
-  arcade: './css/theme-arcade.css?v=3.4.3',
-  zen210: './css/theme-zen210.css?v=3.4.3'
+  ocean: './css/theme-ocean.css?v=3.4.4',
+  paper: './css/theme-paper.css?v=3.4.4',
+  split: './css/theme-split.css?v=3.4.4',
+  arcade: './css/theme-arcade.css?v=3.4.4',
+  zen210: './css/theme-zen210.css?v=3.4.4'
 };
 
 function currentPage() {
@@ -149,101 +151,6 @@ function initGlobalUI() {
   if (saveSettingsBtn) {
     saveSettingsBtn.addEventListener('click', () => syncSettings());
   }
-}
-
-function renderDashboardInsights(library, history, recommendedTest) {
-  const recommendedEl = document.getElementById('recommendedMeta');
-  const recentEl = document.getElementById('recentScores');
-  const weakEl = document.getElementById('weakDomains');
-
-  if (recommendedTest) {
-    recommendedEl.textContent = `${recommendedTest.id} · Week ${recommendedTest.week || '—'} · Difficulty ${recommendedTest.difficulty || 3} · Topics: ${(recommendedTest.topicsCovered || []).join(', ') || 'general reading'} · Domains: ${(recommendedTest.domainsCovered || []).join(', ') || 'mixed'}`;
-  } else {
-    recommendedEl.textContent = 'No recommendation available.';
-  }
-
-  if (history.length) {
-    recentEl.textContent = history.slice(-5).map((item) => `${item.testId}: ${item.percentage}%`).join(' · ');
-  } else {
-    recentEl.textContent = 'No attempts yet.';
-  }
-
-  const weakDomains = getWeakDomains(history);
-  weakEl.textContent = weakDomains.length ? weakDomains.join(', ') : 'No weak domains identified yet.';
-
-  renderDashboardMeta(document.getElementById('libraryMeta'), library);
-}
-
-async function startTestWithSelection(selectionFn, errorEl) {
-  try {
-    const library = await loadLibrary();
-    const history = loadHistory();
-    const test = selectionFn(library, history);
-    if (!test) throw new Error('No test available in selected library');
-    saveCurrentTest(test);
-    window.location.href = './test.html';
-  } catch (error) {
-    errorEl.textContent = `Could not generate a test: ${error.message}`;
-  }
-}
-
-async function refreshDashboard() {
-  const library = await loadLibrary();
-  const history = loadHistory();
-  const recommended = selectNextTest(library, history);
-  renderDashboardInsights(library, history, recommended);
-}
-
-async function initDashboard() {
-  const errorEl = document.getElementById('dashboardError');
-  const generateBtn = document.getElementById('generateBtn');
-  const randomBtn = document.getElementById('randomBtn');
-  const applyLibraryBtn = document.getElementById('applyLibraryBtn');
-  const libraryFileSelect = document.getElementById('libraryFile');
-  const libraryPathInput = document.getElementById('libraryPathInput');
-
-  libraryFileSelect.value = getStoredLibraryPath();
-  libraryPathInput.value = getStoredLibraryPath();
-
-  try {
-    await refreshDashboard();
-    errorEl.textContent = '';
-  } catch (error) {
-    document.getElementById('libraryMeta').textContent = 'Unable to load the reading test library.';
-    errorEl.textContent = `Error: ${error.message}`;
-    generateBtn.disabled = true;
-    randomBtn.disabled = true;
-    return;
-  }
-
-  applyLibraryBtn.addEventListener('click', async () => {
-    const selectedPath = libraryPathInput.value.trim() || libraryFileSelect.value;
-    setLibraryPath(selectedPath);
-    try {
-      await refreshDashboard();
-      errorEl.textContent = '';
-      generateBtn.disabled = false;
-      randomBtn.disabled = false;
-    } catch (error) {
-      errorEl.textContent = `Error: ${error.message}`;
-      generateBtn.disabled = true;
-      randomBtn.disabled = true;
-    }
-  });
-
-  generateBtn.addEventListener('click', async () => {
-    await startTestWithSelection((library, history) => selectNextTest(library, history), errorEl);
-  });
-
-  randomBtn.addEventListener('click', async () => {
-    try {
-      const test = await generateTestRandom();
-      saveCurrentTest(test);
-      window.location.href = './test.html';
-    } catch (error) {
-      errorEl.textContent = `Could not generate a random test: ${error.message}`;
-    }
-  });
 }
 
 function initTest() {
@@ -632,89 +539,39 @@ function initTest() {
 }
 
 
-function bindFeedbackAssist(promptText) {
-  const copyBtn = document.getElementById('copyFeedbackPromptBtn');
-  const openBtn = document.getElementById('openFeedbackPromptBtn');
-  const statusEl = document.getElementById('feedbackPromptStatus');
-
-  if (copyBtn) {
-    copyBtn.addEventListener('click', async () => {
-      try {
-        await copyPrompt(promptText);
-        if (statusEl) statusEl.textContent = 'Prompt copied. Paste it into ChatGPT.';
-      } catch (_error) {
-        if (statusEl) statusEl.textContent = 'Could not copy automatically. Select and copy the prompt manually.';
-      }
-    });
-  }
-
-  if (openBtn) {
-    openBtn.addEventListener('click', () => {
-      openPromptInChatGPT(promptText);
-      if (statusEl) statusEl.textContent = 'Opened ChatGPT in a new tab with the prompt.';
-    });
-  }
-}
-
-function initDiagnostic() {
-  const last = getLastDiagnostic();
-  const root = document.getElementById('diagnosticRoot');
-  if (!last) {
-    root.innerHTML = '<section class="card"><p>No diagnostic available yet.</p></section>';
-    return;
-  }
-  renderDiagnostic(root, last, last);
-  const prompt = createFeedbackPrompt({
-    test: last.testSnapshot,
-    result: last,
-    answers: last.answers
-  });
-  renderFeedbackAssist(root, prompt, 'AI Feedback Assist (Diagnostic)');
-  bindFeedbackAssist(prompt);
-}
-
-function initTracker() {
-  renderTracker(
-    document.getElementById('historyBody'),
-    document.getElementById('trend'),
-    document.getElementById('difficultyTrend'),
-    getHistory()
-  );
-}
-
-function initAttempt() {
-  const history = getHistory();
-  const params = new URLSearchParams(window.location.search);
-  const idx = Number(params.get('i'));
-  const attempt = Number.isInteger(idx) ? history[idx] : null;
-  const root = document.getElementById('attemptRoot');
-
-  if (!attempt) {
-    root.innerHTML = '<section class="card"><p>Attempt not found.</p></section>';
-    return;
-  }
-
-  renderAttemptReview(root, attempt);
-  const prompt = createFeedbackPrompt({
-    test: attempt.testSnapshot,
-    result: attempt,
-    answers: attempt.answers
-  });
-  renderFeedbackAssist(root, prompt, 'AI Feedback Assist (Completed Attempt)');
-  bindFeedbackAssist(prompt);
-}
-
 (async function bootstrap() {
   const runtimeDiagnostics = installRuntimeDiagnostics();
   try {
     initGlobalUI();
     const page = currentPage();
     runtimeDiagnostics.report('info', `Bootstrap start on ${page} page`);
-    if (page === 'dashboard') await initDashboard();
+    if (page === 'dashboard') await initDashboardPage({
+      loadLibrary,
+      setLibraryPath,
+      getStoredLibraryPath,
+      generateTestRandom,
+      selectNextTest,
+      loadHistory,
+      saveCurrentTest,
+      getWeakDomains,
+      renderDashboardMeta
+    });
     if (page === 'test') initTest();
-    if (page === 'diagnostic') initDiagnostic();
-    if (page === 'tracker') initTracker();
-    if (page === 'attempt') initAttempt();
+    if (page === 'diagnostic') initDiagnosticPage({
+      getLastDiagnostic,
+      renderDiagnostic,
+      createFeedbackPrompt,
+      renderFeedbackAssist,
+      bindFeedbackAssistFn: (prompt) => bindFeedbackAssist(prompt, { copyPrompt, openPromptInChatGPT })
+    });
+    if (page === 'tracker') initTrackerPage({ renderTracker, getHistory });
+    if (page === 'attempt') initAttemptPage({
+      getHistory,
+      renderAttemptReview,
+      createFeedbackPrompt,
+      renderFeedbackAssist,
+      bindFeedbackAssistFn: (prompt) => bindFeedbackAssist(prompt, { copyPrompt, openPromptInChatGPT })
+    });
     runtimeDiagnostics.report('info', 'Bootstrap complete');
   } catch (error) {
     runtimeDiagnostics.report('error', 'App bootstrap failed', error?.message || error);

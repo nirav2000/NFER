@@ -95,3 +95,5 @@ This helps generate richer feedback while keeping the app itself fully static an
 - On each release/fix, increment `APP_VERSION` in `js/app.js` and update HTML asset query strings to force fresh fetches on GitHub Pages.
 
 - Runtime diagnostics now come from dedicated module `js/runtimeDiagnostics.js` with a footer Diagnostics toggle and non-intrusive panel.
+
+- `js/app.js` has been split into page-focused modules (`js/appDashboard.js`, `js/appReports.js`) to keep responsibilities smaller and easier to debug.
