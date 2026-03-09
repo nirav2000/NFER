@@ -93,3 +93,5 @@ This helps generate richer feedback while keeping the app itself fully static an
 
 - CSS and JS entry assets are versioned with `?v=` query strings.
 - On each release/fix, increment `APP_VERSION` in `js/app.js` and update HTML asset query strings to force fresh fetches on GitHub Pages.
+
+- Footer includes a lightweight Diagnostics toggle that opens recent runtime errors/warnings without overlapping version info.
