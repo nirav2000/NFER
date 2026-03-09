@@ -1,0 +1,143 @@
+{
+  "version": "7.0",
+  "yearGroup": 4,
+  "libraryTitle": "Year 4 Single Passage Reading Assessment Bank",
+  "description": "Curated single-passage reading assessment units for Year 4, designed in the style of UK primary reading assessments.",
+  "unitSchema": {
+    "unitId": "string",
+    "unitNumber": "number",
+    "week": "number",
+    "title": "string",
+    "subtitle": "string",
+    "genre": "fiction | nonfiction",
+    "topic": "string",
+    "subtopic": "string",
+    "difficulty": "1-5",
+    "difficultyBand": "year4_lower | year4_mid | year4_upper",
+    "difficultyProfile": {
+      "readingComplexity": "1-5",
+      "vocabularyComplexity": "1-5",
+      "inferenceComplexity": "1-5"
+    },
+    "wordCount": "number",
+    "paragraphCount": "number",
+    "estimatedTimeMinutes": "number",
+    "marks": {
+      "core": "number",
+      "additional": "number",
+      "totalAvailable": "number"
+    },
+    "questionCounts": {
+      "core": "number",
+      "additional": "number",
+      "total": "number"
+    },
+    "domainDistribution": {
+      "retrieval": "number",
+      "vocabulary": "number",
+      "inference": "number",
+      "structure": "number",
+      "authorIntent": "number"
+    },
+    "styleBenchmark": "UK primary reading assessment",
+    "sourceType": "original",
+    "editorialStatus": "draft | reviewed | approved",
+    "assessmentFocus": "string",
+    "tags": ["string"],
+    "reviewNotes": ["string"],
+    "reviewHistory": [
+      {
+        "date": "YYYY-MM-DD",
+        "reviewer": "string",
+        "notes": "string"
+      }
+    ],
+    "passage": {
+      "passageId": "string",
+      "passageNumber": 1,
+      "title": "string",
+      "summary": "string",
+      "setting": "string",
+      "mainCharacter": "string | null",
+      "supportsDomains": [
+        "retrieval",
+        "vocabulary",
+        "inference",
+        "structure",
+        "authorIntent"
+      ],
+      "questionSupport": {
+        "retrievalFacts": "number",
+        "vocabularyTargets": "number",
+        "inferenceClues": "number",
+        "structuralFeatures": "number"
+      },
+      "readingMetrics": {
+        "readingLevel": "year4_lower | year4_mid | year4_upper",
+        "avgSentenceLengthApprox": "number",
+        "longestSentenceApprox": "number",
+        "rareVocabularyCountApprox": "number"
+      },
+      "text": "string"
+    },
+    "coreQuestions": [
+      {
+        "questionId": "string",
+        "questionNumber": "number",
+        "displayNumber": "string",
+        "section": "core",
+        "passageId": "string",
+        "passageNumber": 1,
+        "domain": "retrieval | vocabulary | inference | structure | authorIntent",
+        "skillGroup": "string",
+        "fineSkillTag": "string",
+        "questionType": "mcq | short-answer",
+        "answerType": "selected | open",
+        "difficulty": "1-5",
+        "marks": "number",
+        "isScaffolded": "boolean",
+        "evidenceRequired": "boolean",
+        "stem": "string",
+        "options": ["string"],
+        "optionRationale": {},
+        "correctAnswer": "string | null",
+        "acceptedAnswers": ["string"],
+        "markScheme": {},
+        "modelAnswerGold": "string | null",
+        "modelAnswerSilver": "string | null",
+        "commonWrongAnswer": "string | null",
+        "whyWrong": "string | null",
+        "requiresManualReview": "boolean",
+        "editorialStatus": "draft | reviewed | approved",
+        "reviewFlag": "boolean"
+      }
+    ],
+    "additionalQuestionBank": [],
+    "teacherNotes": {
+      "mainFocus": "string",
+      "commonMisconceptions": ["string"],
+      "teachingTips": ["string"]
+    },
+    "diagnosticHooks": {
+      "recommendedExtraIfWeak": {
+        "retrieval": ["questionId"],
+        "vocabulary": ["questionId"],
+        "inference": ["questionId"],
+        "structure": ["questionId"],
+        "authorIntent": ["questionId"]
+      }
+    },
+    "validation": {
+      "hasSinglePassage": "boolean",
+      "coreQuestionCountMatches": "boolean",
+      "additionalQuestionCountMatches": "boolean",
+      "domainDistributionMatches": "boolean",
+      "allQuestionsLinkToPassage": "boolean",
+      "allMcqOptionsCountValid": "boolean",
+      "allMcqAnswersValid": "boolean",
+      "questionIdsUnique": "boolean",
+      "questionNumbersUniqueWithinSection": "boolean",
+      "noRepeatedQuestionStems": "boolean"
+    }
+  }
+}
