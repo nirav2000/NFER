@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NFER Reading Builder</title>
-  <link rel="stylesheet" href="./css/styles.css?v=3.4.10" />
+  <link rel="stylesheet" href="./css/styles.css?v=3.4.12" />
   <link rel="stylesheet" href="" id="themeStylesheet" />
 </head>
 <body data-page="dashboard">
@@ -26,28 +26,28 @@
 
   <main class="container">
     <section class="card">
-      <h2>Assessment Dashboard</h2>
+      <h2>Reading Dashboard</h2>
       <p id="libraryMeta">Loading library...</p>
       <p id="dashboardError" class="error"></p>
 
       <div class="library-row">
-        <label for="libraryFile">Assessment file</label>
+        <label for="libraryFile">Reading file</label>
         <select id="libraryFile">
-          <option value="/data/year4_combined_50_test_library_v3.json">Year 4 combined 50 tests (v3)</option>
+          <option value="/data/year4_combined_50_test_library_v3.json">Y4 | 50 reading sessions (v3)</option>
         </select>
         <input id="libraryPathInput" type="text" placeholder="/data/your_other_library.json" autocomplete="off" />
         <button id="applyLibraryBtn" type="button">Load File</button>
       </div>
 
       <div class="actions">
-        <button id="generateBtn">Start Recommended Test</button>
-        <button id="randomBtn" type="button">Random Test</button>
+        <button id="generateBtn">Start Recommended Session</button>
+        <button id="randomBtn" type="button">Random Session</button>
         <a class="button-link action-btn" href="./tracker.html">Progress Tracker</a>
       </div>
     </section>
 
     <section class="card">
-      <h3>Next Recommended Test</h3>
+      <h3>Next Recommended Session</h3>
       <p id="recommendedMeta">No recommendation yet.</p>
     </section>
 
@@ -72,6 +72,6 @@
     </select>
   </footer>
 
-  <script type="module" src="./js/app.js?v=3.4.10"></script>
+  <script type="module" src="./js/app.js?v=3.4.12"></script>
 </body>
 </html>

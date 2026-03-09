@@ -35,20 +35,19 @@ function createQuestionInput(q, answerValue, inputScale = 1) {
 }
 
 function questionLabelText(q, index, hideMarks = false, gentleMode = false) {
-  const word = gentleMode ? 'Challenge' : 'Question';
+  const word = 'Q.';
   return hideMarks
     ? `${word} ${index + 1}. ${q.stem}`
     : `${word} ${index + 1}. ${q.stem} (${q.marks} marks)`;
 }
 
 export function renderDashboardMeta(el, library) {
-  el.textContent = `Year ${library.yearGroup} · Version ${library.version || 'n/a'} · Total tests available: ${(library.tests || []).length}.`;
+  el.textContent = `Y${library.yearGroup} | v${library.version || 'n/a'} | ${(library.tests || []).length} sessions available.`;
 }
 
 export function renderTestMeta(test, refs, options = {}) {
-  const labelA = options.gentleMode ? 'Practice Session' : 'Test';
   refs.meta.innerHTML = `<h2>${test.title}</h2>
-    <p><strong>${labelA} ID:</strong> ${test.id} · <strong>Week:</strong> ${test.week || '—'} · <strong>Sequence:</strong> ${test.sequence || '—'} · <strong>Difficulty:</strong> ${test.difficulty} · <strong>Total marks:</strong> ${test.totalMarks}</p>
+    <p><strong>Session ID:</strong> ${test.id} · <strong>Week:</strong> ${test.week || '—'} · <strong>Sequence:</strong> ${test.sequence || '—'} · <strong>Difficulty:</strong> ${test.difficulty} · <strong>Total marks:</strong> ${test.totalMarks}</p>
     <p><strong>Domains:</strong> ${(test.domainsCovered || []).join(', ') || 'mixed'} · <strong>Topics:</strong> ${(test.topicsCovered || []).join(', ') || 'general reading'} · <strong>Genres:</strong> ${(test.passageGenres || []).join(', ') || 'mixed'}</p>
     <p class="muted">This includes two passages. Questions indicate which passage to refer to.</p>`;
   refs.passage1.textContent = test.passages?.[0]?.text || 'Passage 1 missing';
@@ -138,7 +137,7 @@ export function renderReview(test, answers, skippedSet, rootEl, options = {}) {
 
     const row = document.createElement('div');
     row.className = `review-row status-${status.toLowerCase().replace(' ', '-')}`;
-    row.innerHTML = `<span>${options.gentleMode ? 'Challenge' : 'Q'}${idx + 1}</span><span>${status}</span><button type="button" data-jump="${idx}">Go to question</button>`;
+    row.innerHTML = `<span>Q. ${idx + 1}</span><span>${status}</span><button type="button" data-jump="${idx}">Go to question</button>`;
     list.appendChild(row);
   });
 
@@ -148,7 +147,7 @@ export function renderReview(test, answers, skippedSet, rootEl, options = {}) {
 export function renderProgress(currentIndex, totalQuestions, answeredCount, progressFillEl, progressTextEl, options = {}) {
   const value = totalQuestions ? Math.round((answeredCount / totalQuestions) * 100) : 0;
   progressFillEl.style.width = `${value}%`;
-  const word = options.gentleMode ? 'Challenge' : 'Question';
+  const word = 'Q.';
   progressTextEl.textContent = `${word} ${currentIndex + 1} of ${totalQuestions} · Answered ${answeredCount}/${totalQuestions}`;
 }
 

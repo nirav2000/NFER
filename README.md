@@ -1,6 +1,6 @@
 # NFER Reading Builder (Static GitHub Pages App)
 
-A static Year 4 reading assessment app that runs fully client-side in the browser.
+A static Y4 reading practice app that runs fully client-side in the browser.
 
 ## Primary data source
 
@@ -12,10 +12,10 @@ It can also load compatible JSON files from `/data/` using the dashboard file se
 
 ## Pages
 
-- `index.html` – dashboard (library overview, recommended test, random fallback, weak domains)
+- `index.html` – dashboard (library overview, recommended session, random fallback, weak domains)
 - `test.html` – passages, questions, timer/progress, navigation, review, submission
 - `diagnostic.html` – score, percentage, domain breakdown, strengths, focus area
-- `tracker.html` – history table, score trend, difficulty progression (click `Test ID` to view full completed attempt)
+- `tracker.html` – history table, score trend, difficulty progression (click `Session ID` to view full completed attempt)
 - `attempt.html` – full completed attempt view with learner answers and model answers
 
 ## UI themes and settings
@@ -35,7 +35,7 @@ It can also load compatible JSON files from `/data/` using the dashboard file se
   - hide marks per question
   - gentler wording mode
 
-## Test usability features
+## Session usability features
 
 - Header icon toggles for timer/progress and all-questions mode.
 - Autosave of in-progress test state with return-and-continue support.
@@ -44,14 +44,14 @@ It can also load compatible JSON files from `/data/` using the dashboard file se
 
 ## Selection logic
 
-- **Recommended test** uses a balanced algorithm considering:
+- **Recommended session** uses a balanced algorithm considering:
   - recent test IDs
   - recent topics
   - target difficulty from recent performance
   - weak domains from recent attempts
-- **Random test** button is available as fallback.
+- **Random session** button is available as fallback.
 
-## LocalStorage history record
+## LocalStorage history record (session)
 
 Each completed test record includes fields such as:
 
@@ -94,16 +94,9 @@ This helps generate richer feedback while keeping the app itself fully static an
 - CSS and JS entry assets are versioned with `?v=` query strings.
 - On each release/fix, increment `APP_VERSION` in `js/app.js` and update HTML asset query strings to force fresh fetches on GitHub Pages.
 
-- Runtime diagnostics now come from dedicated module `js/runtimeDiagnostics.js` with a footer Diagnostics toggle and non-intrusive panel.
+## Implementation notes
 
-- `js/app.js` has been split into page-focused modules (`js/appDashboard.js`, `js/appReports.js`) to keep responsibilities smaller and easier to debug.
-
-- Boot orchestration is now in `js/app.bootstrap.js`, with dedicated modules: `js/app.global-ui.js`, `js/app.dashboard.js`, `js/app.test-runtime.js`, `js/app.diagnostic.js`, `js/app.tracker.js`, `js/app.attempt.js`.
-
-- Optional in-app OpenAI feedback generation is isolated in `js/feedbackOpenAI.js` and gated by an explicit toggle in the feedback card so it can be disabled without affecting core app flow.
-
-- Interaction recording/replay orchestration is now packaged in reusable module `js/interactionReplayModule.js`, built on generic recorder primitives in `js/replay.js`.
-- Interaction recording/replay now includes throttled scroll/pointer samples, viewport + DPR metadata, focus/caret capture, UI render markers, answer-delta compression, and IndexedDB fallback persistence.
-- Replay controls now include selectable recordings, play/pause/stop, and step back/forward with visible replay cursor + button pulse indicators.
-- Recording mode now uses a red live record button; replay control bar only appears during active replay (or after first captured interaction while recording).
-
+- Runtime diagnostics are provided by `js/runtimeDiagnostics.js` with a footer Diagnostics toggle and non-intrusive panel.
+- App boot orchestration is in `js/app.bootstrap.js`, with page-focused modules for dashboard, runtime, diagnostics, tracker, and attempt views.
+- Optional in-app OpenAI feedback is isolated in `js/feedbackOpenAI.js` and gated behind an explicit toggle.
+- Interaction recording/replay is handled by `js/interactionReplayModule.js` and `js/replay.js`, including selectable recordings and replay controls.

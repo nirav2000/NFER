@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Generated Test</title>
-  <link rel="stylesheet" href="./css/styles.css?v=3.4.10" />
+  <title>Reading Journey</title>
+  <link rel="stylesheet" href="./css/styles.css?v=3.4.12" />
   <link rel="stylesheet" href="" id="themeStylesheet" />
 </head>
 <body data-page="test">
   <header class="site-header">
     <div class="header-row">
-      <h1>Generated Test</h1>
+      <h1 id="sessionHeading" class="session-heading" role="button" tabindex="0" aria-expanded="false" aria-controls="testMeta">Reading Journey</h1>
       <div class="header-tools" aria-label="Test display options">
         <button type="button" id="toggleTimerProgressBtn" class="icon-btn" title="Toggle timer and progress" aria-pressed="true">🕒</button>
         <button type="button" id="toggleAllQuestionsBtn" class="icon-btn" title="Toggle show all questions" aria-pressed="false">📄</button>
@@ -56,7 +56,9 @@
   </aside>
 
   <main class="container">
-    <section class="card" id="testMeta"></section>
+    <section class="card meta-card">
+      <div id="testMeta" hidden></div>
+    </section>
 
     <section class="card timer-card">
       <div class="row-between">
@@ -80,7 +82,7 @@
 
     <section class="card" id="questionCard">
       <div class="row-between">
-        <h2>Question</h2>
+        <h2>Q.</h2>
         <label class="toggle"><input type="checkbox" id="schemeToggle" /> Show Mark Scheme</label>
       </div>
       <form id="answersForm" autocomplete="off"></form>
@@ -127,6 +129,6 @@
     </select>
   </footer>
 
-  <script type="module" src="./js/app.js?v=3.4.10"></script>
+  <script type="module" src="./js/app.js?v=3.4.12"></script>
 </body>
 </html>

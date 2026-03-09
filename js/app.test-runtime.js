@@ -1,4 +1,4 @@
-import { markTest, buildDiagnostic } from './diagnostics.js?v=3.4.10';
+import { markTest, buildDiagnostic } from './diagnostics.js?v=3.4.12';
 import {
   getCurrentTest,
   saveResult,
@@ -6,7 +6,7 @@ import {
   getTestSession,
   clearTestSession,
   getSettings
-} from './storage.js?v=3.4.10';
+} from './storage.js?v=3.4.12';
 import {
   renderTestMeta,
   renderQuestion,
@@ -16,28 +16,15 @@ import {
   renderProgress,
   renderTimer,
   toggleSchemes
-} from './renderer.js?v=3.4.10';
-import { mountInteractionReplay } from './interactionReplayModule.js?v=3.4.10';
+} from './renderer.js?v=3.4.12';
+import { mountInteractionReplay } from './interactionReplayModule.js?v=3.4.12';
 
 const TEST_DURATION_SECONDS = 35 * 60;
-
-function getLabel(word, settings) {
-  if (!settings?.gentleMode) return word;
-  const map = {
-    Assessment: 'Practice Plan',
-    Test: 'Practice',
-    Question: 'Challenge',
-    Submit: 'Finish',
-    Diagnostic: 'Learning Summary',
-    Progress: 'Journey'
-  };
-  return map[word] || word;
-}
 
 export function initTestRuntime() {
   const test = getCurrentTest();
   if (!test) {
-    document.getElementById('testMeta').innerHTML = '<h2>No test generated</h2><p>Go back to Dashboard and click Start Recommended Test.</p>';
+    document.getElementById('testMeta').innerHTML = '<h2>No session ready</h2><p>Go back to Dashboard and click Start Recommended Session.</p>';
     return;
   }
 
@@ -63,7 +50,8 @@ export function initTestRuntime() {
     skipBtn: document.getElementById('skipBtn'),
     nextBtn: document.getElementById('nextBtn'),
     reviewBtn: document.getElementById('reviewBtn'),
-    recordingStatus: document.getElementById('recordingStatus')
+    recordingStatus: document.getElementById('recordingStatus'),
+    sessionHeading: document.getElementById('sessionHeading')
   };
 
   const savedSession = getTestSession(test.id);
@@ -101,6 +89,31 @@ export function initTestRuntime() {
     inputFontScale: settings.inputFontScale
   });
 
+
+  const buildSessionHeading = () => {
+    const topic = (test.topicsCovered || []).find(Boolean) || (test.passageGenres || []).find(Boolean) || 'Reading Focus';
+    return `Y4 | ${topic}`;
+  };
+
+  if (refs.sessionHeading) {
+    refs.sessionHeading.textContent = buildSessionHeading();
+  }
+
+  if (refs.sessionHeading && refs.meta) {
+    const toggleMeta = () => {
+      const expanded = refs.sessionHeading.getAttribute('aria-expanded') === 'true';
+      refs.sessionHeading.setAttribute('aria-expanded', String(!expanded));
+      refs.meta.hidden = expanded;
+    };
+
+    refs.sessionHeading.addEventListener('click', toggleMeta);
+    refs.sessionHeading.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        toggleMeta();
+      }
+    });
+  }
   renderTestMeta(test, refs, { gentleMode: settings.gentleMode });
 
   refs.passage1.style.fontSize = `${settings.passageFontScale}rem`;

@@ -60,7 +60,7 @@ export async function loadLibrary() {
     }
   }
 
-  throw lastError || new Error('Failed to load assessment library JSON');
+  throw lastError || new Error('Failed to load reading library JSON');
 }
 
 export function getWeakDomains(history = []) {

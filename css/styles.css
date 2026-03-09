@@ -3,6 +3,10 @@
 body{margin:0;font-family:Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.7}
 .site-header{background:var(--card);border-bottom:1px solid var(--line);padding:.8rem 1rem;position:sticky;top:0;z-index:10}
 .site-header h1{margin:0 0 .35rem 0;font-size:1.2rem}
+.session-heading{cursor:pointer;display:inline-flex;align-items:center;gap:.35rem}
+.session-heading::after{content:'▾';font-size:.9rem;opacity:.7;transition:transform .2s ease}
+.session-heading[aria-expanded="true"]::after{transform:rotate(180deg)}
+.session-heading:focus-visible{outline:2px solid #93c5fd;outline-offset:3px;border-radius:6px}
 .header-row{display:flex;align-items:center;justify-content:space-between;gap:.8rem}
 .header-tools{display:flex;gap:.45rem}
 .icon-btn{width:2.2rem;height:2.2rem;padding:0;border-radius:50%;display:inline-grid;place-items:center;font-size:1.05rem}
@@ -23,6 +27,9 @@ button:disabled{opacity:.6;cursor:not-allowed}
 .error{color:var(--danger);font-weight:600}
 .muted{color:#4b5563;font-size:.95rem}
 .timer-card p{margin:.2rem 0}
+
+.meta-card{padding:.6rem .9rem}
+#testMeta[hidden]{display:none!important}
 .progress-track{height:12px;background:#e5edf8;border-radius:999px;overflow:hidden}
 .progress-fill{height:100%;background:linear-gradient(90deg,#1d4ed8,#0ea5e9);width:0;transition:width .25s ease}
 .question{padding-top:.2rem}
