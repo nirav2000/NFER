@@ -1,3 +1,3 @@
-import { bootstrapApp } from './app.bootstrap.js?v=3.4.7';
+import { bootstrapApp } from './app.bootstrap.js?v=3.4.8';
 
 bootstrapApp();

@@ -103,4 +103,5 @@ This helps generate richer feedback while keeping the app itself fully static an
 - Optional in-app OpenAI feedback generation is isolated in `js/feedbackOpenAI.js` and gated by an explicit toggle in the feedback card so it can be disabled without affecting core app flow.
 
 - Interaction recording/replay orchestration is now packaged in reusable module `js/interactionReplayModule.js`, built on generic recorder primitives in `js/replay.js`.
+- Interaction recording/replay now includes throttled scroll/pointer samples, viewport + DPR metadata, focus/caret capture, UI render markers, answer-delta compression, and IndexedDB fallback persistence.
 

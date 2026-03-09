@@ -1,4 +1,4 @@
-import { markTest, buildDiagnostic } from './diagnostics.js?v=3.4.7';
+import { markTest, buildDiagnostic } from './diagnostics.js?v=3.4.8';
 import {
   getCurrentTest,
   saveResult,
@@ -6,7 +6,7 @@ import {
   getTestSession,
   clearTestSession,
   getSettings
-} from './storage.js?v=3.4.7';
+} from './storage.js?v=3.4.8';
 import {
   renderTestMeta,
   renderQuestion,
@@ -16,8 +16,8 @@ import {
   renderProgress,
   renderTimer,
   toggleSchemes
-} from './renderer.js?v=3.4.7';
-import { mountInteractionReplay } from './interactionReplayModule.js?v=3.4.7';
+} from './renderer.js?v=3.4.8';
+import { mountInteractionReplay } from './interactionReplayModule.js?v=3.4.8';
 
 const TEST_DURATION_SECONDS = 35 * 60;
 
@@ -146,6 +146,7 @@ export function initTestRuntime() {
       refs.nextBtn.hidden = true;
       refs.reviewBtn.hidden = true;
       refs.submitNowBtn.hidden = false;
+      recordAction('ui:question-mounted', { currentIndex: state.currentIndex, mode: 'all' });
       return;
     }
 
@@ -159,6 +160,7 @@ export function initTestRuntime() {
     refs.submitNowBtn.hidden = true;
     refs.prevBtn.disabled = state.currentIndex === 0;
     refs.nextBtn.disabled = state.currentIndex === test.questions.length - 1;
+    recordAction('ui:question-mounted', { currentIndex: state.currentIndex, mode: 'single' });
   };
 
   const openReview = () => {
@@ -166,6 +168,7 @@ export function initTestRuntime() {
     renderReview(test, state.answers, state.skipped, refs.reviewList, options());
     refs.questionCard.hidden = true;
     refs.reviewCard.hidden = false;
+    recordAction('ui:render-complete', { marker: 'review-open' });
 
     refs.reviewList.querySelectorAll('[data-jump]').forEach((btn) => {
       btn.addEventListener('click', () => {
@@ -351,6 +354,7 @@ export function initTestRuntime() {
       timerToggle: () => refs.toggleTimerProgressBtn.click(),
       allQuestionsToggle: () => refs.toggleAllQuestionsBtn.click()
     },
+    getReplayContainer: () => refs.form,
     onReplayStart: () => {
       state.replayMode = true;
     },
