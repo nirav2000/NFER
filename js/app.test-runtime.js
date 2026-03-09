@@ -1,4 +1,4 @@
-import { markTest, buildDiagnostic } from './diagnostics.js?v=3.4.9';
+import { markTest, buildDiagnostic } from './diagnostics.js?v=3.4.10';
 import {
   getCurrentTest,
   saveResult,
@@ -6,7 +6,7 @@ import {
   getTestSession,
   clearTestSession,
   getSettings
-} from './storage.js?v=3.4.9';
+} from './storage.js?v=3.4.10';
 import {
   renderTestMeta,
   renderQuestion,
@@ -16,8 +16,8 @@ import {
   renderProgress,
   renderTimer,
   toggleSchemes
-} from './renderer.js?v=3.4.9';
-import { mountInteractionReplay } from './interactionReplayModule.js?v=3.4.9';
+} from './renderer.js?v=3.4.10';
+import { mountInteractionReplay } from './interactionReplayModule.js?v=3.4.10';
 
 const TEST_DURATION_SECONDS = 35 * 60;
 
@@ -303,7 +303,6 @@ export function initTestRuntime() {
       const q = test.questions[state.currentIndex];
       state.answers[q.id] = readCurrentAnswer(refs.form, q);
     }
-    recordAction('input', { currentIndex: state.currentIndex, answers: state.answers });
     persistSession();
   });
 
@@ -320,14 +319,14 @@ export function initTestRuntime() {
       replayPlayPauseBtn: document.getElementById('replayPlayPauseBtn'),
       replayStopBtn: document.getElementById('replayStopBtn'),
       replayStepBackBtn: document.getElementById('replayStepBackBtn'),
-      replayStepForwardBtn: document.getElementById('replayStepForwardBtn')
+      replayStepForwardBtn: document.getElementById('replayStepForwardBtn'),
+      recordModeBadgeEl: document.getElementById('recordModeBadge')
     },
     getSnapshot: () => ({
       currentIndex: state.currentIndex,
       showAllQuestions: state.showAllQuestions,
       showTimerProgress: state.showTimerProgress,
       showScheme: state.showScheme,
-      answers: state.answers,
       remaining: Math.max(0, Math.round((state.deadline - Date.now()) / 1000))
     }),
     applySnapshot: (p) => {
@@ -335,7 +334,6 @@ export function initTestRuntime() {
       state.showAllQuestions = Boolean(p.showAllQuestions);
       state.showTimerProgress = Boolean(p.showTimerProgress);
       state.showScheme = Boolean(p.showScheme);
-      state.answers = p.answers || state.answers;
       if (typeof p.scrollY === 'number') window.scrollTo(0, p.scrollY);
       if (typeof p.remaining === 'number') {
         state.deadline = Date.now() + (p.remaining * 1000);
@@ -345,9 +343,9 @@ export function initTestRuntime() {
       refreshQuestionView();
     },
     actionHandlers: {
-      input: (p) => {
-        if (p.answers) state.answers = p.answers;
-        if (Number.isFinite(p.currentIndex)) state.currentIndex = p.currentIndex;
+      typing: (p) => {
+        const qid = p?.name || p?.id;
+        if (qid) state.answers[qid] = String(p?.value || '');
         refreshQuestionView();
       },
       prev: () => refs.prevBtn.click(),

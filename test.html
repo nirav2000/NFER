@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Generated Test</title>
-  <link rel="stylesheet" href="./css/styles.css?v=3.4.9" />
+  <link rel="stylesheet" href="./css/styles.css?v=3.4.10" />
   <link rel="stylesheet" href="" id="themeStylesheet" />
 </head>
 <body data-page="test">
@@ -52,6 +52,7 @@
     </div>
     <p class="muted">Replay reproduces navigation, text input pacing, cursor movement, scroll, and recorded timer states.</p>
     <p id="recordingStatus" class="muted">No recording in progress.</p>
+    <p class="muted">Replay controls auto-appear only during recording/replay.</p>
   </aside>
 
   <main class="container">
@@ -106,6 +107,7 @@
 
 
   <div id="replayControlBar" class="replay-control-bar" hidden>
+    <button type="button" id="recordModeBadge" class="record-badge" hidden>● REC</button>
     <button type="button" id="replayStopBtn">Stop</button>
     <button type="button" id="replayPlayPauseBtn">Pause</button>
     <button type="button" id="replayStepBackBtn">Step Back</button>
@@ -125,6 +127,6 @@
     </select>
   </footer>
 
-  <script type="module" src="./js/app.js?v=3.4.9"></script>
+  <script type="module" src="./js/app.js?v=3.4.10"></script>
 </body>
 </html>

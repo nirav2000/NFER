@@ -105,4 +105,5 @@ This helps generate richer feedback while keeping the app itself fully static an
 - Interaction recording/replay orchestration is now packaged in reusable module `js/interactionReplayModule.js`, built on generic recorder primitives in `js/replay.js`.
 - Interaction recording/replay now includes throttled scroll/pointer samples, viewport + DPR metadata, focus/caret capture, UI render markers, answer-delta compression, and IndexedDB fallback persistence.
 - Replay controls now include selectable recordings, play/pause/stop, and step back/forward with visible replay cursor + button pulse indicators.
+- Recording mode now uses a red live record button; replay control bar only appears during active replay (or after first captured interaction while recording).
 

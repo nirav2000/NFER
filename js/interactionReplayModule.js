@@ -1,4 +1,4 @@
-import { createInteractionRecorder, getStoredReplay, replayInteractions, getReplayIndex } from './replay.js?v=3.4.9';
+import { createInteractionRecorder, getStoredReplay, replayInteractions, getReplayIndex } from './replay.js?v=3.4.10';
 
 const DEFAULT_SCROLL_SAMPLE_MS = 120;
 const DEFAULT_POINTER_SAMPLE_MS = 120;
@@ -43,11 +43,12 @@ export function mountInteractionReplay(options) {
   } = options;
 
   const recorder = createInteractionRecorder({ storageKey });
-  const { recordingStatusEl, recordingToggleBtn, replayBtn, replaySpeedEl, replaySelectEl, replayRefreshBtn, replayControlBarEl, replayPlayPauseBtn, replayStopBtn, replayStepBackBtn, replayStepForwardBtn } = refs;
+  const { recordingStatusEl, recordingToggleBtn, replayBtn, replaySpeedEl, replaySelectEl, replayRefreshBtn, replayControlBarEl, replayPlayPauseBtn, replayStopBtn, replayStepBackBtn, replayStepForwardBtn, recordModeBadgeEl } = refs;
 
   let frameCaptureTimer = null;
   let lastScrollSampleAt = 0;
   let lastPointerSampleAt = 0;
+  let mode = 'idle';
 
   let replayPaused = false;
   let replayStopped = false;
@@ -62,6 +63,16 @@ export function mountInteractionReplay(options) {
 
   const setStatus = (text) => {
     if (recordingStatusEl) recordingStatusEl.textContent = text;
+  };
+
+  const setMode = (nextMode) => {
+    mode = nextMode;
+    if (!replayControlBarEl) return;
+    replayControlBarEl.classList.remove('idle', 'recording', 'replaying');
+    replayControlBarEl.classList.add(mode);
+    replayControlBarEl.hidden = mode === 'idle';
+    if (recordModeBadgeEl) recordModeBadgeEl.hidden = mode !== 'recording';
+    replayCursor.hidden = mode !== 'replaying';
   };
 
   const refreshReplayList = () => {
@@ -88,7 +99,10 @@ export function mountInteractionReplay(options) {
     devicePixelRatio: window.devicePixelRatio || 1
   });
 
-  const record = (type, payload = {}) => recorder.log(type, withViewport(payload));
+  const record = (type, payload = {}) => {
+    recorder.log(type, withViewport(payload));
+    if (mode === 'recording' && type !== 'recordingStart') setMode('recording');
+  };
 
   const startFrameCapture = () => {
     if (frameCaptureTimer) clearInterval(frameCaptureTimer);
@@ -105,7 +119,11 @@ export function mountInteractionReplay(options) {
     if (frameCaptureTimer) clearInterval(frameCaptureTimer);
     frameCaptureTimer = null;
     setStatus(message);
-    if (recordingToggleBtn) recordingToggleBtn.textContent = 'Start Interaction Recording';
+    if (recordingToggleBtn) {
+      recordingToggleBtn.textContent = 'Start Interaction Recording';
+      recordingToggleBtn.classList.remove('recording-live');
+    }
+    setMode('idle');
     refreshReplayList();
     return payload;
   };
@@ -134,6 +152,13 @@ export function mountInteractionReplay(options) {
     record('focus', { name: el.name || '', id: el.id || '', selectionStart: el.selectionStart ?? null, selectionEnd: el.selectionEnd ?? null });
   });
 
+  container.addEventListener('input', (event) => {
+    if (!recorder.isRecording()) return;
+    const el = event.target;
+    if (!(el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement)) return;
+    record('typing', { id: el.id || '', name: el.name || '', value: el.value, selectionStart: el.selectionStart ?? null, selectionEnd: el.selectionEnd ?? null });
+  });
+
   document.addEventListener('selectionchange', () => {
     if (!recorder.isRecording()) return;
     const el = document.activeElement;
@@ -151,6 +176,8 @@ export function mountInteractionReplay(options) {
         startFrameCapture();
         setStatus('Recording in progress...');
         recordingToggleBtn.textContent = 'Stop Interaction Recording';
+        recordingToggleBtn.classList.add('recording-live');
+        setMode('idle');
       }
     });
   }
@@ -173,8 +200,7 @@ export function mountInteractionReplay(options) {
       const settingsPanel = document.getElementById('settingsPanel');
       if (settingsPanel) settingsPanel.hidden = true;
     }
-    if (replayControlBarEl) replayControlBarEl.hidden = !active;
-    replayCursor.hidden = !active;
+    setMode(active ? 'replaying' : 'idle');
   };
 
   if (replayPlayPauseBtn) {
@@ -184,7 +210,11 @@ export function mountInteractionReplay(options) {
     });
   }
   if (replayStopBtn) replayStopBtn.addEventListener('click', () => { replayStopped = true; });
-  if (replayStepForwardBtn) replayStepForwardBtn.addEventListener('click', () => { replayPaused = true; replayStepBudget += 1; if (replayPlayPauseBtn) replayPlayPauseBtn.textContent = 'Play'; });
+  if (replayStepForwardBtn) replayStepForwardBtn.addEventListener('click', () => {
+    replayPaused = true;
+    replayStepBudget += 1;
+    if (replayPlayPauseBtn) replayPlayPauseBtn.textContent = 'Play';
+  });
   if (replayStepBackBtn) replayStepBackBtn.addEventListener('click', () => {
     replayPaused = true;
     if (replayFramePtr > 0) {
@@ -259,5 +289,6 @@ export function mountInteractionReplay(options) {
     });
   }
 
+  setMode('idle');
   return { record, isRecording: () => recorder.isRecording(), stop: stopRecording, refreshReplayList };
 }

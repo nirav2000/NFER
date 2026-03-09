@@ -91,3 +91,13 @@ th,td{border:1px solid var(--line);padding:.5rem;text-align:left;white-space:now
 @keyframes replay-pop{0%{transform:scale(1)}50%{transform:scale(1.18)}100%{transform:scale(1)}}
 #replayCursor{position:fixed;left:0;top:0;width:14px;height:14px;border-radius:50%;background:#ef4444;border:2px solid #fff;z-index:50;pointer-events:none;box-shadow:0 0 0 2px rgba(239,68,68,.3)}
 body.replay-active #settingsPanel, body.replay-active #settingsToggleBtn{display:none!important}
+
+
+.record-badge{background:#b91c1c!important;color:#fff!important;font-weight:800;letter-spacing:.03em}
+.replay-control-bar.recording #replayPlayPauseBtn,
+.replay-control-bar.recording #replayStepBackBtn,
+.replay-control-bar.recording #replayStepForwardBtn{display:none}
+.replay-control-bar.replaying #recordModeBadge{display:none!important}
+.replay-control-bar.idle{display:none!important}
+
+#recordingToggleBtn.recording-live{background:#b91c1c!important;box-shadow:0 0 0 2px rgba(185,28,28,.25)}
