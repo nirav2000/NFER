@@ -1,0 +1,651 @@
+{
+  "unitId": "Y4_U001",
+  "unitNumber": 1,
+  "week": 1,
+  "title": "The Last Boat In",
+  "subtitle": "A harbour mystery",
+  "genre": "fiction",
+  "topic": "mystery",
+  "subtopic": "harbour",
+  "difficulty": 3,
+  "difficultyBand": "year4_mid",
+  "difficultyProfile": {
+    "readingComplexity": 3,
+    "vocabularyComplexity": 3,
+    "inferenceComplexity": 3
+  },
+  "wordCount": 345,
+  "paragraphCount": 8,
+  "estimatedTimeMinutes": 20,
+  "marks": {
+    "core": 11,
+    "additional": 10,
+    "totalAvailable": 21
+  },
+  "questionCounts": {
+    "core": 7,
+    "additional": 6,
+    "total": 13
+  },
+  "domainDistribution": {
+    "retrieval": 2,
+    "vocabulary": 1,
+    "inference": 2,
+    "structure": 1,
+    "authorIntent": 1
+  },
+  "styleBenchmark": "UK primary reading assessment",
+  "sourceType": "original",
+  "editorialStatus": "reviewed",
+  "assessmentFocus": "Inference from atmosphere, setting and character reaction",
+  "tags": [
+    "harbour",
+    "mystery",
+    "boats",
+    "coast",
+    "atmosphere",
+    "suspense"
+  ],
+  "reviewNotes": [
+    "Passage length increased to align more closely with a realistic Year 4 assessment passage.",
+    "Question stems rewritten to be passage-specific and avoid generic template wording.",
+    "Distractors made plausible and rooted in the harbour setting.",
+    "Additional bank includes targeted inference boosters."
+  ],
+  "reviewHistory": [
+    {
+      "date": "2026-03-09",
+      "reviewer": "OpenAI",
+      "notes": "Reworked into single-passage curated unit with stronger passage length, improved inference support, and explicit validation metadata."
+    }
+  ],
+  "passage": {
+    "passageId": "Y4_U001_P1",
+    "passageNumber": 1,
+    "title": "The Last Boat In",
+    "summary": "Noah watches the final fishing boat return to an unusually quiet harbour and senses that something in the water has made the captain stop.",
+    "setting": "a harbour at evening",
+    "mainCharacter": "Noah",
+    "supportsDomains": [
+      "retrieval",
+      "vocabulary",
+      "inference",
+      "structure",
+      "authorIntent"
+    ],
+    "questionSupport": {
+      "retrievalFacts": 6,
+      "vocabularyTargets": 3,
+      "inferenceClues": 4,
+      "structuralFeatures": 2
+    },
+    "readingMetrics": {
+      "readingLevel": "year4_mid",
+      "avgSentenceLengthApprox": 14,
+      "longestSentenceApprox": 26,
+      "rareVocabularyCountApprox": 5
+    },
+    "text": "The harbour was quieter than usual that evening.\n\nNoah stood at the end of the wooden pier, watching the last fishing boat move slowly across the grey water. The tide was almost out, and the ropes that tied the smaller boats to the harbour wall hung loosely against the posts. Usually the harbour was full of movement and noise — fishermen calling to each other, gulls circling overhead, and engines rumbling as boats came and went. Tonight, however, the air felt strangely still.\n\nA cool wind drifted across the water. Noah pulled his jacket tighter and looked towards the mouth of the harbour. The boat he had been watching was moving carefully between the markers that showed where the deep water lay. Its engine made a steady humming sound that echoed against the stone walls.\n\nSomething about the scene made Noah uneasy.\n\nThe captain of the boat was usually quick to steer into the harbour, but tonight the boat slowed almost to a stop before reaching the pier. For a moment it drifted quietly on the water. Noah noticed the captain standing very still at the wheel, staring towards the dark water near the rocks.\n\nNoah followed the captain’s gaze.\n\nAt first he saw nothing unusual. Then the surface of the water rippled, as if something large had moved just beneath it. The boat’s engine grew quieter as the captain switched it off completely.\n\nThe harbour became silent.\n\nEven the gulls had stopped calling.\n\nNoah gripped the railing of the pier and leaned forward slightly, trying to see what the captain had noticed in the water below."
+  },
+  "coreQuestions": [
+    {
+      "questionId": "Y4_U001_Q01",
+      "questionNumber": 1,
+      "displayNumber": "Q1",
+      "section": "core",
+      "passageId": "Y4_U001_P1",
+      "passageNumber": 1,
+      "domain": "retrieval",
+      "skillGroup": "locating details",
+      "fineSkillTag": "locating stated information",
+      "questionType": "mcq",
+      "answerType": "selected",
+      "difficulty": 2,
+      "marks": 1,
+      "isScaffolded": false,
+      "evidenceRequired": false,
+      "stem": "Where is Noah standing at the beginning of the passage?",
+      "options": [
+        "at the end of the wooden pier",
+        "inside the lighthouse",
+        "on the fishing boat",
+        "beside the harbour office"
+      ],
+      "optionRationale": {
+        "at the end of the wooden pier": "Correct. This is stated directly in the passage.",
+        "inside the lighthouse": "Fits the coastal setting but is not mentioned.",
+        "on the fishing boat": "He is watching the boat from the pier, not riding on it.",
+        "beside the harbour office": "Plausible within the setting but not stated."
+      },
+      "correctAnswer": "at the end of the wooden pier",
+      "acceptedAnswers": [
+        "at the end of the wooden pier",
+        "on the wooden pier"
+      ],
+      "markScheme": {
+        "1": "Award 1 mark for 'at the end of the wooden pier' or an accepted equivalent only."
+      },
+      "modelAnswerGold": null,
+      "modelAnswerSilver": null,
+      "commonWrongAnswer": "on the fishing boat",
+      "whyWrong": "Noah is watching the boat from the pier; he is not on it.",
+      "requiresManualReview": false,
+      "editorialStatus": "reviewed",
+      "reviewFlag": false
+    },
+    {
+      "questionId": "Y4_U001_Q02",
+      "questionNumber": 2,
+      "displayNumber": "Q2",
+      "section": "core",
+      "passageId": "Y4_U001_P1",
+      "passageNumber": 1,
+      "domain": "retrieval",
+      "skillGroup": "locating details",
+      "fineSkillTag": "finding supporting detail",
+      "questionType": "mcq",
+      "answerType": "selected",
+      "difficulty": 2,
+      "marks": 1,
+      "isScaffolded": false,
+      "evidenceRequired": false,
+      "stem": "Which detail shows that the tide is almost out?",
+      "options": [
+        "The ropes hang loosely against the posts.",
+        "The gulls stop calling.",
+        "The engine grows quieter.",
+        "The wind drifts across the water."
+      ],
+      "optionRationale": {
+        "The ropes hang loosely against the posts.": "Correct. This is the clue the writer gives.",
+        "The gulls stop calling.": "This creates atmosphere later in the passage.",
+        "The engine grows quieter.": "This happens later when the captain stops the boat.",
+        "The wind drifts across the water.": "This describes the weather, not the tide."
+      },
+      "correctAnswer": "The ropes hang loosely against the posts.",
+      "acceptedAnswers": [
+        "The ropes hang loosely against the posts.",
+        "the ropes hang loosely",
+        "the ropes hung loosely against the posts"
+      ],
+      "markScheme": {
+        "1": "Award 1 mark for identifying that the ropes hang loosely against the posts."
+      },
+      "modelAnswerGold": null,
+      "modelAnswerSilver": null,
+      "commonWrongAnswer": "The engine grows quieter.",
+      "whyWrong": "That detail is about the captain stopping the boat, not about the tide level.",
+      "requiresManualReview": false,
+      "editorialStatus": "reviewed",
+      "reviewFlag": false
+    },
+    {
+      "questionId": "Y4_U001_Q03",
+      "questionNumber": 3,
+      "displayNumber": "Q3",
+      "section": "core",
+      "passageId": "Y4_U001_P1",
+      "passageNumber": 1,
+      "domain": "vocabulary",
+      "skillGroup": "meaning in context",
+      "fineSkillTag": "word meaning in context",
+      "questionType": "mcq",
+      "answerType": "selected",
+      "difficulty": 2,
+      "marks": 1,
+      "isScaffolded": false,
+      "evidenceRequired": false,
+      "stem": "What does the word \"uneasy\" suggest about Noah?",
+      "options": [
+        "He feels worried.",
+        "He feels proud.",
+        "He feels bored.",
+        "He feels sleepy."
+      ],
+      "optionRationale": {
+        "He feels worried.": "Correct. 'Uneasy' suggests concern or nervousness.",
+        "He feels proud.": "Not supported by the tense atmosphere.",
+        "He feels bored.": "The passage suggests careful attention, not boredom.",
+        "He feels sleepy.": "There is no clue that Noah is tired."
+      },
+      "correctAnswer": "He feels worried.",
+      "acceptedAnswers": [
+        "He feels worried.",
+        "worried",
+        "nervous",
+        "concerned"
+      ],
+      "markScheme": {
+        "1": "Award 1 mark for 'worried' or an accepted equivalent such as 'nervous' or 'concerned'."
+      },
+      "modelAnswerGold": null,
+      "modelAnswerSilver": null,
+      "commonWrongAnswer": "He feels bored.",
+      "whyWrong": "Noah is alert and tense, which suggests worry rather than boredom.",
+      "requiresManualReview": false,
+      "editorialStatus": "reviewed",
+      "reviewFlag": false
+    },
+    {
+      "questionId": "Y4_U001_Q04",
+      "questionNumber": 4,
+      "displayNumber": "Q4",
+      "section": "core",
+      "passageId": "Y4_U001_P1",
+      "passageNumber": 1,
+      "domain": "inference",
+      "skillGroup": "atmosphere and setting",
+      "fineSkillTag": "inferring atmosphere",
+      "questionType": "short-answer",
+      "answerType": "open",
+      "difficulty": 3,
+      "marks": 2,
+      "isScaffolded": false,
+      "evidenceRequired": true,
+      "stem": "How can you tell that the harbour feels unusual that evening? Use evidence from the passage.",
+      "options": [],
+      "optionRationale": {},
+      "correctAnswer": null,
+      "acceptedAnswers": [
+        "The harbour feels unusual because it is normally noisy and busy, but that evening it is strangely still and quiet.",
+        "It feels unusual because the usual sounds are missing and everything seems still."
+      ],
+      "markScheme": {
+        "2": "Award 2 marks for explaining that the harbour feels unusual because it is much quieter or stiller than normal, supported by relevant evidence or paraphrase.",
+        "1": "Award 1 mark for identifying that it feels unusual or quiet without relevant supporting evidence, or for giving partial support.",
+        "0": "No credit for answers that are incorrect or not linked to the passage."
+      },
+      "modelAnswerGold": "The harbour feels unusual because it is normally full of voices, gulls and engines, but this evening it is strangely still and quiet.",
+      "modelAnswerSilver": "It feels unusual because it is very quiet.",
+      "commonWrongAnswer": "It feels unusual because the harbour is crowded and noisy.",
+      "whyWrong": "The passage says the opposite: the harbour is quieter than usual.",
+      "requiresManualReview": true,
+      "editorialStatus": "reviewed",
+      "reviewFlag": false
+    },
+    {
+      "questionId": "Y4_U001_Q05",
+      "questionNumber": 5,
+      "displayNumber": "Q5",
+      "section": "core",
+      "passageId": "Y4_U001_P1",
+      "passageNumber": 1,
+      "domain": "inference",
+      "skillGroup": "character actions and motives",
+      "fineSkillTag": "inferring reasons for actions",
+      "questionType": "short-answer",
+      "answerType": "open",
+      "difficulty": 3,
+      "marks": 2,
+      "isScaffolded": false,
+      "evidenceRequired": true,
+      "stem": "Why might the captain switch off the engine?",
+      "options": [],
+      "optionRationale": {},
+      "correctAnswer": null,
+      "acceptedAnswers": [
+        "The captain may switch off the engine because he has noticed something unusual in the water and wants to stop to watch it carefully.",
+        "He likely stops the engine because something near the rocks has caught his attention."
+      ],
+      "markScheme": {
+        "2": "Award 2 marks for inferring that the captain has noticed something unusual in the water and stops the engine to look carefully or avoid disturbing it, with some support from the text.",
+        "1": "Award 1 mark for a plausible inference such as 'he saw something in the water' without support or detail.",
+        "0": "No credit for answers that are not supported by the passage."
+      },
+      "modelAnswerGold": "The captain probably switches off the engine because he sees something unusual in the dark water near the rocks and wants to stop and watch it carefully.",
+      "modelAnswerSilver": "He saw something in the water.",
+      "commonWrongAnswer": "He switches off the engine because the boat has already arrived at the pier.",
+      "whyWrong": "The passage says the boat slows almost to a stop before reaching the pier.",
+      "requiresManualReview": true,
+      "editorialStatus": "reviewed",
+      "reviewFlag": false
+    },
+    {
+      "questionId": "Y4_U001_Q06",
+      "questionNumber": 6,
+      "displayNumber": "Q6",
+      "section": "core",
+      "passageId": "Y4_U001_P1",
+      "passageNumber": 1,
+      "domain": "structure",
+      "skillGroup": "tracking changes",
+      "fineSkillTag": "identifying a shift in the text",
+      "questionType": "short-answer",
+      "answerType": "open",
+      "difficulty": 3,
+      "marks": 2,
+      "isScaffolded": false,
+      "evidenceRequired": false,
+      "stem": "What change happens in the passage when the engine is switched off?",
+      "options": [],
+      "optionRationale": {},
+      "correctAnswer": null,
+      "acceptedAnswers": [
+        "The passage becomes much quieter and more tense when the engine is switched off.",
+        "When the engine stops, the scene changes into complete silence and greater suspense."
+      ],
+      "markScheme": {
+        "2": "Award 2 marks for identifying the shift to silence or tension and explaining the effect on the scene.",
+        "1": "Award 1 mark for identifying either the silence or the mood change without explaining both clearly.",
+        "0": "No credit for incorrect answers."
+      },
+      "modelAnswerGold": "When the engine is switched off, the scene changes from the steady hum of the boat into complete silence, which makes the moment feel more tense and suspenseful.",
+      "modelAnswerSilver": "It becomes very quiet.",
+      "commonWrongAnswer": "The passage becomes cheerful because the danger has ended.",
+      "whyWrong": "The writer increases suspense rather than ending it.",
+      "requiresManualReview": true,
+      "editorialStatus": "reviewed",
+      "reviewFlag": false
+    },
+    {
+      "questionId": "Y4_U001_Q07",
+      "questionNumber": 7,
+      "displayNumber": "Q7",
+      "section": "core",
+      "passageId": "Y4_U001_P1",
+      "passageNumber": 1,
+      "domain": "authorIntent",
+      "skillGroup": "effect of language",
+      "fineSkillTag": "explaining the effect of word choice",
+      "questionType": "short-answer",
+      "answerType": "open",
+      "difficulty": 3,
+      "marks": 2,
+      "isScaffolded": false,
+      "evidenceRequired": true,
+      "stem": "Why does the writer describe the harbour as \"silent\" near the end of the passage?",
+      "options": [],
+      "optionRationale": {},
+      "correctAnswer": null,
+      "acceptedAnswers": [
+        "The writer uses 'silent' to make the scene feel tense and to show that all the usual harbour sounds have stopped.",
+        "It helps create suspense by showing that everything has gone quiet."
+      ],
+      "markScheme": {
+        "2": "Award 2 marks for explaining that 'silent' creates tension or suspense and emphasises that the usual harbour sounds have stopped.",
+        "1": "Award 1 mark for recognising either the silence or the tension without linking both ideas clearly.",
+        "0": "No credit for incorrect answers."
+      },
+      "modelAnswerGold": "The writer uses the word 'silent' to make the scene feel tense and suspenseful, because all the normal harbour sounds have stopped while Noah waits to see what is in the water.",
+      "modelAnswerSilver": "It makes the ending feel tense because everything is quiet.",
+      "commonWrongAnswer": "The writer wants to show that the harbour is empty forever.",
+      "whyWrong": "The silence belongs to this moment in the story; it does not suggest the harbour will always stay empty.",
+      "requiresManualReview": true,
+      "editorialStatus": "reviewed",
+      "reviewFlag": false
+    }
+  ],
+  "additionalQuestionBank": [
+    {
+      "questionId": "Y4_U001_A01",
+      "questionNumber": 8,
+      "displayNumber": "Extra Q1",
+      "section": "additional",
+      "passageId": "Y4_U001_P1",
+      "passageNumber": 1,
+      "domain": "inference",
+      "skillGroup": "character feelings",
+      "fineSkillTag": "inferring feelings from actions",
+      "questionType": "short-answer",
+      "answerType": "open",
+      "difficulty": 3,
+      "marks": 2,
+      "isScaffolded": false,
+      "evidenceRequired": true,
+      "stem": "How can you tell that Noah feels tense near the end of the passage?",
+      "options": [],
+      "optionRationale": {},
+      "correctAnswer": null,
+      "acceptedAnswers": [
+        "You can tell Noah feels tense because he grips the railing, leans forward and watches carefully to see what is in the water.",
+        "His actions show tension because he grips the railing and tries hard to see what the captain noticed."
+      ],
+      "markScheme": {
+        "2": "Award 2 marks for identifying Noah's tense or nervous feeling and supporting it with relevant actions from the text.",
+        "1": "Award 1 mark for identifying the feeling without relevant support, or for partial support.",
+        "0": "No credit for unsupported or incorrect answers."
+      },
+      "modelAnswerGold": "Noah seems tense because he grips the railing and leans forward, which shows he is anxious and focused on what might be in the water.",
+      "modelAnswerSilver": "He feels tense because he grips the railing.",
+      "commonWrongAnswer": "He feels relaxed because the water is calm.",
+      "whyWrong": "Although the water is calm, Noah's actions and the atmosphere suggest tension.",
+      "requiresManualReview": true,
+      "editorialStatus": "reviewed",
+      "reviewFlag": false
+    },
+    {
+      "questionId": "Y4_U001_A02",
+      "questionNumber": 9,
+      "displayNumber": "Extra Q2",
+      "section": "additional",
+      "passageId": "Y4_U001_P1",
+      "passageNumber": 1,
+      "domain": "inference",
+      "skillGroup": "making predictions",
+      "fineSkillTag": "predicting from evidence",
+      "questionType": "short-answer",
+      "answerType": "open",
+      "difficulty": 4,
+      "marks": 2,
+      "isScaffolded": false,
+      "evidenceRequired": true,
+      "stem": "What is Noah most likely to do next? Use the passage to help you.",
+      "options": [],
+      "optionRationale": {},
+      "correctAnswer": null,
+      "acceptedAnswers": [
+        "Noah is most likely to keep watching the water or move closer so he can find out what the captain has seen.",
+        "He will probably continue looking carefully because he is trying to see what moved beneath the water."
+      ],
+      "markScheme": {
+        "2": "Award 2 marks for a plausible prediction linked to Noah's actions and the final lines of the passage.",
+        "1": "Award 1 mark for a plausible prediction without clear support from the passage.",
+        "0": "No credit for implausible or unsupported predictions."
+      },
+      "modelAnswerGold": "Noah will probably keep watching the water closely, or move nearer if he can, because he is already leaning forward and trying to see what the captain noticed.",
+      "modelAnswerSilver": "He will keep looking at the water.",
+      "commonWrongAnswer": "He will go home straight away.",
+      "whyWrong": "The ending shows Noah becoming more focused and curious, not leaving.",
+      "requiresManualReview": true,
+      "editorialStatus": "reviewed",
+      "reviewFlag": false
+    },
+    {
+      "questionId": "Y4_U001_A03",
+      "questionNumber": 10,
+      "displayNumber": "Extra Q3",
+      "section": "additional",
+      "passageId": "Y4_U001_P1",
+      "passageNumber": 1,
+      "domain": "inference",
+      "skillGroup": "atmosphere and setting",
+      "fineSkillTag": "linking details to mood",
+      "questionType": "short-answer",
+      "answerType": "open",
+      "difficulty": 3,
+      "marks": 2,
+      "isScaffolded": true,
+      "evidenceRequired": true,
+      "stem": "Which two details help to create a tense atmosphere in the passage?",
+      "options": [],
+      "optionRationale": {},
+      "correctAnswer": null,
+      "acceptedAnswers": [
+        "Possible details include the strangely still air, the boat slowing almost to a stop, the captain staring at the dark water, the rippling surface, and the harbour becoming silent.",
+        "Any two relevant details that clearly create tension should be accepted."
+      ],
+      "markScheme": {
+        "2": "Award 2 marks for giving two relevant details from the passage that help create tension.",
+        "1": "Award 1 mark for giving one relevant detail.",
+        "0": "No credit for irrelevant details."
+      },
+      "modelAnswerGold": "Two details that create tension are that the captain stands very still staring at the dark water and that the harbour becomes silent when the engine stops.",
+      "modelAnswerSilver": "The captain stares at the water.",
+      "commonWrongAnswer": "The harbour is busy and cheerful.",
+      "whyWrong": "The passage repeatedly describes the harbour as still and quiet, not busy and cheerful.",
+      "requiresManualReview": true,
+      "editorialStatus": "reviewed",
+      "reviewFlag": false
+    },
+    {
+      "questionId": "Y4_U001_A04",
+      "questionNumber": 11,
+      "displayNumber": "Extra Q4",
+      "section": "additional",
+      "passageId": "Y4_U001_P1",
+      "passageNumber": 1,
+      "domain": "vocabulary",
+      "skillGroup": "shades of meaning",
+      "fineSkillTag": "explaining the effect of a verb",
+      "questionType": "short-answer",
+      "answerType": "open",
+      "difficulty": 3,
+      "marks": 1,
+      "isScaffolded": false,
+      "evidenceRequired": false,
+      "stem": "What does the word \"drifted\" suggest in the sentence \"For a moment it drifted quietly on the water\"?",
+      "options": [],
+      "optionRationale": {},
+      "correctAnswer": null,
+      "acceptedAnswers": [
+        "It suggests the boat moved slowly and gently without much control.",
+        "It shows the boat was moving softly and slowly."
+      ],
+      "markScheme": {
+        "1": "Award 1 mark for explaining that 'drifted' suggests slow, gentle movement."
+      },
+      "modelAnswerGold": "The word 'drifted' suggests the boat moved slowly and gently across the water without hurrying.",
+      "modelAnswerSilver": "It moved slowly.",
+      "commonWrongAnswer": "It raced quickly forward.",
+      "whyWrong": "The word 'drifted' suggests slow movement, not speed.",
+      "requiresManualReview": true,
+      "editorialStatus": "reviewed",
+      "reviewFlag": false
+    },
+    {
+      "questionId": "Y4_U001_A05",
+      "questionNumber": 12,
+      "displayNumber": "Extra Q5",
+      "section": "additional",
+      "passageId": "Y4_U001_P1",
+      "passageNumber": 1,
+      "domain": "retrieval",
+      "skillGroup": "locating details",
+      "fineSkillTag": "finding a precise fact",
+      "questionType": "mcq",
+      "answerType": "selected",
+      "difficulty": 2,
+      "marks": 1,
+      "isScaffolded": false,
+      "evidenceRequired": false,
+      "stem": "What does Noah look towards after pulling his jacket tighter?",
+      "options": [
+        "the mouth of the harbour",
+        "the harbour office",
+        "the village road",
+        "the lighthouse window"
+      ],
+      "optionRationale": {
+        "the mouth of the harbour": "Correct. This is stated directly.",
+        "the harbour office": "Fits the setting but is not mentioned.",
+        "the village road": "Not part of this moment in the passage.",
+        "the lighthouse window": "A plausible harbour detail but not stated."
+      },
+      "correctAnswer": "the mouth of the harbour",
+      "acceptedAnswers": [
+        "the mouth of the harbour"
+      ],
+      "markScheme": {
+        "1": "Award 1 mark for 'the mouth of the harbour' only."
+      },
+      "modelAnswerGold": null,
+      "modelAnswerSilver": null,
+      "commonWrongAnswer": "the lighthouse window",
+      "whyWrong": "The passage does not mention Noah looking at a lighthouse window.",
+      "requiresManualReview": false,
+      "editorialStatus": "reviewed",
+      "reviewFlag": false
+    },
+    {
+      "questionId": "Y4_U001_A06",
+      "questionNumber": 13,
+      "displayNumber": "Extra Q6",
+      "section": "additional",
+      "passageId": "Y4_U001_P1",
+      "passageNumber": 1,
+      "domain": "authorIntent",
+      "skillGroup": "effect of language",
+      "fineSkillTag": "explaining why a detail is included",
+      "questionType": "short-answer",
+      "answerType": "open",
+      "difficulty": 3,
+      "marks": 2,
+      "isScaffolded": false,
+      "evidenceRequired": true,
+      "stem": "Why does the writer include the sentence \"Even the gulls had stopped calling\"?",
+      "options": [],
+      "optionRationale": {},
+      "correctAnswer": null,
+      "acceptedAnswers": [
+        "The writer includes this detail to show how completely quiet the harbour has become and to make the moment feel more tense.",
+        "It emphasises the silence and adds suspense."
+      ],
+      "markScheme": {
+        "2": "Award 2 marks for explaining that the detail emphasises the silence and increases tension or suspense.",
+        "1": "Award 1 mark for identifying either the silence or tension only.",
+        "0": "No credit for incorrect answers."
+      },
+      "modelAnswerGold": "The writer includes that sentence to show that the silence is so complete that even the usual gull sounds have disappeared, which makes the moment feel more suspenseful.",
+      "modelAnswerSilver": "It shows the harbour is very quiet.",
+      "commonWrongAnswer": "It shows the gulls have flown away for winter.",
+      "whyWrong": "The sentence is used to create atmosphere in the moment, not to explain migration.",
+      "requiresManualReview": true,
+      "editorialStatus": "reviewed",
+      "reviewFlag": false
+    }
+  ],
+  "teacherNotes": {
+    "mainFocus": "Inference from atmosphere, setting and character reaction",
+    "commonMisconceptions": [
+      "choosing an answer that fits a harbour setting but is not actually stated in the passage",
+      "spotting that the atmosphere is quiet without supporting the answer with evidence",
+      "confusing what Noah sees with what the captain notices first"
+    ],
+    "teachingTips": [
+      "Encourage the pupil to compare what is normal in the harbour with what is different that evening.",
+      "For inference questions, ask the pupil to underline the clue in the text before answering.",
+      "For author intent questions, prompt with: 'What effect does this detail have on the reader?'"
+    ]
+  },
+  "diagnosticHooks": {
+    "recommendedExtraIfWeak": {
+      "retrieval": [
+        "Y4_U001_A05"
+      ],
+      "vocabulary": [
+        "Y4_U001_A04"
+      ],
+      "inference": [
+        "Y4_U001_A01",
+        "Y4_U001_A02",
+        "Y4_U001_A03"
+      ],
+      "structure": [],
+      "authorIntent": [
+        "Y4_U001_A06"
+      ]
+    }
+  },
+  "validation": {
+    "hasSinglePassage": true,
+    "coreQuestionCountMatches": true,
+    "additionalQuestionCountMatches": true,
+    "domainDistributionMatches": true,
+    "allQuestionsLinkToPassage": true,
+    "allMcqOptionsCountValid": true,
+    "allMcqAnswersValid": true,
+    "questionIdsUnique": true,
+    "questionNumbersUniqueWithinSection": true,
+    "noRepeatedQuestionStems": true
+  }
+}
