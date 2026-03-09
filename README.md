@@ -97,3 +97,5 @@ This helps generate richer feedback while keeping the app itself fully static an
 - Runtime diagnostics now come from dedicated module `js/runtimeDiagnostics.js` with a footer Diagnostics toggle and non-intrusive panel.
 
 - `js/app.js` has been split into page-focused modules (`js/appDashboard.js`, `js/appReports.js`) to keep responsibilities smaller and easier to debug.
+
+- Boot orchestration is now in `js/app.bootstrap.js`, with dedicated modules: `js/app.global-ui.js`, `js/app.dashboard.js`, `js/app.test-runtime.js`, `js/app.diagnostic.js`, `js/app.tracker.js`, `js/app.attempt.js`.
