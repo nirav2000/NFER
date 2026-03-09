@@ -214,6 +214,7 @@ export function renderFeedbackAssist(root, promptText, heading = 'AI Feedback As
     <details class="in-app-feedback">
       <summary>Optional in-app OpenAI feedback (experimental)</summary>
       <p class="muted">This module is isolated and can be disabled at any time. If it fails, standard prompt copy/open tools still work.</p>
+      <p class="muted"><a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer">How to create an OpenAI API key</a></p>
       <label class="toggle"><input id="openAIFeedbackToggle" type="checkbox" /> Enable in-app OpenAI feedback</label>
       <div id="inAppFeedbackControls" class="feedback-tools" hidden>
         <input id="openAIApiKeyInput" type="password" placeholder="OpenAI API key (stored in this browser only)" autocomplete="off" />
