@@ -1,4 +1,4 @@
-import { createInteractionRecorder, getStoredReplay, replayInteractions, getReplayIndex } from './replay.js?v=3.4.16';
+import { createInteractionRecorder, getStoredReplay, replayInteractions, getReplayIndex } from './replay.js?v=3.4.17';
 
 const DEFAULT_SCROLL_SAMPLE_MS = 120;
 const DEFAULT_POINTER_SAMPLE_MS = 120;

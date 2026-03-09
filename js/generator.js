@@ -1,4 +1,4 @@
-import { normaliseLibrarySchema, inspectLibraryCompatibility } from './schemaAdapter.js?v=3.4.16';
+import { normaliseLibrarySchema, inspectLibraryCompatibility } from './schemaAdapter.js?v=3.4.17';
 const DEFAULT_LIBRARY_PATH = '/data/year4_combined_50_test_library_v3.json';
 const LIBRARY_PATH_KEY = 'y4.libraryPath';
 
@@ -30,7 +30,19 @@ export function getStoredLibraryPath() {
 }
 
 function toCandidateUrls(path) {
-  return [normalisePath(path)];
+  const normalised = normalisePath(path);
+  if (normalised.startsWith('./') || normalised.startsWith('../')) return [normalised];
+
+  const fileName = normalised.split('/').pop();
+  if (normalised.startsWith('/data/')) {
+    return Array.from(new Set([`./data/${fileName}`, normalised]));
+  }
+
+  if (normalised.startsWith('/')) {
+    return Array.from(new Set([`.${normalised}`, normalised]));
+  }
+
+  return [normalised];
 }
 
 async function fetchLibrary(url) {
