@@ -41,7 +41,7 @@ function mapUnitToLegacyTest(unit) {
     week: unit.week,
     sequence: unit.unitNumber,
     difficulty: Number(unit.difficulty || 3),
-    totalMarks: Number(unit.totalCoreMarks || questions.reduce((sum, q) => sum + (q.marks || 0), 0)),
+    totalMarks: Number(unit.totalCoreMarks || unit.marks?.core || questions.reduce((sum, q) => sum + (q.marks || 0), 0)),
     questionCount: questions.length,
     topicsCovered: [unit.topic, unit.subtopic].filter(Boolean),
     domainsCovered,
@@ -66,13 +66,47 @@ function isV6UnitLibraryShape(raw) {
   return raw && raw.structure && Array.isArray(raw.structure.units);
 }
 
+function isSchemaDefinitionOnly(raw) {
+  return raw && (raw.unitSchema || raw.structure?.units?.length === 0) && !Array.isArray(raw.tests) && !raw.unitId;
+}
+
+export function inspectLibraryCompatibility(rawLibrary) {
+  if (isLegacyLibraryShape(rawLibrary)) {
+    return { supported: true, format: 'legacy-tests', version: rawLibrary.version || 'unknown' };
+  }
+
+  if (isSingleUnitShape(rawLibrary)) {
+    return { supported: true, format: 'single-unit', version: rawLibrary.version || '7.0-compatible' };
+  }
+
+  if (isV6UnitLibraryShape(rawLibrary)) {
+    return { supported: true, format: 'unit-library', version: rawLibrary.version || '6.0' };
+  }
+
+  if (isSchemaDefinitionOnly(rawLibrary)) {
+    return {
+      supported: false,
+      format: 'schema-definition',
+      version: rawLibrary.version || 'unknown',
+      reason: 'Schema definition file only (no units/tests payload).'
+    };
+  }
+
+  return {
+    supported: false,
+    format: 'unknown',
+    version: rawLibrary?.version || rawLibrary?.schemaVersion || 'unknown',
+    reason: 'Unsupported JSON shape. Extend js/schemaAdapter.js to map this schema.'
+  };
+}
+
 export function normaliseLibrarySchema(rawLibrary) {
   if (isLegacyLibraryShape(rawLibrary)) return rawLibrary;
 
   if (isSingleUnitShape(rawLibrary)) {
     return {
       version: rawLibrary.version || 'v6-adapted',
-      yearGroup: 4,
+      yearGroup: rawLibrary.yearGroup || 4,
       libraryTitle: 'Single Unit Import',
       tests: [mapUnitToLegacyTest(rawLibrary)]
     };

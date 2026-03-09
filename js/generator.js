@@ -1,4 +1,4 @@
-import { normaliseLibrarySchema } from './schemaAdapter.js?v=3.4.14';
+import { normaliseLibrarySchema, inspectLibraryCompatibility } from './schemaAdapter.js?v=3.4.15';
 const DEFAULT_LIBRARY_PATH = '/data/year4_combined_50_test_library_v3.json';
 const LIBRARY_PATH_KEY = 'y4.libraryPath';
 
@@ -54,7 +54,12 @@ export async function loadLibrary() {
 
   for (const url of candidates) {
     try {
-      libraryCache = normaliseLibrarySchema(await fetchLibrary(url));
+      const rawLibrary = await fetchLibrary(url);
+      const compatibility = inspectLibraryCompatibility(rawLibrary);
+      if (!compatibility.supported) {
+        throw new Error(`${url}: ${compatibility.reason} Detected format=${compatibility.format}, version=${compatibility.version}.`);
+      }
+      libraryCache = normaliseLibrarySchema(rawLibrary);
       return libraryCache;
     } catch (error) {
       lastError = error;

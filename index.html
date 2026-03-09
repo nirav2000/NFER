@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NFER Reading Builder</title>
-  <link rel="stylesheet" href="./css/styles.css?v=3.4.14" />
+  <link rel="stylesheet" href="./css/styles.css?v=3.4.15" />
   <link rel="stylesheet" href="" id="themeStylesheet" />
 </head>
 <body data-page="dashboard">
@@ -38,7 +38,9 @@
         </select>
         <input id="libraryPathInput" type="text" placeholder="/data/your_other_library.json" autocomplete="off" />
         <button id="applyLibraryBtn" type="button">Load File</button>
+        <button id="autoScanBtn" type="button">Auto Scan</button>
       </div>
+      <p id="schemaScanStatus" class="muted"></p>
 
       <div class="actions">
         <button id="generateBtn">Start Recommended Session</button>
@@ -73,6 +75,6 @@
     </select>
   </footer>
 
-  <script type="module" src="./js/app.js?v=3.4.14"></script>
+  <script type="module" src="./js/app.js?v=3.4.15"></script>
 </body>
 </html>

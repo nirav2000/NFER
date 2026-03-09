@@ -21,6 +21,26 @@ export function renderDashboardInsights(library, history, recommendedTest, deps)
   renderDashboardMeta(document.getElementById('libraryMeta'), library);
 }
 
+async function loadCatalogPaths() {
+  const fallback = [
+    '/data/year4_combined_50_test_library_v3.json',
+    '/data/year4_reading_starter_pack_10_tests.json',
+    '/data/year4_unit_001_gold_standard.json',
+    '/data/year4_unit_001_v7.json',
+    '/data/year4_single_passage_schema_v6.json',
+    '/data/year4_single_passage_schema_v7.json'
+  ];
+
+  try {
+    const response = await fetch('/data/library_catalog.json', { cache: 'no-store' });
+    if (!response.ok) return fallback;
+    const payload = await response.json();
+    return Array.isArray(payload.files) ? payload.files : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
 export async function initDashboardPage(deps) {
   const {
     loadLibrary,
@@ -31,7 +51,8 @@ export async function initDashboardPage(deps) {
     loadHistory,
     saveCurrentTest,
     getWeakDomains,
-    renderDashboardMeta
+    renderDashboardMeta,
+    inspectLibraryCompatibility
   } = deps;
 
   const errorEl = document.getElementById('dashboardError');
@@ -40,6 +61,8 @@ export async function initDashboardPage(deps) {
   const applyLibraryBtn = document.getElementById('applyLibraryBtn');
   const libraryFileSelect = document.getElementById('libraryFile');
   const libraryPathInput = document.getElementById('libraryPathInput');
+  const autoScanBtn = document.getElementById('autoScanBtn');
+  const schemaScanStatus = document.getElementById('schemaScanStatus');
 
   const refreshDashboard = async () => {
     const library = await loadLibrary();
@@ -61,6 +84,52 @@ export async function initDashboardPage(deps) {
     }
   };
 
+  const autoScanFiles = async () => {
+    if (!schemaScanStatus) return;
+    schemaScanStatus.textContent = 'Scanning data files…';
+
+    const paths = await loadCatalogPaths();
+    const supported = [];
+    const unsupported = [];
+
+    for (const path of paths) {
+      try {
+        const response = await fetch(path, { cache: 'no-store' });
+        if (!response.ok) {
+          unsupported.push(`${path} (fetch ${response.status})`);
+          continue;
+        }
+        const raw = await response.json();
+        const compatibility = inspectLibraryCompatibility(raw);
+        if (compatibility.supported) {
+          supported.push({ path, compatibility });
+        } else {
+          unsupported.push(`${path} (${compatibility.reason})`);
+        }
+      } catch (error) {
+        unsupported.push(`${path} (${error.message})`);
+      }
+    }
+
+    const existing = new Set(Array.from(libraryFileSelect.options).map((opt) => opt.value));
+    supported.forEach(({ path, compatibility }) => {
+      if (existing.has(path)) return;
+      const option = document.createElement('option');
+      option.value = path;
+      option.textContent = `Auto: ${path.split('/').pop()} (${compatibility.format} v${compatibility.version})`;
+      libraryFileSelect.appendChild(option);
+      existing.add(path);
+    });
+
+    if (unsupported.length) {
+      schemaScanStatus.textContent = `Supported ${supported.length} files. Unsupported ${unsupported.length}: ${unsupported.join(' | ')}. If required, extend js/schemaAdapter.js.`;
+      schemaScanStatus.classList.add('error');
+    } else {
+      schemaScanStatus.textContent = `Supported ${supported.length} files. All scanned files are adapter-compatible.`;
+      schemaScanStatus.classList.remove('error');
+    }
+  };
+
   libraryFileSelect.value = getStoredLibraryPath();
   libraryPathInput.value = getStoredLibraryPath();
 
@@ -72,8 +141,9 @@ export async function initDashboardPage(deps) {
     errorEl.textContent = `Error: ${error.message}`;
     generateBtn.disabled = true;
     randomBtn.disabled = true;
-    return;
   }
+
+  if (autoScanBtn) autoScanBtn.addEventListener('click', autoScanFiles);
 
   applyLibraryBtn.addEventListener('click', async () => {
     const selectedPath = libraryPathInput.value.trim() || libraryFileSelect.value;

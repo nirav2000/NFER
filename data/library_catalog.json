@@ -1,0 +1,10 @@
+{
+  "files": [
+    "/data/year4_combined_50_test_library_v3.json",
+    "/data/year4_reading_starter_pack_10_tests.json",
+    "/data/year4_unit_001_gold_standard.json",
+    "/data/year4_unit_001_v7.json",
+    "/data/year4_single_passage_schema_v6.json",
+    "/data/year4_single_passage_schema_v7.json"
+  ]
+}

@@ -86,6 +86,12 @@ Trial data files:
 
 - `/data/year4_unit_001_gold_standard.json`
 - `/data/year4_single_passage_schema_v6.json`
+- `/data/year4_unit_001_v7.json`
+- `/data/year4_single_passage_schema_v7.json`
+
+- Dashboard includes an **Auto Scan** button that checks files listed in `data/library_catalog.json`, adds compatible files to the selector, and warns when adapter support is missing.
+- Current adapter compatibility: legacy `tests[]`, v6 `structure.units[]`, and v7-style single-unit payloads (for example `year4_unit_001_v7.json`).
+- Schema-definition-only files (for example `year4_single_passage_schema_v7.json`) are intentionally flagged as unsupported runtime payloads and require a concrete unit/library file.
 
 ## Run locally
 

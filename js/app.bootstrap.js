@@ -1,13 +1,14 @@
-import { loadLibrary, setLibraryPath, getStoredLibraryPath, generateTestRandom, selectNextTest, getWeakDomains } from './generator.js?v=3.4.14';
-import { getLastDiagnostic, loadHistory, saveCurrentTest, getHistory } from './storage.js?v=3.4.14';
-import { renderDashboardMeta, renderDiagnostic, renderTracker, renderAttemptReview, renderFeedbackAssist } from './renderer.js?v=3.4.14';
-import { createFeedbackPrompt, openPromptInChatGPT, copyPrompt } from './feedback.js?v=3.4.14';
-import { installRuntimeDiagnostics } from './runtimeDiagnostics.js?v=3.4.14';
-import { initGlobalUI, currentPage } from './app.global-ui.js?v=3.4.14';
-import { initDashboardPage } from './appDashboard.js?v=3.4.14';
-import { bindFeedbackAssist, initDiagnosticPage, initTrackerPage, initAttemptPage } from './appReports.js?v=3.4.14';
-import { initTestRuntime } from './app.test-runtime.js?v=3.4.14';
-import { createOpenAIFeedbackModule } from './feedbackOpenAI.js?v=3.4.14';
+import { loadLibrary, setLibraryPath, getStoredLibraryPath, generateTestRandom, selectNextTest, getWeakDomains } from './generator.js?v=3.4.15';
+import { getLastDiagnostic, loadHistory, saveCurrentTest, getHistory } from './storage.js?v=3.4.15';
+import { renderDashboardMeta, renderDiagnostic, renderTracker, renderAttemptReview, renderFeedbackAssist } from './renderer.js?v=3.4.15';
+import { createFeedbackPrompt, openPromptInChatGPT, copyPrompt } from './feedback.js?v=3.4.15';
+import { installRuntimeDiagnostics } from './runtimeDiagnostics.js?v=3.4.15';
+import { initGlobalUI, currentPage } from './app.global-ui.js?v=3.4.15';
+import { initDashboardPage } from './appDashboard.js?v=3.4.15';
+import { bindFeedbackAssist, initDiagnosticPage, initTrackerPage, initAttemptPage } from './appReports.js?v=3.4.15';
+import { initTestRuntime } from './app.test-runtime.js?v=3.4.15';
+import { createOpenAIFeedbackModule } from './feedbackOpenAI.js?v=3.4.15';
+import { inspectLibraryCompatibility } from './schemaAdapter.js?v=3.4.15';
 
 export async function bootstrapApp() {
   const runtimeDiagnostics = installRuntimeDiagnostics();
@@ -25,7 +26,8 @@ export async function bootstrapApp() {
       loadHistory,
       saveCurrentTest,
       getWeakDomains,
-      renderDashboardMeta
+      renderDashboardMeta,
+      inspectLibraryCompatibility
     });
     if (page === 'test') initTestRuntime();
     if (page === 'diagnostic') initDiagnosticPage({
