@@ -1,5 +1,5 @@
-import { loadLibrary, setLibraryPath, getStoredLibraryPath, generateTestRandom, selectNextTest, getWeakDomains } from './generator.js?v=3.4.1';
-import { markTest, buildDiagnostic } from './diagnostics.js?v=3.4.1';
+import { loadLibrary, setLibraryPath, getStoredLibraryPath, generateTestRandom, selectNextTest, getWeakDomains } from './generator.js?v=3.4.3';
+import { markTest, buildDiagnostic } from './diagnostics.js?v=3.4.3';
 import {
   saveCurrentTest,
   getCurrentTest,
@@ -12,7 +12,7 @@ import {
   clearTestSession,
   getSettings,
   saveSettings
-} from './storage.js?v=3.4.1';
+} from './storage.js?v=3.4.3';
 import {
   renderDashboardMeta,
   renderTestMeta,
@@ -27,20 +27,21 @@ import {
   renderTracker,
   renderAttemptReview,
   renderFeedbackAssist
-} from './renderer.js?v=3.4.1';
-import { createInteractionRecorder, getStoredReplay, replayInteractions } from './replay.js?v=3.4.1';
-import { createFeedbackPrompt, openPromptInChatGPT, copyPrompt } from './feedback.js?v=3.4.1';
+} from './renderer.js?v=3.4.3';
+import { createInteractionRecorder, getStoredReplay, replayInteractions } from './replay.js?v=3.4.3';
+import { createFeedbackPrompt, openPromptInChatGPT, copyPrompt } from './feedback.js?v=3.4.3';
+import { installRuntimeDiagnostics } from './runtimeDiagnostics.js?v=3.4.3';
 
 const TEST_DURATION_SECONDS = 35 * 60;
-const APP_VERSION = 'v3.4.1';
+const APP_VERSION = 'v3.4.3';
 const THEME_KEY = 'y4.theme';
 const THEME_PATHS = {
   default: '',
-  ocean: './css/theme-ocean.css?v=3.4.1',
-  paper: './css/theme-paper.css?v=3.4.1',
-  split: './css/theme-split.css?v=3.4.1',
-  arcade: './css/theme-arcade.css?v=3.4.1',
-  zen210: './css/theme-zen210.css?v=3.4.1'
+  ocean: './css/theme-ocean.css?v=3.4.3',
+  paper: './css/theme-paper.css?v=3.4.3',
+  split: './css/theme-split.css?v=3.4.3',
+  arcade: './css/theme-arcade.css?v=3.4.3',
+  zen210: './css/theme-zen210.css?v=3.4.3'
 };
 
 function currentPage() {
@@ -704,11 +705,22 @@ function initAttempt() {
 }
 
 (async function bootstrap() {
-  initGlobalUI();
-  const page = currentPage();
-  if (page === 'dashboard') await initDashboard();
-  if (page === 'test') initTest();
-  if (page === 'diagnostic') initDiagnostic();
-  if (page === 'tracker') initTracker();
-  if (page === 'attempt') initAttempt();
+  const runtimeDiagnostics = installRuntimeDiagnostics();
+  try {
+    initGlobalUI();
+    const page = currentPage();
+    runtimeDiagnostics.report('info', `Bootstrap start on ${page} page`);
+    if (page === 'dashboard') await initDashboard();
+    if (page === 'test') initTest();
+    if (page === 'diagnostic') initDiagnostic();
+    if (page === 'tracker') initTracker();
+    if (page === 'attempt') initAttempt();
+    runtimeDiagnostics.report('info', 'Bootstrap complete');
+  } catch (error) {
+    runtimeDiagnostics.report('error', 'App bootstrap failed', error?.message || error);
+    const container = document.querySelector('.container');
+    if (container) {
+      container.insertAdjacentHTML('afterbegin', `<section class="card"><p class="error">App error: ${error?.message || error}</p></section>`);
+    }
+  }
 })();
